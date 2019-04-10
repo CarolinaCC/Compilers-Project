@@ -107,21 +107,23 @@ extern int YYPARSE_DECL();
 #define IFX 285
 #define UMINUS 286
 #define ENDE 287
-#define EQ 288
-#define GT 289
-#define LT 290
-#define BAND 291
-#define BOR 292
-#define MUL 293
-#define DIV 294
-#define MOD 295
-#define ADD 296
-#define SUB 297
-#define BNOT 298
-#define CALL 299
-#define PTR 300
-#define ARG 301
-#define EEND 302
+#define tEQ 288
+#define tGT 289
+#define tLT 290
+#define tAND 291
+#define tBOR 292
+#define tMUL 293
+#define tDIV 294
+#define tMOD 295
+#define tADD 296
+#define tSUB 297
+#define tNOT 298
+#define tCALL 299
+#define tPTR 300
+#define tARG 301
+#define tEND 302
+#define tINDEX 303
+#define tLOAD 304
 #define YYERRCODE 256
 typedef short YYINT;
 static const YYINT yylhs[] = {                           -1,
@@ -486,8 +488,8 @@ static const YYINT yycheck[] = {                         35,
 #ifndef YYDEBUG
 #define YYDEBUG 0
 #endif
-#define YYMAXTOKEN 302
-#define YYUNDFTOKEN 328
+#define YYMAXTOKEN 304
+#define YYUNDFTOKEN 330
 #define YYTRANSLATE(a) ((a) > YYMAXTOKEN ? YYUNDFTOKEN : (a))
 #if YYDEBUG
 static const char *const yyname[] = {
@@ -502,9 +504,9 @@ static const char *const yyname[] = {
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"INT","REAL","ID","STR",
 "DO","WHILE","IF","THEN","FOR","IN","UPTO","DOWNTO","STEP","BREAK","CONTINUE",
 "VOID","INTEGER","STRING","NUMBER","CONST","PUBLIC","INCR","DECR","ATR","NE",
-"GE","LE","ELSE","IFX","UMINUS","ENDE","EQ","GT","LT","BAND","BOR","MUL","DIV",
-"MOD","ADD","SUB","BNOT","CALL","PTR","ARG","EEND",0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,"illegal-symbol",
+"GE","LE","ELSE","IFX","UMINUS","ENDE","tEQ","tGT","tLT","tAND","tBOR","tMUL",
+"tDIV","tMOD","tADD","tSUB","tNOT","tCALL","tPTR","tARG","tEND","tINDEX",
+"tLOAD",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"illegal-symbol",
 };
 static const char *const yyrule[] = {
 "$accept : file",
@@ -637,7 +639,7 @@ char **yynames =
 #else
 		 0;
 #endif
-#line 641 "y.tab.c"
+#line 643 "y.tab.c"
 
 #if YYDEBUG
 #include <stdio.h>	/* needed for printf */
@@ -836,13 +838,25 @@ yyreduce:
 
     switch (yyn)
     {
+case 51:
+#line 137 "diy.y"
+	{ yyval.n = ID(yystack.l_mark[0].s); }
+break;
+case 52:
+#line 138 "diy.y"
+	{ yyval.n = binNode(tINDEX, yystack.l_mark[-3].n, yystack.l_mark[-1].n); yyval.n->info = 0; }
+break;
+case 53:
+#line 139 "diy.y"
+	{ yyval.n = uniNode(tLOAD, yystack.l_mark[0].n); yyval.n->info = 0; }
+break;
 case 59:
 #line 147 "diy.y"
-	{ yyval.n = binNode(CALL, yystack.l_mark[-3].n, yystack.l_mark[-1].n); }
+	{ yyval.n = binNode(tCALL, yystack.l_mark[-3].n, yystack.l_mark[-1].n); }
 break;
 case 60:
 #line 148 "diy.y"
-	{ yyval.n = binNode(CALL, yystack.l_mark[-2].n, nilNode(EEND)); }
+	{ yyval.n = binNode(tCALL, yystack.l_mark[-2].n, nilNode(tEND)); }
 break;
 case 61:
 #line 149 "diy.y"
@@ -850,11 +864,11 @@ case 61:
 break;
 case 62:
 #line 150 "diy.y"
-	{ yyval.n = uniNode(PTR, yystack.l_mark[0].n); }
+	{ yyval.n = uniNode(tPTR, yystack.l_mark[0].n); }
 break;
 case 63:
 #line 151 "diy.y"
-	{ yyval.n = uniNode(BNOT, yystack.l_mark[0].n); }
+	{ yyval.n = uniNode(tNOT, yystack.l_mark[0].n); }
 break;
 case 64:
 #line 152 "diy.y"
@@ -874,31 +888,31 @@ case 67:
 break;
 case 68:
 #line 157 "diy.y"
-	{ yyval.n = binNode(MUL, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
+	{ yyval.n = binNode(tMUL, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
 break;
 case 69:
 #line 158 "diy.y"
-	{ yyval.n = binNode(DIV, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
+	{ yyval.n = binNode(tDIV, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
 break;
 case 70:
 #line 159 "diy.y"
-	{ yyval.n = binNode(MOD, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
+	{ yyval.n = binNode(tMOD, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
 break;
 case 71:
 #line 160 "diy.y"
-	{ yyval.n = binNode(ADD, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
+	{ yyval.n = binNode(tADD, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
 break;
 case 72:
 #line 161 "diy.y"
-	{ yyval.n = binNode(SUB, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
+	{ yyval.n = binNode(tSUB, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
 break;
 case 73:
 #line 162 "diy.y"
-	{ yyval.n = binNode(LT, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
+	{ yyval.n = binNode(tLT, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
 break;
 case 74:
 #line 163 "diy.y"
-	{ yyval.n = binNode(GT, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
+	{ yyval.n = binNode(tGT, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
 break;
 case 75:
 #line 164 "diy.y"
@@ -910,7 +924,7 @@ case 76:
 break;
 case 77:
 #line 166 "diy.y"
-	{ yyval.n = binNode(EQ, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
+	{ yyval.n = binNode(tEQ, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
 break;
 case 78:
 #line 167 "diy.y"
@@ -918,11 +932,11 @@ case 78:
 break;
 case 79:
 #line 168 "diy.y"
-	{ yyval.n = binNode(BAND, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
+	{ yyval.n = binNode(tAND, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
 break;
 case 80:
 #line 169 "diy.y"
-	{ yyval.n = binNode(BOR, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
+	{ yyval.n = binNode(tOR, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
 break;
 case 81:
 #line 170 "diy.y"
@@ -930,9 +944,13 @@ case 81:
 break;
 case 82:
 #line 173 "diy.y"
-	{ yyval.n = binNode(ARG, yystack.l_mark[0].n, nilNode(EEND)); }
+	{ yyval.n = binNode(tARG, yystack.l_mark[0].n, nilNode(tEND)); }
 break;
-#line 936 "y.tab.c"
+case 83:
+#line 174 "diy.y"
+	{ yyval.n = binNode(tARG, yystack.l_mark[0].n, yystack.l_mark[-2].n); }
+break;
+#line 954 "y.tab.c"
     }
     yystack.s_mark -= yym;
     yystate = *yystack.s_mark;
