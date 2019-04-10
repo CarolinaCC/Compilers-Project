@@ -75,9 +75,6 @@ prmtsOrNon:
 		  | parametros
 		  ;
 
-prmtOrNon : 
-		| parametro ';'
-		;
 
 crpOrNon: 
 		| corpo
@@ -94,11 +91,16 @@ parametros 	: parametro
 parametro   : tipo astOrNon ID
 			;
 
-corpo 		:'{' prmtOrNon instrOrNon '}'
+corpo 		:'{' prmtOrMore instrOrMore '}'
 			;
 
-instrOrNon	: 
-			| instrucao
+prmtOrMore : parametro ';'
+		   | parametro ';' prmtOrMore
+		   ;
+
+
+instrOrMore	: instrucao
+			| instrucao instrOrMore
 			;
 
 instrucao 	: IF expressao THEN instrucao els
