@@ -91,17 +91,17 @@ parametros 	: parametro
 parametro   : tipo astOrNon ID
 			;
 
-corpo 		:'{' prmtOrMore instrOrMore '}'
+corpo 		:'{' prmtNonOrMore instrNonOrMore '}'
 			;
 
-prmtOrMore : parametro ';'
-		   | parametro ';' prmtOrMore
-		   ;
+prmtNonOrMore : 
+		  	  | parametro ';' prmtNonOrMore
+		   	  ;
 
 
-instrOrMore	: instrucao
-			| instrucao instrOrMore
-			;
+instrNonOrMore	: 
+				| instrucao instrNonOrMore
+				;
 
 instrucao 	: IF expressao THEN instrucao els
 			| DO instrucao WHILE expressao ';'

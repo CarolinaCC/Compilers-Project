@@ -42,13 +42,13 @@
 
   29  parametro : tipo astOrNon ID
 
-  30  corpo : '{' prmtOrMore instrOrMore '}'
+  30  corpo : '{' prmtNonOrMore instrNonOrMore '}'
 
-  31  prmtOrMore : parametro ';'
-  32             | parametro ';' prmtOrMore
+  31  prmtNonOrMore :
+  32                | parametro ';' prmtNonOrMore
 
-  33  instrOrMore : instrucao
-  34              | instrucao instrOrMore
+  33  instrNonOrMore :
+  34                 | instrucao instrNonOrMore
 
   35  instrucao : IF expressao THEN instrucao els
   36            | DO instrucao WHILE expressao ';'
@@ -400,77 +400,8 @@ state 34
 
 
 state 35
-	corpo : '{' . prmtOrMore instrOrMore '}'  (30)
-
-	VOID  shift 8
-	INTEGER  shift 9
-	STRING  shift 10
-	NUMBER  shift 11
-	.  error
-
-	tipo  goto 25
-	parametro  goto 39
-	prmtOrMore  goto 40
-
-
-state 36
-	init : '(' prmtsOrNon ')' crpOrNon .  (15)
-
-	.  reduce 15
-
-
-state 37
-	crpOrNon : corpo .  (24)
-
-	.  reduce 24
-
-
-state 38
-	parametros : parametro ',' parametros .  (28)
-
-	.  reduce 28
-
-
-state 39
-	prmtOrMore : parametro . ';'  (31)
-	prmtOrMore : parametro . ';' prmtOrMore  (32)
-
-	';'  shift 41
-	.  error
-
-
-state 40
-	corpo : '{' prmtOrMore . instrOrMore '}'  (30)
-
-	INT  shift 42
-	REAL  shift 43
-	ID  shift 44
-	STR  shift 45
-	DO  shift 46
-	IF  shift 47
-	FOR  shift 48
-	BREAK  shift 49
-	CONTINUE  shift 50
-	INCR  shift 51
-	DECR  shift 52
-	'&'  shift 53
-	'~'  shift 54
-	'-'  shift 55
-	'*'  shift 56
-	'('  shift 57
-	'{'  shift 35
-	.  error
-
-	corpo  goto 58
-	instrOrMore  goto 59
-	instrucao  goto 60
-	expressao  goto 61
-	lvalue  goto 62
-
-
-state 41
-	prmtOrMore : parametro ';' .  (31)
-	prmtOrMore : parametro ';' . prmtOrMore  (32)
+	corpo : '{' . prmtNonOrMore instrNonOrMore '}'  (30)
+	prmtNonOrMore : .  (31)
 
 	VOID  shift 8
 	INTEGER  shift 9
@@ -493,10 +424,98 @@ state 41
 	'*'  reduce 31
 	'('  reduce 31
 	'{'  reduce 31
+	'}'  reduce 31
 
 	tipo  goto 25
 	parametro  goto 39
-	prmtOrMore  goto 63
+	prmtNonOrMore  goto 40
+
+
+state 36
+	init : '(' prmtsOrNon ')' crpOrNon .  (15)
+
+	.  reduce 15
+
+
+state 37
+	crpOrNon : corpo .  (24)
+
+	.  reduce 24
+
+
+state 38
+	parametros : parametro ',' parametros .  (28)
+
+	.  reduce 28
+
+
+state 39
+	prmtNonOrMore : parametro . ';' prmtNonOrMore  (32)
+
+	';'  shift 41
+	.  error
+
+
+state 40
+	corpo : '{' prmtNonOrMore . instrNonOrMore '}'  (30)
+	instrNonOrMore : .  (33)
+
+	INT  shift 42
+	REAL  shift 43
+	ID  shift 44
+	STR  shift 45
+	DO  shift 46
+	IF  shift 47
+	FOR  shift 48
+	BREAK  shift 49
+	CONTINUE  shift 50
+	INCR  shift 51
+	DECR  shift 52
+	'&'  shift 53
+	'~'  shift 54
+	'-'  shift 55
+	'*'  shift 56
+	'('  shift 57
+	'{'  shift 35
+	'}'  reduce 33
+
+	corpo  goto 58
+	instrNonOrMore  goto 59
+	instrucao  goto 60
+	expressao  goto 61
+	lvalue  goto 62
+
+
+state 41
+	prmtNonOrMore : parametro ';' . prmtNonOrMore  (32)
+	prmtNonOrMore : .  (31)
+
+	VOID  shift 8
+	INTEGER  shift 9
+	STRING  shift 10
+	NUMBER  shift 11
+	INT  reduce 31
+	REAL  reduce 31
+	ID  reduce 31
+	STR  reduce 31
+	DO  reduce 31
+	IF  reduce 31
+	FOR  reduce 31
+	BREAK  reduce 31
+	CONTINUE  reduce 31
+	INCR  reduce 31
+	DECR  reduce 31
+	'&'  reduce 31
+	'~'  reduce 31
+	'-'  reduce 31
+	'*'  reduce 31
+	'('  reduce 31
+	'{'  reduce 31
+	'}'  reduce 31
+
+	tipo  goto 25
+	parametro  goto 39
+	prmtNonOrMore  goto 63
 
 
 state 42
@@ -708,15 +727,15 @@ state 58
 
 
 state 59
-	corpo : '{' prmtOrMore instrOrMore . '}'  (30)
+	corpo : '{' prmtNonOrMore instrNonOrMore . '}'  (30)
 
 	'}'  shift 78
 	.  error
 
 
 state 60
-	instrOrMore : instrucao .  (33)
-	instrOrMore : instrucao . instrOrMore  (34)
+	instrNonOrMore : instrucao . instrNonOrMore  (34)
+	instrNonOrMore : .  (33)
 
 	INT  shift 42
 	REAL  shift 43
@@ -738,7 +757,7 @@ state 60
 	'}'  reduce 33
 
 	corpo  goto 58
-	instrOrMore  goto 79
+	instrNonOrMore  goto 79
 	instrucao  goto 60
 	expressao  goto 61
 	lvalue  goto 62
@@ -811,7 +830,7 @@ state 62
 
 
 state 63
-	prmtOrMore : parametro ';' prmtOrMore .  (32)
+	prmtNonOrMore : parametro ';' prmtNonOrMore .  (32)
 
 	.  reduce 32
 
@@ -1172,13 +1191,13 @@ state 77
 
 
 state 78
-	corpo : '{' prmtOrMore instrOrMore '}' .  (30)
+	corpo : '{' prmtNonOrMore instrNonOrMore '}' .  (30)
 
 	.  reduce 30
 
 
 state 79
-	instrOrMore : instrucao instrOrMore .  (34)
+	instrNonOrMore : instrucao instrNonOrMore .  (34)
 
 	.  reduce 34
 
