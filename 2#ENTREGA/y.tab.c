@@ -121,7 +121,7 @@ extern int YYPARSE_DECL();
 #define CALL 299
 #define PTR 300
 #define ARG 301
-#define END 302
+#define EEND 302
 #define YYERRCODE 256
 typedef short YYINT;
 static const YYINT yylhs[] = {                           -1,
@@ -503,8 +503,8 @@ static const char *const yyname[] = {
 "DO","WHILE","IF","THEN","FOR","IN","UPTO","DOWNTO","STEP","BREAK","CONTINUE",
 "VOID","INTEGER","STRING","NUMBER","CONST","PUBLIC","INCR","DECR","ATR","NE",
 "GE","LE","ELSE","IFX","UMINUS","ENDE","EQ","GT","LT","BAND","BOR","MUL","DIV",
-"MOD","ADD","SUB","BNOT","CALL","PTR","ARG","END",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,"illegal-symbol",
+"MOD","ADD","SUB","BNOT","CALL","PTR","ARG","EEND",0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,"illegal-symbol",
 };
 static const char *const yyrule[] = {
 "$accept : file",
@@ -842,7 +842,7 @@ case 59:
 break;
 case 60:
 #line 148 "diy.y"
-	{ yyval.n = binNode(CALL, yystack.l_mark[-2].n, nilNode(END)); }
+	{ yyval.n = binNode(CALL, yystack.l_mark[-2].n, nilNode(EEND)); }
 break;
 case 61:
 #line 149 "diy.y"
@@ -930,7 +930,7 @@ case 81:
 break;
 case 82:
 #line 173 "diy.y"
-	{ yyval.n = binNode(ARG, yystack.l_mark[0].n, nilNode(END)); }
+	{ yyval.n = binNode(ARG, yystack.l_mark[0].n, nilNode(EEND)); }
 break;
 #line 936 "y.tab.c"
     }

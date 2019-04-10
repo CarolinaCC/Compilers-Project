@@ -43,7 +43,7 @@
 #define CALL 299
 #define PTR 300
 #define ARG 301
-#define END 302
+#define EEND 302
 #ifdef YYSTYPE
 #undef  YYSTYPE_IS_DECLARED
 #define YYSTYPE_IS_DECLARED 1
