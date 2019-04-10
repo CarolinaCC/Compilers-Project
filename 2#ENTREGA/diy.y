@@ -36,7 +36,7 @@ int yyerror(char *s);
 %type<n> file stmt initOrNon pubOuConstOrNone astOrNon tipo init init1 prmtsOrNon crpOrNon cnstOrNon parametros parametro corpo prmtNonOrMore instrNonOrMore instrucao stp upOrDown els inteirOrNon lvalue expressao args
 	
 %token EQ GT LT BAND BOR MUL DIV MOD ADD SUB BNOT 
-%token CALL PTR ARG END
+%token CALL PTR ARG EEND
 %%
 
 file	: 
@@ -145,7 +145,7 @@ expressao	: INT
 			| lvalue						
 			| '(' expressao ')'				
 			| expressao '(' args ')'	{ $$ = binNode(CALL, $1, $3); }	
-			| expressao '(' ')'			{ $$ = binNode(CALL, $1, nilNode(END)); }	
+			| expressao '(' ')'			{ $$ = binNode(CALL, $1, nilNode(EEND)); }	
       		| '-' expressao %prec UMINUS 	{ $$ = uniNode(UMINUS, $2); }
 			| '&' lvalue %prec ENDE			{ $$ = uniNode(PTR, $2); }	
 			| '~' expressao					{ $$ = uniNode(BNOT, $2); }	
@@ -170,7 +170,7 @@ expressao	: INT
 			| lvalue ATR expressao		{ $$ = binNode(ATR, $3, $1); }
        		;
 
-args	: expressao		      { $$ = binNode(ARG, $1, nilNode(END)); }
+args	: expressao		      { $$ = binNode(ARG, $1, nilNode(EEND)); }
 		| args ',' expressao
 		;
 		
