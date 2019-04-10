@@ -61,7 +61,7 @@ tipo	: INTEGER
 		;
 
 init 	: ATR init1
-		| ATR '(' prmtsOrNon ')' crpOrNon
+		| '(' prmtsOrNon ')' crpOrNon
 		;
 
 init1 	: 
