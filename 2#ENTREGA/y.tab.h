@@ -28,8 +28,22 @@
 #define ELSE 284
 #define IFX 285
 #define UMINUS 286
-#define PONT 287
-#define ENDE 288
+#define ENDE 287
+#define EQ 288
+#define GT 289
+#define LT 290
+#define BAND 291
+#define BOR 292
+#define MUL 293
+#define DIV 294
+#define MOD 295
+#define ADD 296
+#define SUB 297
+#define BNOT 298
+#define CALL 299
+#define PTR 300
+#define ARG 301
+#define END 302
 #ifdef YYSTYPE
 #undef  YYSTYPE_IS_DECLARED
 #define YYSTYPE_IS_DECLARED 1
@@ -40,6 +54,7 @@ typedef union {
 	int i;			/* integer value */
 	double r;		/* real value */
 	char *s;		/* symbol name or string literal */
+	Node *n;	/* tree node */
 } YYSTYPE;
 #endif /* !YYSTYPE_IS_DECLARED */
 extern YYSTYPE yylval;

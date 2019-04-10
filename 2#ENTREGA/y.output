@@ -254,8 +254,8 @@ state 16
 	STR  reduce 25
 	';'  reduce 16
 
-	cnstOrNon  goto 23
-	init1  goto 24
+	init1  goto 23
+	cnstOrNon  goto 24
 
 
 state 17
@@ -306,16 +306,16 @@ state 22
 
 
 state 23
+	init : ATR init1 .  (14)
+
+	.  reduce 14
+
+
+state 24
 	init1 : cnstOrNon . STR  (18)
 
 	STR  shift 30
 	.  error
-
-
-state 24
-	init : ATR init1 .  (14)
-
-	.  reduce 14
 
 
 state 25
@@ -482,8 +482,8 @@ state 40
 	corpo  goto 58
 	instrNonOrMore  goto 59
 	instrucao  goto 60
-	expressao  goto 61
-	lvalue  goto 62
+	lvalue  goto 61
+	expressao  goto 62
 
 
 state 41
@@ -566,8 +566,8 @@ state 46
 
 	corpo  goto 58
 	instrucao  goto 64
-	expressao  goto 61
-	lvalue  goto 62
+	lvalue  goto 61
+	expressao  goto 62
 
 
 state 47
@@ -586,8 +586,8 @@ state 47
 	'('  shift 57
 	.  error
 
-	expressao  goto 65
-	lvalue  goto 66
+	lvalue  goto 65
+	expressao  goto 66
 
 
 state 48
@@ -666,8 +666,8 @@ state 54
 	'('  shift 57
 	.  error
 
+	lvalue  goto 65
 	expressao  goto 74
-	lvalue  goto 66
 
 
 state 55
@@ -686,8 +686,8 @@ state 55
 	'('  shift 57
 	.  error
 
+	lvalue  goto 65
 	expressao  goto 75
-	lvalue  goto 66
 
 
 state 56
@@ -716,8 +716,8 @@ state 57
 	'('  shift 57
 	.  error
 
+	lvalue  goto 65
 	expressao  goto 77
-	lvalue  goto 66
 
 
 state 58
@@ -759,47 +759,11 @@ state 60
 	corpo  goto 58
 	instrNonOrMore  goto 79
 	instrucao  goto 60
-	expressao  goto 61
-	lvalue  goto 62
+	lvalue  goto 61
+	expressao  goto 62
 
 
 state 61
-	instrucao : expressao . ';'  (38)
-	expressao : expressao . '(' args ')'  (59)
-	expressao : expressao . '(' ')'  (60)
-	expressao : expressao . '*' expressao  (68)
-	expressao : expressao . '/' expressao  (69)
-	expressao : expressao . '%' expressao  (70)
-	expressao : expressao . '+' expressao  (71)
-	expressao : expressao . '-' expressao  (72)
-	expressao : expressao . '<' expressao  (73)
-	expressao : expressao . '>' expressao  (74)
-	expressao : expressao . GE expressao  (75)
-	expressao : expressao . LE expressao  (76)
-	expressao : expressao . '=' expressao  (77)
-	expressao : expressao . NE expressao  (78)
-	expressao : expressao . '&' expressao  (79)
-	expressao : expressao . '|' expressao  (80)
-
-	NE  shift 80
-	GE  shift 81
-	LE  shift 82
-	'|'  shift 83
-	'&'  shift 84
-	'='  shift 85
-	'<'  shift 86
-	'>'  shift 87
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
-	';'  shift 94
-	.  error
-
-
-state 62
 	instrucao : lvalue . '#' expressao ';'  (42)
 	lvalue : lvalue . '[' expressao ']'  (52)
 	expressao : lvalue .  (57)
@@ -807,11 +771,11 @@ state 62
 	expressao : lvalue . DECR  (65)
 	expressao : lvalue . ATR expressao  (81)
 
-	INCR  shift 95
-	DECR  shift 96
-	ATR  shift 97
-	'['  shift 98
-	'#'  shift 99
+	INCR  shift 80
+	DECR  shift 81
+	ATR  shift 82
+	'['  shift 83
+	'#'  shift 84
 	NE  reduce 57
 	GE  reduce 57
 	LE  reduce 57
@@ -829,21 +793,8 @@ state 62
 	';'  reduce 57
 
 
-state 63
-	prmtNonOrMore : parametro ';' prmtNonOrMore .  (32)
-
-	.  reduce 32
-
-
-state 64
-	instrucao : DO instrucao . WHILE expressao ';'  (36)
-
-	WHILE  shift 100
-	.  error
-
-
-state 65
-	instrucao : IF expressao . THEN instrucao els  (35)
+state 62
+	instrucao : expressao . ';'  (38)
 	expressao : expressao . '(' args ')'  (59)
 	expressao : expressao . '(' ')'  (60)
 	expressao : expressao . '*' expressao  (68)
@@ -860,35 +811,48 @@ state 65
 	expressao : expressao . '&' expressao  (79)
 	expressao : expressao . '|' expressao  (80)
 
-	THEN  shift 101
-	NE  shift 80
-	GE  shift 81
-	LE  shift 82
-	'|'  shift 83
-	'&'  shift 84
-	'='  shift 85
-	'<'  shift 86
-	'>'  shift 87
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
+	NE  shift 85
+	GE  shift 86
+	LE  shift 87
+	'|'  shift 88
+	'&'  shift 89
+	'='  shift 90
+	'<'  shift 91
+	'>'  shift 92
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
+	';'  shift 99
 	.  error
 
 
-state 66
+state 63
+	prmtNonOrMore : parametro ';' prmtNonOrMore .  (32)
+
+	.  reduce 32
+
+
+state 64
+	instrucao : DO instrucao . WHILE expressao ';'  (36)
+
+	WHILE  shift 100
+	.  error
+
+
+state 65
 	lvalue : lvalue . '[' expressao ']'  (52)
 	expressao : lvalue .  (57)
 	expressao : lvalue . INCR  (64)
 	expressao : lvalue . DECR  (65)
 	expressao : lvalue . ATR expressao  (81)
 
-	INCR  shift 95
-	DECR  shift 96
-	ATR  shift 97
-	'['  shift 98
+	INCR  shift 80
+	DECR  shift 81
+	ATR  shift 82
+	'['  shift 83
 	DO  reduce 57
 	THEN  reduce 57
 	UPTO  reduce 57
@@ -914,12 +878,48 @@ state 66
 	']'  reduce 57
 
 
+state 66
+	instrucao : IF expressao . THEN instrucao els  (35)
+	expressao : expressao . '(' args ')'  (59)
+	expressao : expressao . '(' ')'  (60)
+	expressao : expressao . '*' expressao  (68)
+	expressao : expressao . '/' expressao  (69)
+	expressao : expressao . '%' expressao  (70)
+	expressao : expressao . '+' expressao  (71)
+	expressao : expressao . '-' expressao  (72)
+	expressao : expressao . '<' expressao  (73)
+	expressao : expressao . '>' expressao  (74)
+	expressao : expressao . GE expressao  (75)
+	expressao : expressao . LE expressao  (76)
+	expressao : expressao . '=' expressao  (77)
+	expressao : expressao . NE expressao  (78)
+	expressao : expressao . '&' expressao  (79)
+	expressao : expressao . '|' expressao  (80)
+
+	THEN  shift 101
+	NE  shift 85
+	GE  shift 86
+	LE  shift 87
+	'|'  shift 88
+	'&'  shift 89
+	'='  shift 90
+	'<'  shift 91
+	'>'  shift 92
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
+	.  error
+
+
 state 67
 	instrucao : FOR lvalue . IN expressao upOrDown expressao stp DO instrucao  (37)
 	lvalue : lvalue . '[' expressao ']'  (52)
 
 	IN  shift 102
-	'['  shift 98
+	'['  shift 83
 	.  error
 
 
@@ -947,7 +947,7 @@ state 71
 	lvalue : lvalue . '[' expressao ']'  (52)
 	expressao : INCR lvalue .  (66)
 
-	'['  shift 98
+	'['  shift 83
 	DO  reduce 66
 	THEN  reduce 66
 	UPTO  reduce 66
@@ -977,7 +977,7 @@ state 72
 	lvalue : lvalue . '[' expressao ']'  (52)
 	expressao : DECR lvalue .  (67)
 
-	'['  shift 98
+	'['  shift 83
 	DO  reduce 67
 	THEN  reduce 67
 	UPTO  reduce 67
@@ -1007,7 +1007,7 @@ state 73
 	lvalue : lvalue . '[' expressao ']'  (52)
 	expressao : '&' lvalue .  (62)
 
-	'['  shift 98
+	'['  shift 83
 	DO  reduce 62
 	THEN  reduce 62
 	UPTO  reduce 62
@@ -1051,18 +1051,18 @@ state 74
 	expressao : expressao . '&' expressao  (79)
 	expressao : expressao . '|' expressao  (80)
 
-	NE  shift 80
-	GE  shift 81
-	LE  shift 82
-	'='  shift 85
-	'<'  shift 86
-	'>'  shift 87
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
+	NE  shift 85
+	GE  shift 86
+	LE  shift 87
+	'='  shift 90
+	'<'  shift 91
+	'>'  shift 92
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
 	DO  reduce 63
 	THEN  reduce 63
 	UPTO  reduce 63
@@ -1094,7 +1094,7 @@ state 75
 	expressao : expressao . '&' expressao  (79)
 	expressao : expressao . '|' expressao  (80)
 
-	'('  shift 93
+	'('  shift 98
 	DO  reduce 61
 	THEN  reduce 61
 	UPTO  reduce 61
@@ -1123,7 +1123,7 @@ state 76
 	lvalue : lvalue . '[' expressao ']'  (52)
 	lvalue : '*' lvalue .  (53)
 
-	'['  shift 98
+	'['  shift 83
 	DO  reduce 53
 	THEN  reduce 53
 	IN  reduce 53
@@ -1172,20 +1172,20 @@ state 77
 	expressao : expressao . '&' expressao  (79)
 	expressao : expressao . '|' expressao  (80)
 
-	NE  shift 80
-	GE  shift 81
-	LE  shift 82
-	'|'  shift 83
-	'&'  shift 84
-	'='  shift 85
-	'<'  shift 86
-	'>'  shift 87
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
+	NE  shift 85
+	GE  shift 86
+	LE  shift 87
+	'|'  shift 88
+	'&'  shift 89
+	'='  shift 90
+	'<'  shift 91
+	'>'  shift 92
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
 	')'  shift 105
 	.  error
 
@@ -1203,307 +1203,18 @@ state 79
 
 
 state 80
-	expressao : expressao NE . expressao  (78)
-
-	INT  shift 42
-	REAL  shift 43
-	ID  shift 44
-	STR  shift 45
-	INCR  shift 51
-	DECR  shift 52
-	'&'  shift 53
-	'~'  shift 54
-	'-'  shift 55
-	'*'  shift 56
-	'('  shift 57
-	.  error
-
-	expressao  goto 106
-	lvalue  goto 66
-
-
-state 81
-	expressao : expressao GE . expressao  (75)
-
-	INT  shift 42
-	REAL  shift 43
-	ID  shift 44
-	STR  shift 45
-	INCR  shift 51
-	DECR  shift 52
-	'&'  shift 53
-	'~'  shift 54
-	'-'  shift 55
-	'*'  shift 56
-	'('  shift 57
-	.  error
-
-	expressao  goto 107
-	lvalue  goto 66
-
-
-state 82
-	expressao : expressao LE . expressao  (76)
-
-	INT  shift 42
-	REAL  shift 43
-	ID  shift 44
-	STR  shift 45
-	INCR  shift 51
-	DECR  shift 52
-	'&'  shift 53
-	'~'  shift 54
-	'-'  shift 55
-	'*'  shift 56
-	'('  shift 57
-	.  error
-
-	expressao  goto 108
-	lvalue  goto 66
-
-
-state 83
-	expressao : expressao '|' . expressao  (80)
-
-	INT  shift 42
-	REAL  shift 43
-	ID  shift 44
-	STR  shift 45
-	INCR  shift 51
-	DECR  shift 52
-	'&'  shift 53
-	'~'  shift 54
-	'-'  shift 55
-	'*'  shift 56
-	'('  shift 57
-	.  error
-
-	expressao  goto 109
-	lvalue  goto 66
-
-
-state 84
-	expressao : expressao '&' . expressao  (79)
-
-	INT  shift 42
-	REAL  shift 43
-	ID  shift 44
-	STR  shift 45
-	INCR  shift 51
-	DECR  shift 52
-	'&'  shift 53
-	'~'  shift 54
-	'-'  shift 55
-	'*'  shift 56
-	'('  shift 57
-	.  error
-
-	expressao  goto 110
-	lvalue  goto 66
-
-
-state 85
-	expressao : expressao '=' . expressao  (77)
-
-	INT  shift 42
-	REAL  shift 43
-	ID  shift 44
-	STR  shift 45
-	INCR  shift 51
-	DECR  shift 52
-	'&'  shift 53
-	'~'  shift 54
-	'-'  shift 55
-	'*'  shift 56
-	'('  shift 57
-	.  error
-
-	expressao  goto 111
-	lvalue  goto 66
-
-
-state 86
-	expressao : expressao '<' . expressao  (73)
-
-	INT  shift 42
-	REAL  shift 43
-	ID  shift 44
-	STR  shift 45
-	INCR  shift 51
-	DECR  shift 52
-	'&'  shift 53
-	'~'  shift 54
-	'-'  shift 55
-	'*'  shift 56
-	'('  shift 57
-	.  error
-
-	expressao  goto 112
-	lvalue  goto 66
-
-
-state 87
-	expressao : expressao '>' . expressao  (74)
-
-	INT  shift 42
-	REAL  shift 43
-	ID  shift 44
-	STR  shift 45
-	INCR  shift 51
-	DECR  shift 52
-	'&'  shift 53
-	'~'  shift 54
-	'-'  shift 55
-	'*'  shift 56
-	'('  shift 57
-	.  error
-
-	expressao  goto 113
-	lvalue  goto 66
-
-
-state 88
-	expressao : expressao '-' . expressao  (72)
-
-	INT  shift 42
-	REAL  shift 43
-	ID  shift 44
-	STR  shift 45
-	INCR  shift 51
-	DECR  shift 52
-	'&'  shift 53
-	'~'  shift 54
-	'-'  shift 55
-	'*'  shift 56
-	'('  shift 57
-	.  error
-
-	expressao  goto 114
-	lvalue  goto 66
-
-
-state 89
-	expressao : expressao '+' . expressao  (71)
-
-	INT  shift 42
-	REAL  shift 43
-	ID  shift 44
-	STR  shift 45
-	INCR  shift 51
-	DECR  shift 52
-	'&'  shift 53
-	'~'  shift 54
-	'-'  shift 55
-	'*'  shift 56
-	'('  shift 57
-	.  error
-
-	expressao  goto 115
-	lvalue  goto 66
-
-
-state 90
-	expressao : expressao '*' . expressao  (68)
-
-	INT  shift 42
-	REAL  shift 43
-	ID  shift 44
-	STR  shift 45
-	INCR  shift 51
-	DECR  shift 52
-	'&'  shift 53
-	'~'  shift 54
-	'-'  shift 55
-	'*'  shift 56
-	'('  shift 57
-	.  error
-
-	expressao  goto 116
-	lvalue  goto 66
-
-
-state 91
-	expressao : expressao '/' . expressao  (69)
-
-	INT  shift 42
-	REAL  shift 43
-	ID  shift 44
-	STR  shift 45
-	INCR  shift 51
-	DECR  shift 52
-	'&'  shift 53
-	'~'  shift 54
-	'-'  shift 55
-	'*'  shift 56
-	'('  shift 57
-	.  error
-
-	expressao  goto 117
-	lvalue  goto 66
-
-
-state 92
-	expressao : expressao '%' . expressao  (70)
-
-	INT  shift 42
-	REAL  shift 43
-	ID  shift 44
-	STR  shift 45
-	INCR  shift 51
-	DECR  shift 52
-	'&'  shift 53
-	'~'  shift 54
-	'-'  shift 55
-	'*'  shift 56
-	'('  shift 57
-	.  error
-
-	expressao  goto 118
-	lvalue  goto 66
-
-
-state 93
-	expressao : expressao '(' . args ')'  (59)
-	expressao : expressao '(' . ')'  (60)
-
-	INT  shift 42
-	REAL  shift 43
-	ID  shift 44
-	STR  shift 45
-	INCR  shift 51
-	DECR  shift 52
-	'&'  shift 53
-	'~'  shift 54
-	'-'  shift 55
-	'*'  shift 56
-	'('  shift 57
-	')'  shift 119
-	.  error
-
-	expressao  goto 120
-	lvalue  goto 66
-	args  goto 121
-
-
-state 94
-	instrucao : expressao ';' .  (38)
-
-	.  reduce 38
-
-
-state 95
 	expressao : lvalue INCR .  (64)
 
 	.  reduce 64
 
 
-state 96
+state 81
 	expressao : lvalue DECR .  (65)
 
 	.  reduce 65
 
 
-state 97
+state 82
 	expressao : lvalue ATR . expressao  (81)
 
 	INT  shift 42
@@ -1519,11 +1230,11 @@ state 97
 	'('  shift 57
 	.  error
 
-	expressao  goto 122
-	lvalue  goto 66
+	lvalue  goto 65
+	expressao  goto 106
 
 
-state 98
+state 83
 	lvalue : lvalue '[' . expressao ']'  (52)
 
 	INT  shift 42
@@ -1539,11 +1250,11 @@ state 98
 	'('  shift 57
 	.  error
 
-	expressao  goto 123
-	lvalue  goto 66
+	lvalue  goto 65
+	expressao  goto 107
 
 
-state 99
+state 84
 	instrucao : lvalue '#' . expressao ';'  (42)
 
 	INT  shift 42
@@ -1559,8 +1270,297 @@ state 99
 	'('  shift 57
 	.  error
 
-	expressao  goto 124
-	lvalue  goto 66
+	lvalue  goto 65
+	expressao  goto 108
+
+
+state 85
+	expressao : expressao NE . expressao  (78)
+
+	INT  shift 42
+	REAL  shift 43
+	ID  shift 44
+	STR  shift 45
+	INCR  shift 51
+	DECR  shift 52
+	'&'  shift 53
+	'~'  shift 54
+	'-'  shift 55
+	'*'  shift 56
+	'('  shift 57
+	.  error
+
+	lvalue  goto 65
+	expressao  goto 109
+
+
+state 86
+	expressao : expressao GE . expressao  (75)
+
+	INT  shift 42
+	REAL  shift 43
+	ID  shift 44
+	STR  shift 45
+	INCR  shift 51
+	DECR  shift 52
+	'&'  shift 53
+	'~'  shift 54
+	'-'  shift 55
+	'*'  shift 56
+	'('  shift 57
+	.  error
+
+	lvalue  goto 65
+	expressao  goto 110
+
+
+state 87
+	expressao : expressao LE . expressao  (76)
+
+	INT  shift 42
+	REAL  shift 43
+	ID  shift 44
+	STR  shift 45
+	INCR  shift 51
+	DECR  shift 52
+	'&'  shift 53
+	'~'  shift 54
+	'-'  shift 55
+	'*'  shift 56
+	'('  shift 57
+	.  error
+
+	lvalue  goto 65
+	expressao  goto 111
+
+
+state 88
+	expressao : expressao '|' . expressao  (80)
+
+	INT  shift 42
+	REAL  shift 43
+	ID  shift 44
+	STR  shift 45
+	INCR  shift 51
+	DECR  shift 52
+	'&'  shift 53
+	'~'  shift 54
+	'-'  shift 55
+	'*'  shift 56
+	'('  shift 57
+	.  error
+
+	lvalue  goto 65
+	expressao  goto 112
+
+
+state 89
+	expressao : expressao '&' . expressao  (79)
+
+	INT  shift 42
+	REAL  shift 43
+	ID  shift 44
+	STR  shift 45
+	INCR  shift 51
+	DECR  shift 52
+	'&'  shift 53
+	'~'  shift 54
+	'-'  shift 55
+	'*'  shift 56
+	'('  shift 57
+	.  error
+
+	lvalue  goto 65
+	expressao  goto 113
+
+
+state 90
+	expressao : expressao '=' . expressao  (77)
+
+	INT  shift 42
+	REAL  shift 43
+	ID  shift 44
+	STR  shift 45
+	INCR  shift 51
+	DECR  shift 52
+	'&'  shift 53
+	'~'  shift 54
+	'-'  shift 55
+	'*'  shift 56
+	'('  shift 57
+	.  error
+
+	lvalue  goto 65
+	expressao  goto 114
+
+
+state 91
+	expressao : expressao '<' . expressao  (73)
+
+	INT  shift 42
+	REAL  shift 43
+	ID  shift 44
+	STR  shift 45
+	INCR  shift 51
+	DECR  shift 52
+	'&'  shift 53
+	'~'  shift 54
+	'-'  shift 55
+	'*'  shift 56
+	'('  shift 57
+	.  error
+
+	lvalue  goto 65
+	expressao  goto 115
+
+
+state 92
+	expressao : expressao '>' . expressao  (74)
+
+	INT  shift 42
+	REAL  shift 43
+	ID  shift 44
+	STR  shift 45
+	INCR  shift 51
+	DECR  shift 52
+	'&'  shift 53
+	'~'  shift 54
+	'-'  shift 55
+	'*'  shift 56
+	'('  shift 57
+	.  error
+
+	lvalue  goto 65
+	expressao  goto 116
+
+
+state 93
+	expressao : expressao '-' . expressao  (72)
+
+	INT  shift 42
+	REAL  shift 43
+	ID  shift 44
+	STR  shift 45
+	INCR  shift 51
+	DECR  shift 52
+	'&'  shift 53
+	'~'  shift 54
+	'-'  shift 55
+	'*'  shift 56
+	'('  shift 57
+	.  error
+
+	lvalue  goto 65
+	expressao  goto 117
+
+
+state 94
+	expressao : expressao '+' . expressao  (71)
+
+	INT  shift 42
+	REAL  shift 43
+	ID  shift 44
+	STR  shift 45
+	INCR  shift 51
+	DECR  shift 52
+	'&'  shift 53
+	'~'  shift 54
+	'-'  shift 55
+	'*'  shift 56
+	'('  shift 57
+	.  error
+
+	lvalue  goto 65
+	expressao  goto 118
+
+
+state 95
+	expressao : expressao '*' . expressao  (68)
+
+	INT  shift 42
+	REAL  shift 43
+	ID  shift 44
+	STR  shift 45
+	INCR  shift 51
+	DECR  shift 52
+	'&'  shift 53
+	'~'  shift 54
+	'-'  shift 55
+	'*'  shift 56
+	'('  shift 57
+	.  error
+
+	lvalue  goto 65
+	expressao  goto 119
+
+
+state 96
+	expressao : expressao '/' . expressao  (69)
+
+	INT  shift 42
+	REAL  shift 43
+	ID  shift 44
+	STR  shift 45
+	INCR  shift 51
+	DECR  shift 52
+	'&'  shift 53
+	'~'  shift 54
+	'-'  shift 55
+	'*'  shift 56
+	'('  shift 57
+	.  error
+
+	lvalue  goto 65
+	expressao  goto 120
+
+
+state 97
+	expressao : expressao '%' . expressao  (70)
+
+	INT  shift 42
+	REAL  shift 43
+	ID  shift 44
+	STR  shift 45
+	INCR  shift 51
+	DECR  shift 52
+	'&'  shift 53
+	'~'  shift 54
+	'-'  shift 55
+	'*'  shift 56
+	'('  shift 57
+	.  error
+
+	lvalue  goto 65
+	expressao  goto 121
+
+
+state 98
+	expressao : expressao '(' . args ')'  (59)
+	expressao : expressao '(' . ')'  (60)
+
+	INT  shift 42
+	REAL  shift 43
+	ID  shift 44
+	STR  shift 45
+	INCR  shift 51
+	DECR  shift 52
+	'&'  shift 53
+	'~'  shift 54
+	'-'  shift 55
+	'*'  shift 56
+	'('  shift 57
+	')'  shift 122
+	.  error
+
+	lvalue  goto 65
+	expressao  goto 123
+	args  goto 124
+
+
+state 99
+	instrucao : expressao ';' .  (38)
+
+	.  reduce 38
 
 
 state 100
@@ -1579,8 +1579,8 @@ state 100
 	'('  shift 57
 	.  error
 
+	lvalue  goto 65
 	expressao  goto 125
-	lvalue  goto 66
 
 
 state 101
@@ -1607,8 +1607,8 @@ state 101
 
 	corpo  goto 58
 	instrucao  goto 126
-	expressao  goto 61
-	lvalue  goto 62
+	lvalue  goto 61
+	expressao  goto 62
 
 
 state 102
@@ -1627,8 +1627,8 @@ state 102
 	'('  shift 57
 	.  error
 
+	lvalue  goto 65
 	expressao  goto 127
-	lvalue  goto 66
 
 
 state 103
@@ -1663,20 +1663,135 @@ state 106
 	expressao : expressao . LE expressao  (76)
 	expressao : expressao . '=' expressao  (77)
 	expressao : expressao . NE expressao  (78)
+	expressao : expressao . '&' expressao  (79)
+	expressao : expressao . '|' expressao  (80)
+	expressao : lvalue ATR expressao .  (81)
+
+	NE  shift 85
+	GE  shift 86
+	LE  shift 87
+	'|'  shift 88
+	'&'  shift 89
+	'='  shift 90
+	'<'  shift 91
+	'>'  shift 92
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
+	DO  reduce 81
+	THEN  reduce 81
+	UPTO  reduce 81
+	DOWNTO  reduce 81
+	STEP  reduce 81
+	';'  reduce 81
+	')'  reduce 81
+	','  reduce 81
+	']'  reduce 81
+
+
+state 107
+	lvalue : lvalue '[' expressao . ']'  (52)
+	expressao : expressao . '(' args ')'  (59)
+	expressao : expressao . '(' ')'  (60)
+	expressao : expressao . '*' expressao  (68)
+	expressao : expressao . '/' expressao  (69)
+	expressao : expressao . '%' expressao  (70)
+	expressao : expressao . '+' expressao  (71)
+	expressao : expressao . '-' expressao  (72)
+	expressao : expressao . '<' expressao  (73)
+	expressao : expressao . '>' expressao  (74)
+	expressao : expressao . GE expressao  (75)
+	expressao : expressao . LE expressao  (76)
+	expressao : expressao . '=' expressao  (77)
+	expressao : expressao . NE expressao  (78)
+	expressao : expressao . '&' expressao  (79)
+	expressao : expressao . '|' expressao  (80)
+
+	NE  shift 85
+	GE  shift 86
+	LE  shift 87
+	'|'  shift 88
+	'&'  shift 89
+	'='  shift 90
+	'<'  shift 91
+	'>'  shift 92
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
+	']'  shift 128
+	.  error
+
+
+state 108
+	instrucao : lvalue '#' expressao . ';'  (42)
+	expressao : expressao . '(' args ')'  (59)
+	expressao : expressao . '(' ')'  (60)
+	expressao : expressao . '*' expressao  (68)
+	expressao : expressao . '/' expressao  (69)
+	expressao : expressao . '%' expressao  (70)
+	expressao : expressao . '+' expressao  (71)
+	expressao : expressao . '-' expressao  (72)
+	expressao : expressao . '<' expressao  (73)
+	expressao : expressao . '>' expressao  (74)
+	expressao : expressao . GE expressao  (75)
+	expressao : expressao . LE expressao  (76)
+	expressao : expressao . '=' expressao  (77)
+	expressao : expressao . NE expressao  (78)
+	expressao : expressao . '&' expressao  (79)
+	expressao : expressao . '|' expressao  (80)
+
+	NE  shift 85
+	GE  shift 86
+	LE  shift 87
+	'|'  shift 88
+	'&'  shift 89
+	'='  shift 90
+	'<'  shift 91
+	'>'  shift 92
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
+	';'  shift 129
+	.  error
+
+
+state 109
+	expressao : expressao . '(' args ')'  (59)
+	expressao : expressao . '(' ')'  (60)
+	expressao : expressao . '*' expressao  (68)
+	expressao : expressao . '/' expressao  (69)
+	expressao : expressao . '%' expressao  (70)
+	expressao : expressao . '+' expressao  (71)
+	expressao : expressao . '-' expressao  (72)
+	expressao : expressao . '<' expressao  (73)
+	expressao : expressao . '>' expressao  (74)
+	expressao : expressao . GE expressao  (75)
+	expressao : expressao . LE expressao  (76)
+	expressao : expressao . '=' expressao  (77)
+	expressao : expressao . NE expressao  (78)
 	expressao : expressao NE expressao .  (78)
 	expressao : expressao . '&' expressao  (79)
 	expressao : expressao . '|' expressao  (80)
 
-	GE  shift 81
-	LE  shift 82
-	'<'  shift 86
-	'>'  shift 87
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
+	GE  shift 86
+	LE  shift 87
+	'<'  shift 91
+	'>'  shift 92
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
 	DO  reduce 78
 	THEN  reduce 78
 	UPTO  reduce 78
@@ -1692,7 +1807,7 @@ state 106
 	']'  reduce 78
 
 
-state 107
+state 110
 	expressao : expressao . '(' args ')'  (59)
 	expressao : expressao . '(' ')'  (60)
 	expressao : expressao . '*' expressao  (68)
@@ -1710,12 +1825,12 @@ state 107
 	expressao : expressao . '&' expressao  (79)
 	expressao : expressao . '|' expressao  (80)
 
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
 	DO  reduce 75
 	THEN  reduce 75
 	UPTO  reduce 75
@@ -1735,7 +1850,7 @@ state 107
 	']'  reduce 75
 
 
-state 108
+state 111
 	expressao : expressao . '(' args ')'  (59)
 	expressao : expressao . '(' ')'  (60)
 	expressao : expressao . '*' expressao  (68)
@@ -1753,12 +1868,12 @@ state 108
 	expressao : expressao . '&' expressao  (79)
 	expressao : expressao . '|' expressao  (80)
 
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
 	DO  reduce 76
 	THEN  reduce 76
 	UPTO  reduce 76
@@ -1778,7 +1893,7 @@ state 108
 	']'  reduce 76
 
 
-state 109
+state 112
 	expressao : expressao . '(' args ')'  (59)
 	expressao : expressao . '(' ')'  (60)
 	expressao : expressao . '*' expressao  (68)
@@ -1796,19 +1911,19 @@ state 109
 	expressao : expressao . '|' expressao  (80)
 	expressao : expressao '|' expressao .  (80)
 
-	NE  shift 80
-	GE  shift 81
-	LE  shift 82
-	'&'  shift 84
-	'='  shift 85
-	'<'  shift 86
-	'>'  shift 87
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
+	NE  shift 85
+	GE  shift 86
+	LE  shift 87
+	'&'  shift 89
+	'='  shift 90
+	'<'  shift 91
+	'>'  shift 92
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
 	DO  reduce 80
 	THEN  reduce 80
 	UPTO  reduce 80
@@ -1821,7 +1936,7 @@ state 109
 	']'  reduce 80
 
 
-state 110
+state 113
 	expressao : expressao . '(' args ')'  (59)
 	expressao : expressao . '(' ')'  (60)
 	expressao : expressao . '*' expressao  (68)
@@ -1839,18 +1954,18 @@ state 110
 	expressao : expressao '&' expressao .  (79)
 	expressao : expressao . '|' expressao  (80)
 
-	NE  shift 80
-	GE  shift 81
-	LE  shift 82
-	'='  shift 85
-	'<'  shift 86
-	'>'  shift 87
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
+	NE  shift 85
+	GE  shift 86
+	LE  shift 87
+	'='  shift 90
+	'<'  shift 91
+	'>'  shift 92
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
 	DO  reduce 79
 	THEN  reduce 79
 	UPTO  reduce 79
@@ -1864,7 +1979,7 @@ state 110
 	']'  reduce 79
 
 
-state 111
+state 114
 	expressao : expressao . '(' args ')'  (59)
 	expressao : expressao . '(' ')'  (60)
 	expressao : expressao . '*' expressao  (68)
@@ -1882,16 +1997,16 @@ state 111
 	expressao : expressao . '&' expressao  (79)
 	expressao : expressao . '|' expressao  (80)
 
-	GE  shift 81
-	LE  shift 82
-	'<'  shift 86
-	'>'  shift 87
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
+	GE  shift 86
+	LE  shift 87
+	'<'  shift 91
+	'>'  shift 92
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
 	DO  reduce 77
 	THEN  reduce 77
 	UPTO  reduce 77
@@ -1907,7 +2022,7 @@ state 111
 	']'  reduce 77
 
 
-state 112
+state 115
 	expressao : expressao . '(' args ')'  (59)
 	expressao : expressao . '(' ')'  (60)
 	expressao : expressao . '*' expressao  (68)
@@ -1925,12 +2040,12 @@ state 112
 	expressao : expressao . '&' expressao  (79)
 	expressao : expressao . '|' expressao  (80)
 
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
 	DO  reduce 73
 	THEN  reduce 73
 	UPTO  reduce 73
@@ -1950,7 +2065,7 @@ state 112
 	']'  reduce 73
 
 
-state 113
+state 116
 	expressao : expressao . '(' args ')'  (59)
 	expressao : expressao . '(' ')'  (60)
 	expressao : expressao . '*' expressao  (68)
@@ -1968,12 +2083,12 @@ state 113
 	expressao : expressao . '&' expressao  (79)
 	expressao : expressao . '|' expressao  (80)
 
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
 	DO  reduce 74
 	THEN  reduce 74
 	UPTO  reduce 74
@@ -1993,7 +2108,7 @@ state 113
 	']'  reduce 74
 
 
-state 114
+state 117
 	expressao : expressao . '(' args ')'  (59)
 	expressao : expressao . '(' ')'  (60)
 	expressao : expressao . '*' expressao  (68)
@@ -2011,10 +2126,10 @@ state 114
 	expressao : expressao . '&' expressao  (79)
 	expressao : expressao . '|' expressao  (80)
 
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
 	DO  reduce 72
 	THEN  reduce 72
 	UPTO  reduce 72
@@ -2036,7 +2151,7 @@ state 114
 	']'  reduce 72
 
 
-state 115
+state 118
 	expressao : expressao . '(' args ')'  (59)
 	expressao : expressao . '(' ')'  (60)
 	expressao : expressao . '*' expressao  (68)
@@ -2054,10 +2169,10 @@ state 115
 	expressao : expressao . '&' expressao  (79)
 	expressao : expressao . '|' expressao  (80)
 
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
 	DO  reduce 71
 	THEN  reduce 71
 	UPTO  reduce 71
@@ -2079,7 +2194,7 @@ state 115
 	']'  reduce 71
 
 
-state 116
+state 119
 	expressao : expressao . '(' args ')'  (59)
 	expressao : expressao . '(' ')'  (60)
 	expressao : expressao . '*' expressao  (68)
@@ -2097,7 +2212,7 @@ state 116
 	expressao : expressao . '&' expressao  (79)
 	expressao : expressao . '|' expressao  (80)
 
-	'('  shift 93
+	'('  shift 98
 	DO  reduce 68
 	THEN  reduce 68
 	UPTO  reduce 68
@@ -2122,7 +2237,7 @@ state 116
 	']'  reduce 68
 
 
-state 117
+state 120
 	expressao : expressao . '(' args ')'  (59)
 	expressao : expressao . '(' ')'  (60)
 	expressao : expressao . '*' expressao  (68)
@@ -2140,7 +2255,7 @@ state 117
 	expressao : expressao . '&' expressao  (79)
 	expressao : expressao . '|' expressao  (80)
 
-	'('  shift 93
+	'('  shift 98
 	DO  reduce 69
 	THEN  reduce 69
 	UPTO  reduce 69
@@ -2165,7 +2280,7 @@ state 117
 	']'  reduce 69
 
 
-state 118
+state 121
 	expressao : expressao . '(' args ')'  (59)
 	expressao : expressao . '(' ')'  (60)
 	expressao : expressao . '*' expressao  (68)
@@ -2183,7 +2298,7 @@ state 118
 	expressao : expressao . '&' expressao  (79)
 	expressao : expressao . '|' expressao  (80)
 
-	'('  shift 93
+	'('  shift 98
 	DO  reduce 70
 	THEN  reduce 70
 	UPTO  reduce 70
@@ -2208,13 +2323,13 @@ state 118
 	']'  reduce 70
 
 
-state 119
+state 122
 	expressao : expressao '(' ')' .  (60)
 
 	.  reduce 60
 
 
-state 120
+state 123
 	expressao : expressao . '(' args ')'  (59)
 	expressao : expressao . '(' ')'  (60)
 	expressao : expressao . '*' expressao  (68)
@@ -2232,145 +2347,30 @@ state 120
 	expressao : expressao . '|' expressao  (80)
 	args : expressao .  (82)
 
-	NE  shift 80
-	GE  shift 81
-	LE  shift 82
-	'|'  shift 83
-	'&'  shift 84
-	'='  shift 85
-	'<'  shift 86
-	'>'  shift 87
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
+	NE  shift 85
+	GE  shift 86
+	LE  shift 87
+	'|'  shift 88
+	'&'  shift 89
+	'='  shift 90
+	'<'  shift 91
+	'>'  shift 92
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
 	')'  reduce 82
 	','  reduce 82
 
 
-state 121
+state 124
 	expressao : expressao '(' args . ')'  (59)
 	args : args . ',' expressao  (83)
 
-	')'  shift 128
-	','  shift 129
-	.  error
-
-
-state 122
-	expressao : expressao . '(' args ')'  (59)
-	expressao : expressao . '(' ')'  (60)
-	expressao : expressao . '*' expressao  (68)
-	expressao : expressao . '/' expressao  (69)
-	expressao : expressao . '%' expressao  (70)
-	expressao : expressao . '+' expressao  (71)
-	expressao : expressao . '-' expressao  (72)
-	expressao : expressao . '<' expressao  (73)
-	expressao : expressao . '>' expressao  (74)
-	expressao : expressao . GE expressao  (75)
-	expressao : expressao . LE expressao  (76)
-	expressao : expressao . '=' expressao  (77)
-	expressao : expressao . NE expressao  (78)
-	expressao : expressao . '&' expressao  (79)
-	expressao : expressao . '|' expressao  (80)
-	expressao : lvalue ATR expressao .  (81)
-
-	NE  shift 80
-	GE  shift 81
-	LE  shift 82
-	'|'  shift 83
-	'&'  shift 84
-	'='  shift 85
-	'<'  shift 86
-	'>'  shift 87
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
-	DO  reduce 81
-	THEN  reduce 81
-	UPTO  reduce 81
-	DOWNTO  reduce 81
-	STEP  reduce 81
-	';'  reduce 81
-	')'  reduce 81
-	','  reduce 81
-	']'  reduce 81
-
-
-state 123
-	lvalue : lvalue '[' expressao . ']'  (52)
-	expressao : expressao . '(' args ')'  (59)
-	expressao : expressao . '(' ')'  (60)
-	expressao : expressao . '*' expressao  (68)
-	expressao : expressao . '/' expressao  (69)
-	expressao : expressao . '%' expressao  (70)
-	expressao : expressao . '+' expressao  (71)
-	expressao : expressao . '-' expressao  (72)
-	expressao : expressao . '<' expressao  (73)
-	expressao : expressao . '>' expressao  (74)
-	expressao : expressao . GE expressao  (75)
-	expressao : expressao . LE expressao  (76)
-	expressao : expressao . '=' expressao  (77)
-	expressao : expressao . NE expressao  (78)
-	expressao : expressao . '&' expressao  (79)
-	expressao : expressao . '|' expressao  (80)
-
-	NE  shift 80
-	GE  shift 81
-	LE  shift 82
-	'|'  shift 83
-	'&'  shift 84
-	'='  shift 85
-	'<'  shift 86
-	'>'  shift 87
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
-	']'  shift 130
-	.  error
-
-
-state 124
-	instrucao : lvalue '#' expressao . ';'  (42)
-	expressao : expressao . '(' args ')'  (59)
-	expressao : expressao . '(' ')'  (60)
-	expressao : expressao . '*' expressao  (68)
-	expressao : expressao . '/' expressao  (69)
-	expressao : expressao . '%' expressao  (70)
-	expressao : expressao . '+' expressao  (71)
-	expressao : expressao . '-' expressao  (72)
-	expressao : expressao . '<' expressao  (73)
-	expressao : expressao . '>' expressao  (74)
-	expressao : expressao . GE expressao  (75)
-	expressao : expressao . LE expressao  (76)
-	expressao : expressao . '=' expressao  (77)
-	expressao : expressao . NE expressao  (78)
-	expressao : expressao . '&' expressao  (79)
-	expressao : expressao . '|' expressao  (80)
-
-	NE  shift 80
-	GE  shift 81
-	LE  shift 82
-	'|'  shift 83
-	'&'  shift 84
-	'='  shift 85
-	'<'  shift 86
-	'>'  shift 87
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
-	';'  shift 131
+	')'  shift 130
+	','  shift 131
 	.  error
 
 
@@ -2392,20 +2392,20 @@ state 125
 	expressao : expressao . '&' expressao  (79)
 	expressao : expressao . '|' expressao  (80)
 
-	NE  shift 80
-	GE  shift 81
-	LE  shift 82
-	'|'  shift 83
-	'&'  shift 84
-	'='  shift 85
-	'<'  shift 86
-	'>'  shift 87
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
+	NE  shift 85
+	GE  shift 86
+	LE  shift 87
+	'|'  shift 88
+	'&'  shift 89
+	'='  shift 90
+	'<'  shift 91
+	'>'  shift 92
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
 	';'  shift 132
 	.  error
 
@@ -2458,32 +2458,44 @@ state 127
 
 	UPTO  shift 135
 	DOWNTO  shift 136
-	NE  shift 80
-	GE  shift 81
-	LE  shift 82
-	'|'  shift 83
-	'&'  shift 84
-	'='  shift 85
-	'<'  shift 86
-	'>'  shift 87
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
+	NE  shift 85
+	GE  shift 86
+	LE  shift 87
+	'|'  shift 88
+	'&'  shift 89
+	'='  shift 90
+	'<'  shift 91
+	'>'  shift 92
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
 	.  error
 
 	upOrDown  goto 137
 
 
 state 128
+	lvalue : lvalue '[' expressao ']' .  (52)
+
+	.  reduce 52
+
+
+state 129
+	instrucao : lvalue '#' expressao ';' .  (42)
+
+	.  reduce 42
+
+
+state 130
 	expressao : expressao '(' args ')' .  (59)
 
 	.  reduce 59
 
 
-state 129
+state 131
 	args : args ',' . expressao  (83)
 
 	INT  shift 42
@@ -2499,20 +2511,8 @@ state 129
 	'('  shift 57
 	.  error
 
+	lvalue  goto 65
 	expressao  goto 138
-	lvalue  goto 66
-
-
-state 130
-	lvalue : lvalue '[' expressao ']' .  (52)
-
-	.  reduce 52
-
-
-state 131
-	instrucao : lvalue '#' expressao ';' .  (42)
-
-	.  reduce 42
 
 
 state 132
@@ -2545,8 +2545,8 @@ state 133
 
 	corpo  goto 58
 	instrucao  goto 139
-	expressao  goto 61
-	lvalue  goto 62
+	lvalue  goto 61
+	expressao  goto 62
 
 
 state 134
@@ -2583,8 +2583,8 @@ state 137
 	'('  shift 57
 	.  error
 
+	lvalue  goto 65
 	expressao  goto 140
-	lvalue  goto 66
 
 
 state 138
@@ -2605,20 +2605,20 @@ state 138
 	expressao : expressao . '|' expressao  (80)
 	args : args ',' expressao .  (83)
 
-	NE  shift 80
-	GE  shift 81
-	LE  shift 82
-	'|'  shift 83
-	'&'  shift 84
-	'='  shift 85
-	'<'  shift 86
-	'>'  shift 87
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
+	NE  shift 85
+	GE  shift 86
+	LE  shift 87
+	'|'  shift 88
+	'&'  shift 89
+	'='  shift 90
+	'<'  shift 91
+	'>'  shift 92
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
 	')'  reduce 83
 	','  reduce 83
 
@@ -2649,20 +2649,20 @@ state 140
 	stp : .  (43)
 
 	STEP  shift 141
-	NE  shift 80
-	GE  shift 81
-	LE  shift 82
-	'|'  shift 83
-	'&'  shift 84
-	'='  shift 85
-	'<'  shift 86
-	'>'  shift 87
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
+	NE  shift 85
+	GE  shift 86
+	LE  shift 87
+	'|'  shift 88
+	'&'  shift 89
+	'='  shift 90
+	'<'  shift 91
+	'>'  shift 92
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
 	DO  reduce 43
 
 	stp  goto 142
@@ -2684,8 +2684,8 @@ state 141
 	'('  shift 57
 	.  error
 
+	lvalue  goto 65
 	expressao  goto 143
-	lvalue  goto 66
 
 
 state 142
@@ -2713,20 +2713,20 @@ state 143
 	expressao : expressao . '&' expressao  (79)
 	expressao : expressao . '|' expressao  (80)
 
-	NE  shift 80
-	GE  shift 81
-	LE  shift 82
-	'|'  shift 83
-	'&'  shift 84
-	'='  shift 85
-	'<'  shift 86
-	'>'  shift 87
-	'-'  shift 88
-	'+'  shift 89
-	'*'  shift 90
-	'/'  shift 91
-	'%'  shift 92
-	'('  shift 93
+	NE  shift 85
+	GE  shift 86
+	LE  shift 87
+	'|'  shift 88
+	'&'  shift 89
+	'='  shift 90
+	'<'  shift 91
+	'>'  shift 92
+	'-'  shift 93
+	'+'  shift 94
+	'*'  shift 95
+	'/'  shift 96
+	'%'  shift 97
+	'('  shift 98
 	DO  reduce 44
 
 
@@ -2754,8 +2754,8 @@ state 144
 
 	corpo  goto 58
 	instrucao  goto 145
-	expressao  goto 61
-	lvalue  goto 62
+	lvalue  goto 61
+	expressao  goto 62
 
 
 state 145
@@ -2764,5 +2764,5 @@ state 145
 	.  reduce 37
 
 
-55 terminals, 25 nonterminals
+69 terminals, 25 nonterminals
 84 grammar rules, 146 states

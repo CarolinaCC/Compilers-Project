@@ -11,6 +11,7 @@ int yyerror(char *s);
 	int i;			/* integer value */
 	double r;		/* real value */
 	char *s;		/* symbol name or string literal */
+	Node *n;	/* tree node */
 };
 %token <i> INT
 %token <r> REAL
@@ -29,9 +30,13 @@ int yyerror(char *s);
 %left '<' '>' LE GE
 %left '-' '+'
 %left '*' '/' '%'
-%nonassoc '!' UMINUS INCR DECR PONT ENDE
+%nonassoc '!' UMINUS INCR DECR ENDE
 %nonassoc '[' '('
 
+%type<n> file stmt initOrNon pubOuConstOrNone astOrNon tipo init init1 prmtsOrNon crpOrNon cnstOrNon parametros parametro corpo prmtNonOrMore instrNonOrMore instrucao stp upOrDown els inteirOrNon lvalue expressao args
+	
+%token EQ GT LT BAND BOR MUL DIV MOD ADD SUB BNOT 
+%token CALL PTR ARG END
 %%
 
 file	: 
@@ -139,32 +144,33 @@ expressao	: INT
 			| STR
 			| lvalue						
 			| '(' expressao ')'				
-			| expressao '(' args ')'		
-			| expressao '(' ')'				
-      		| '-' expressao %prec UMINUS 	
-			| '&' lvalue %prec ENDE				
-			| '~' expressao					
-			| lvalue INCR		
-			| lvalue DECR	
-			| INCR lvalue		
-			| DECR lvalue		
-     		| expressao '*' expressao	
-     		| expressao '/' expressao	
-     		| expressao '%' expressao	
-    		| expressao '+' expressao	
-    		| expressao '-' expressao	
-			| expressao '<' expressao	
-			| expressao '>' expressao	
-			| expressao GE expressao
-			| expressao LE expressao	
-			| expressao '=' expressao	
-			| expressao NE expressao	
-    		| expressao '&' expressao	
-    		| expressao '|' expressao	
-			| lvalue ATR expressao	
+			| expressao '(' args ')'	{ $$ = binNode(CALL, $1, $3); }	
+			| expressao '(' ')'			{ $$ = binNode(CALL, $1, nilNode(END)); }	
+      		| '-' expressao %prec UMINUS 	{ $$ = uniNode(UMINUS, $2); }
+			| '&' lvalue %prec ENDE			{ $$ = uniNode(PTR, $2); }	
+			| '~' expressao					{ $$ = uniNode(BNOT, $2); }	
+			| lvalue INCR			{ $$ = binNode(INCR, $1, intNode(INT, 1)); }
+			| lvalue DECR			{ $$ = binNode(DECR, $1, intNode(INT, 1)); }
+			| INCR lvalue			{ $$ = binNode(INCR, intNode(INT, 1),  $2 ); }
+			| DECR lvalue			{ $$ = binNode(DECR, intNode(INT, 1),  $2 ); }
+
+     		| expressao '*' expressao	{ $$ = binNode(MUL, $1, $3); }
+     		| expressao '/' expressao	{ $$ = binNode(DIV, $1, $3); }
+     		| expressao '%' expressao	{ $$ = binNode(MOD, $1, $3); }
+    		| expressao '+' expressao	{ $$ = binNode(ADD, $1, $3); }
+    		| expressao '-' expressao	{ $$ = binNode(SUB, $1, $3); }
+			| expressao '<' expressao	{ $$ = binNode(LT, $1, $3); }
+			| expressao '>' expressao	{ $$ = binNode(GT, $1, $3); }
+			| expressao GE expressao    { $$ = binNode(GE, $1, $3); }
+			| expressao LE expressao    { $$ = binNode(LE, $1, $3); }	
+			| expressao '=' expressao   { $$ = binNode(EQ, $1, $3); }	
+			| expressao NE expressao	{ $$ = binNode(NE, $1, $3); }	
+    		| expressao '&' expressao	{ $$ = binNode(BAND, $1, $3); }	
+    		| expressao '|' expressao	{ $$ = binNode(BOR, $1, $3); }	
+			| lvalue ATR expressao		{ $$ = binNode(ATR, $3, $1); }
        		;
 
-args	: expressao		
+args	: expressao		      { $$ = binNode(ARG, $1, nilNode(END)); }
 		| args ',' expressao
 		;
 		
