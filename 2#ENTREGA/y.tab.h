@@ -58,6 +58,16 @@
 #define tSTARMORE 314
 #define tIDINIT 315
 #define tPRMTCRP 316
+#define tCORPO 317
+#define tINSTM 318
+#define tSTARID 319
+#define tFINST 320
+#define tTIPOSTAR 321
+#define FEXPSTP 322
+#define tFLVEX 323
+#define tUPDOWN 324
+#define tFORX 325
+#define tPARAM 326
 #ifdef YYSTYPE
 #undef  YYSTYPE_IS_DECLARED
 #define YYSTYPE_IS_DECLARED 1

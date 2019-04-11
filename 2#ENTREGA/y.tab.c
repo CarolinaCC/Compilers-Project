@@ -136,6 +136,16 @@ extern int YYPARSE_DECL();
 #define tSTARMORE 314
 #define tIDINIT 315
 #define tPRMTCRP 316
+#define tCORPO 317
+#define tINSTM 318
+#define tSTARID 319
+#define tFINST 320
+#define tTIPOSTAR 321
+#define FEXPSTP 322
+#define tFLVEX 323
+#define tUPDOWN 324
+#define tFORX 325
+#define tPARAM 326
 #define YYERRCODE 256
 typedef short YYINT;
 static const YYINT yylhs[] = {                           -1,
@@ -500,8 +510,8 @@ static const YYINT yycheck[] = {                         35,
 #ifndef YYDEBUG
 #define YYDEBUG 0
 #endif
-#define YYMAXTOKEN 316
-#define YYUNDFTOKEN 342
+#define YYMAXTOKEN 326
+#define YYUNDFTOKEN 352
 #define YYTRANSLATE(a) ((a) > YYMAXTOKEN ? YYUNDFTOKEN : (a))
 #if YYDEBUG
 static const char *const yyname[] = {
@@ -519,8 +529,9 @@ static const char *const yyname[] = {
 "GE","LE","ELSE","IFX","UMINUS","ENDE","tEQ","tGT","tLT","tAND","tBOR","tMUL",
 "tDIV","tMOD","tADD","tSUB","tNOT","tCALL","tPTR","tARG","tEND","tINDEX",
 "tLOAD","tOR","tALLOC","tSTAR","tCONSTSTR","tPARA","tPUBoN","tFILE","tSTMT",
-"tPUBeTIPO","tSTARMORE","tIDINIT","tPRMTCRP",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,"illegal-symbol",
+"tPUBeTIPO","tSTARMORE","tIDINIT","tPRMTCRP","tCORPO","tINSTM","tSTARID",
+"tFINST","tTIPOSTAR","FEXPSTP","tFLVEX","tUPDOWN","tFORX","tPARAM",0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"illegal-symbol",
 };
 static const char *const yyrule[] = {
 "$accept : file",
@@ -653,7 +664,7 @@ char **yynames =
 #else
 		 0;
 #endif
-#line 657 "y.tab.c"
+#line 668 "y.tab.c"
 
 #if YYDEBUG
 #include <stdio.h>	/* needed for printf */
@@ -938,7 +949,7 @@ case 21:
 break;
 case 22:
 #line 80 "diy.y"
-	{ yyval.n = nilNode(parametros); }
+	{ yyval.n = yystack.l_mark[0].n; }
 break;
 case 23:
 #line 84 "diy.y"
@@ -964,13 +975,29 @@ case 28:
 #line 93 "diy.y"
 	{ yyval.n = binNode(tPARA, yystack.l_mark[-2].n, yystack.l_mark[0].n); }
 break;
+case 29:
+#line 96 "diy.y"
+	{ yyval.n = binNode(tTIPOSTAR, yystack.l_mark[-2].n, binNode(tSTARID, yystack.l_mark[-1].n, yystack.l_mark[0].s));}
+break;
+case 30:
+#line 99 "diy.y"
+	{ yyval.n = binNode(tCORPO, yystack.l_mark[-2].n, yystack.l_mark[-1].n);}
+break;
 case 31:
 #line 102 "diy.y"
 	{ yyval.n = nilNode(tEND); }
 break;
+case 32:
+#line 103 "diy.y"
+	{ yyval.n = binNode(tPARAM, yystack.l_mark[-2].n, yystack.l_mark[0].n);}
+break;
 case 33:
 #line 107 "diy.y"
 	{ yyval.n = nilNode(tEND); }
+break;
+case 34:
+#line 108 "diy.y"
+	{ yyval.n = binNode(tINSTM, yystack.l_mark[-1].n, yystack.l_mark[0].n);}
 break;
 case 35:
 #line 111 "diy.y"
@@ -982,15 +1009,15 @@ case 36:
 break;
 case 37:
 #line 113 "diy.y"
-	{ yyval.n = binNode }
+	{ yyval.n = binNode(tFINST, binNode(tFORX, binNode(tFLVEX, yystack.l_mark[-7].n, yystack.l_mark[-5].n), binNode(tUPDOWN, yystack.l_mark[-4].n, binNode($FEXPSTP, yystack.l_mark[-3].n, yystack.l_mark[-2].n))), yystack.l_mark[0].n); }
 break;
 case 38:
 #line 114 "diy.y"
-	{ yyval.n = nilNode(expressao); }
+	{ yyval.n = yystack.l_mark[-1].n; }
 break;
 case 39:
 #line 115 "diy.y"
-	{ yyval.n = nilNode(corpo); }
+	{ yyval.n = yystack.l_mark[0].n; }
 break;
 case 40:
 #line 116 "diy.y"
@@ -1063,6 +1090,10 @@ break;
 case 57:
 #line 145 "diy.y"
 	{ yyval.n = uniNode(tLOAD, yystack.l_mark[0].n); }
+break;
+case 58:
+#line 146 "diy.y"
+	{ yyval.n = yystack.l_mark[-1].n; }
 break;
 case 59:
 #line 147 "diy.y"
@@ -1164,7 +1195,7 @@ case 83:
 #line 174 "diy.y"
 	{ yyval.n = binNode(tARG, yystack.l_mark[0].n, yystack.l_mark[-2].n); }
 break;
-#line 1168 "y.tab.c"
+#line 1199 "y.tab.c"
     }
     yystack.s_mark -= yym;
     yystate = *yystack.s_mark;

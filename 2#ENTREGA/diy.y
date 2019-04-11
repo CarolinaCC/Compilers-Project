@@ -36,7 +36,7 @@ int yyerror(char *s);
 %type<n> file stmt initOrNon pubOuConstOrNone astOrNon tipo init init1 prmtsOrNon crpOrNon cnstOrNon parametros parametro corpo prmtNonOrMore instrNonOrMore instrucao stp upOrDown els inteirOrNon lvalue expressao args
 	
 %token tEQ tGT tLT tAND tBOR tMUL tDIV tMOD tADD tSUB tNOT 
-%token tCALL tPTR tARG tEND tINDEX tLOAD tOR tALLOC tSTAR tCONSTSTR tPARA tPUBoN tFILE tSTMT tPUBeTIPO tSTARMORE tIDINIT tPRMTCRP tCORPO tINSTM tSTARID tFINST tTIPOSTAR FEXPSTP tFLVEX tUPDOWN tFORX tPARAM
+%token tCALL tPTR tARG tEND tINDEX tLOAD tOR tALLOC tSTAR tCONSTSTR tPARA tPUBoN tFILE tSTMT tPUBeTIPO tSTARMORE tIDINIT tPRMTCRP tCORPO tINSTM tSTARID tFINST tTIPOSTAR tFEXPSTP tFLVEX tUPDOWN tFORX tPARAM
 %%
 
 file	:			 { $$ = nilNode(tEND); } 
@@ -47,7 +47,7 @@ stmt 	: pubOuConstOrNone tipo astOrNon ID initOrNon ';' { $$ = binNode(tSTMT, bi
 		;
 
 initOrNon : 		{ $$ = nilNode(tEND); }
-		  | init    { $$ = nilNode($1); }
+		  | init    { $$ = $1; }
 		  ;
 
 pubOuConstOrNone : cnstOrNon 	  		{ $$ = binNode(tPUBoN, nilNode(tEND), $1 ); } 
@@ -139,9 +139,9 @@ lvalue		: ID				        { $$ = strNode(ID , $1); }
 			| '*' lvalue				{ $$ = uniNode(tLOAD, $2); $$->info = 0; }	
 			;
 
-expressao	: INT 		{ $$ = nilNode(INT); }	
-			| REAL 		{ $$ = nilNode(REAL); }	
-			| STR 		{ $$ = nilNode(STR); }	
+expressao	: INT 		{ $$ = intNode(INT, $1); }	
+			| REAL 		{ $$ = realNode(REAL, $1); }	
+			| STR 		{ $$ = strNode(STR, $1); }	
 			| lvalue	{ $$ = uniNode(tLOAD, $1); }						
 			| '(' expressao ')'			{ $$ = $2; }	
 			| expressao '(' args ')'	{ $$ = binNode(tCALL, $1, $3); }	
