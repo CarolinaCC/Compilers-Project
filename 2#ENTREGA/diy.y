@@ -36,7 +36,7 @@ int yyerror(char *s);
 %type<n> file stmt initOrNon pubOuConstOrNone astOrNon tipo init init1 prmtsOrNon crpOrNon cnstOrNon parametros parametro corpo prmtNonOrMore instrNonOrMore instrucao stp upOrDown els inteirOrNon lvalue expressao args
 	
 %token tEQ tGT tLT tAND tBOR tMUL tDIV tMOD tADD tSUB tNOT 
-%token tCALL tPTR tARG tEND tINDEX tLOAD tOR tALLOC tSTAR tCONSTSTR tPARA tPUBoN tFILE tSTMT tPUBeTIPO tSTARMORE tIDINIT tPRMTCRP tCORPO tINSTM tSTARID tFINST tTIPOSTAR FEXPSTP tFLVEX tUPDOWN tFORX
+%token tCALL tPTR tARG tEND tINDEX tLOAD tOR tALLOC tSTAR tCONSTSTR tPARA tPUBoN tFILE tSTMT tPUBeTIPO tSTARMORE tIDINIT tPRMTCRP tCORPO tINSTM tSTARID tFINST tTIPOSTAR FEXPSTP tFLVEX tUPDOWN tFORX tPARAM
 %%
 
 file	:			 { $$ = nilNode(tEND); } 
@@ -110,9 +110,9 @@ instrNonOrMore	: 								{ $$ = nilNode(tEND); }
 
 instrucao 	: IF expressao THEN instrucao els  { $$ = binNode(IF, binNode(THEN, $2, $4), $5); }
 			| DO instrucao WHILE expressao ';' { $$ = binNode(WHILE, $2, $4); }
-			| FOR lvalue IN expressao upOrDown expressao stp DO instrucao { $$ = binNode(tFINST, binNode(tFORX, binNode(tFLVEX, $2, $4), binNode(tUPDOWN, $5, binNode($FEXPSTP, $6, $7))) $9); }
-			| expressao ';'    			{ $$ = nilNode(expressao); }
-			| corpo 					{ $$ = nilNode(corpo); }
+			| FOR lvalue IN expressao upOrDown expressao stp DO instrucao { $$ = binNode(tFINST, binNode(tFORX, binNode(tFLVEX, $2, $4), binNode(tUPDOWN, $5, binNode($FEXPSTP, $6, $7))), $9); }
+			| expressao ';'    			{ $$ = $1; }
+			| corpo 					{ $$ = $1; }
 			| BREAK inteirOrNon ';'     { $$ = uniNode(BREAK, $2);  }		
 			| CONTINUE inteirOrNon ';'	{ $$ = uniNode(CONTINUE, $2);  }		
 			| lvalue '#' expressao ';'	{ $$ = binNode(tALLOC, $3, $1); }
