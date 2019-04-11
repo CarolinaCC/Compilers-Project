@@ -40,7 +40,7 @@ int yyerror(char *s);
 %%
 
 file	:			 { $$ = nilNode(tEND); } 
-		| file stmt	 { $$ = binNode(tFILE, $1, $2 ); }
+		| file stmt	 { $$ = binNode(tFILE, $1, $2 ); printNode($$, 0, (char**)yyname); }
 		;
 
 stmt 	: pubOuConstOrNone tipo astOrNon ID initOrNon ';' { $$ = binNode(tSTMT, binNode(tPUBeTIPO, $1, $2), binNode(tSTARMORE, $3, binNode(tIDINIT, strNode(ID, $4), $5 ))); } 
