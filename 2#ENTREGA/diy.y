@@ -43,7 +43,7 @@ file	:			 { $$ = nilNode(tEND); }
 		| file stmt	 { $$ = binNode(tFILE, $1, $2 ); }
 		;
 
-stmt 	: pubOuConstOrNone tipo astOrNon ID initOrNon ';' { $$ = binNode(tSTMT, binNode(tPUBeTIPO, $1, $2), binNode(tSTARMORE, $3, binNode(tIDINIT, $4, $5 ))); } 
+stmt 	: pubOuConstOrNone tipo astOrNon ID initOrNon ';' { $$ = binNode(tSTMT, binNode(tPUBeTIPO, $1, $2), binNode(tSTARMORE, $3, binNode(tIDINIT, strNode(ID, $4), $5 ))); } 
 		;
 
 initOrNon : 		{ $$ = nilNode(tEND); }
@@ -93,7 +93,7 @@ parametros 	: parametro 			   { $$ = binNode(tPARA, $1, nilNode(tEND)); }
 			| parametro ',' parametros { $$ = binNode(tPARA, $1, $3); }
 			;
 
-parametro   : tipo astOrNon ID  	{ $$ = binNode(tTIPOSTAR, $1, binNode(tSTARID, $2, $3));}
+parametro   : tipo astOrNon ID  	{ $$ = binNode(tTIPOSTAR, $1, binNode(tSTARID, $2, strNode(ID, $3)));}
 			;
 
 corpo 		:'{' prmtNonOrMore instrNonOrMore '}' { $$ = binNode(tCORPO, $2, $3);}
@@ -110,7 +110,7 @@ instrNonOrMore	: 								{ $$ = nilNode(tEND); }
 
 instrucao 	: IF expressao THEN instrucao els  { $$ = binNode(IF, binNode(THEN, $2, $4), $5); }
 			| DO instrucao WHILE expressao ';' { $$ = binNode(WHILE, $2, $4); }
-			| FOR lvalue IN expressao upOrDown expressao stp DO instrucao { $$ = binNode(tFINST, binNode(tFORX, binNode(tFLVEX, $2, $4), binNode(tUPDOWN, $5, binNode($FEXPSTP, $6, $7))), $9); }
+			| FOR lvalue IN expressao upOrDown expressao stp DO instrucao { $$ = binNode(tFINST, binNode(tFORX, binNode(tFLVEX, $2, $4), binNode(tUPDOWN, $5, binNode(tFEXPSTP, $6, $7))), $9); }
 			| expressao ';'    			{ $$ = $1; }
 			| corpo 					{ $$ = $1; }
 			| BREAK inteirOrNon ';'     { $$ = uniNode(BREAK, $2);  }		
