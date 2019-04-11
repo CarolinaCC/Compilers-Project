@@ -46,6 +46,18 @@
 #define tEND 302
 #define tINDEX 303
 #define tLOAD 304
+#define tOR 305
+#define tALLOC 306
+#define tSTAR 307
+#define tCONSTSTR 308
+#define tPARA 309
+#define tPUBoN 310
+#define tFILE 311
+#define tSTMT 312
+#define tPUBeTIPO 313
+#define tSTARMORE 314
+#define tIDINIT 315
+#define tPRMTCRP 316
 #ifdef YYSTYPE
 #undef  YYSTYPE_IS_DECLARED
 #define YYSTYPE_IS_DECLARED 1
