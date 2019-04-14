@@ -4,6 +4,12 @@
 #include <string.h>
 #include "lib/tabid.h"
 #include "lib/node.h"
+#define vint 1
+#define	vreal 2
+#define vstr 3
+#define vvoid 4
+#define vptr 1000
+#define vconst 10000
 extern int yylex();
 int yyerror(char *s);
 %}
@@ -57,20 +63,20 @@ pubOuConstOrNone : cnstOrNon 	  		{ $$ = binNode(tPUBoN, nilNode(tEND), $1 ); }
 				 ;
 
 
-astOrNon: 		{ $$ = nilNode(tEND); }
-		| '*'	{ $$ = nilNode(tSTAR); }
+astOrNon: 		{ $$ = nilNode(tEND); $$->info = 0;}
+		| '*'	{ $$ = nilNode(tSTAR); $$->info = vptr;}
 		;
 
-tipo	: INTEGER 	{ $$ = nilNode(INTEGER); }
-		| STRING 	{ $$ = nilNode(STRING); }
-		| NUMBER 	{ $$ = nilNode(NUMBER); }
-		| VOID 		{ $$ = nilNode(VOID); }
+tipo	: INTEGER 	{ $$ = nilNode(INTEGER); $$->info = vint;}
+		| STRING 	{ $$ = nilNode(STRING); $$->info = vstr;}
+		| NUMBER 	{ $$ = nilNode(NUMBER); $$->info = vreal;}
+		| VOID 		{ $$ = nilNode(VOID); $$->info = vvoid;}
 		;
 
-init 	: 					{ $$ = nilNode(tEND); }
-		| INT 				{ $$ = intNode(INT, $1); $$->info = 1;}
-		| cnstOrNon STR 	{ $$ = binNode(tCONSTSTR, $1, strNode(STR, $2)); }
-		| REAL 				{ $$ = realNode(REAL, $1); $$->info= 2;}
+init 	: 					{ $$ = nilNode(tEND); $$->info = 0;}
+		| INT 				{ $$ = intNode(INT, $1); $$->info = vint;}
+		| cnstOrNon STR 	{ $$ = binNode(tCONSTSTR, $1, strNode(STR, $2)); $$->info = $1->info + vstr;}
+		| REAL 				{ $$ = realNode(REAL, $1); $$->info=vreal;}
 		| ID 				{ $$ = strNode(ID, $1); }
 		;
 
@@ -83,8 +89,8 @@ crpOrNon: 			{ $$ = nilNode(tEND); }
 		| corpo		{ $$ = $1; }
 		;
 
-cnstOrNon : 		{ $$ = nilNode(tEND); }
-		  | CONST   { $$ = nilNode(CONST); }
+cnstOrNon : 		{ $$ = nilNode(tEND); $$->info = 0}
+		  | CONST   { $$ = nilNode(CONST); $$->info = 10000}
 		  ;
 
 parametros 	: parametro 			   { $$ = binNode(tPARA, $1, nilNode(tEND)); }
