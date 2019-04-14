@@ -160,7 +160,7 @@ expressao	: INT 		{ $$ = intNode(INT, $1); $$->info = vint;}
 			| INCR lvalue			{ $$ = binNode(INCR, intNode(INT, 1),  $2 ); isInt($2->info, 0);}
 			| DECR lvalue			{ $$ = binNode(DECR, intNode(INT, 1),  $2 ); isInt($2->info, 0);}
 
-     		| expressao '*' expressao	{ $$ = binNode(tMUL, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = $1>$2 ? $1 : $2;}
+     		| expressao '*' expressao	{ $$ = binNode(tMUL, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = ($1>$3) ? $1 : $3;}
      		| expressao '/' expressao	{ $$ = binNode(tDIV, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = $1>$2 ? $1 : $2;}
      		| expressao '%' expressao	{ $$ = binNode(tMOD, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = $1>$2 ? $1 : $2;}
     		| expressao '+' expressao	{ $$ = binNode(tADD, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = $1>$2 ? $1 : $2;}
