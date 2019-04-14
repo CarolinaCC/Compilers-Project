@@ -68,9 +68,9 @@ tipo	: INTEGER 	{ $$ = nilNode(INTEGER); }
 		;
 
 init 	: 					{ $$ = nilNode(tEND); }
-		| INT 				{ $$ = intNode(INT, $1); $$->info = 1}
+		| INT 				{ $$ = intNode(INT, $1); $$->info = 1;}
 		| cnstOrNon STR 	{ $$ = binNode(tCONSTSTR, $1, strNode(STR, $2)); }
-		| REAL 				{ $$ = realNode(REAL, $1); $$->info = 2}
+		| REAL 				{ $$ = realNode(REAL, $1); $$->info= 2;}
 		| ID 				{ $$ = strNode(ID, $1); }
 		;
 
