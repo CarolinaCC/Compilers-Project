@@ -33,10 +33,10 @@ int yyerror(char *s);
 %nonassoc '!' UMINUS INCR DECR ENDE
 %nonassoc '[' '('
 
-%type<n> file stmt initOrNon pubOuConstOrNone astOrNon tipo init init1 prmtsOrNon crpOrNon cnstOrNon parametros parametro corpo prmtNonOrMore instrNonOrMore instrucao stp upOrDown els inteirOrNon lvalue expressao args
+%type<n> file stmt initOrNon pubOuConstOrNone astOrNon tipo init prmtsOrNon crpOrNon cnstOrNon parametros parametro corpo prmtNonOrMore instrNonOrMore instrucao stp upOrDown els inteirOrNon lvalue expressao args
 	
 %token tEQ tGT tLT tAND tBOR tMUL tDIV tMOD tADD tSUB tNOT 
-%token tCALL tPTR tARG tEND tINDEX tLOAD tOR tALLOC tSTAR tCONSTSTR tPARA tPUBoN tFILE tSTMT tPUBeTIPO tSTARMORE tIDINIT tPRMTCRP tCORPO tINSTM tSTARID tFINST tTIPOSTAR tFEXPSTP tFLVEX tUPDOWN tFORX tPARAM
+%token tCALL tPTR tARG tEND tINDEX tLOAD tOR tALLOC tSTAR tCONSTSTR tPARA tPUBoN tFILE tSTMT tPUBeTIPO tSTARMORE tIDINIT tPRMTCRP tCORPO tINSTM tSTARID tFINST tTIPOSTAR tFEXPSTP tFLVEX tUPDOWN tFORX tPARAM tSTMT1 tSTMTN tSTMTSTARTID tSTMTPRMTCORP
 %%
 
 file	:			 { $$ = nilNode(tEND); } 
@@ -44,10 +44,12 @@ file	:			 { $$ = nilNode(tEND); }
 		;
 
 stmt 	: pubOuConstOrNone tipo astOrNon ID initOrNon ';' { $$ = binNode(tSTMT, binNode(tPUBeTIPO, $1, $2), binNode(tSTARMORE, $3, binNode(tIDINIT, strNode(ID, $4), $5 ))); } 
+		| pubOuConstOrNone tipo astOrNon ID '(' prmtsOrNon ')' crpOrNon { $$ = binNode(tSTMT1, binNode(tPUBeTIPO, $1, $2), binNode(tSTMTN, binNode(tSTMTSTARTID, $3, strNode(ID, $4)), binNode(tSTMTPRMTCORP, $6, $8))); } 
 		;
 
-initOrNon : 		{ $$ = nilNode(tEND); }
-		  | init    { $$ = $1; }
+
+initOrNon : 				{ $$ = nilNode(tEND); }
+		  | ATR init		{ $$ = uniNode(ATR, $2); }
 		  ;
 
 pubOuConstOrNone : cnstOrNon 	  		{ $$ = binNode(tPUBoN, nilNode(tEND), $1 ); } 
@@ -65,14 +67,10 @@ tipo	: INTEGER 	{ $$ = nilNode(INTEGER); }
 		| VOID 		{ $$ = nilNode(VOID); }
 		;
 
-init 	: ATR init1						{ $$ = uniNode(ATR, $2); }
-		| '(' prmtsOrNon ')' crpOrNon	{ $$ = binNode(tPRMTCRP, $2, $4); }
-		;
-
-init1 	: 					{ $$ = nilNode(tEND); }
-		| INT 				{ $$ = intNode(INT, $1); }
+init 	: 					{ $$ = nilNode(tEND); }
+		| INT 				{ $$ = intNode(INT, $1); $$->info = 1}
 		| cnstOrNon STR 	{ $$ = binNode(tCONSTSTR, $1, strNode(STR, $2)); }
-		| REAL 				{ $$ = realNode(REAL, $1); }
+		| REAL 				{ $$ = realNode(REAL, $1); $$->info = 2}
 		| ID 				{ $$ = strNode(ID, $1); }
 		;
 
