@@ -142,8 +142,8 @@ inteirOrNon	: 				{ $$ = nilNode(tEND); $$->info = 0;}
 			;
 
 lvalue		: ID				        { $$ = strNode(ID , $1); $$->info = IDfind($1, null); }
-			| lvalue '[' expressao ']'  { $$ = binNode(tINDEX, $1, $3); verificacoesPonteiro($1->info, $3->info); $$->info = 0; }
-			| '*' lvalue				{ $$ = uniNode(tLOAD, $2); verificacaoPonteiro($1->info); $$->info = 0; }	
+			| lvalue '[' expressao ']'  { $$ = binNode(tINDEX, $1, $3); $$->info = verificacoesPonteiro($1->info, $3->info);  }
+			| '*' lvalue				{ $$ = uniNode(tLOAD, $2); $$->info = verificacaoPonteiro($2->info);  }	
 			;
 
 expressao	: INT 		{ $$ = intNode(INT, $1); $$->info = vint;}	
@@ -151,7 +151,7 @@ expressao	: INT 		{ $$ = intNode(INT, $1); $$->info = vint;}
 			| STR 		{ $$ = strNode(STR, $1); $$->info = vstr; }	
 			| lvalue	{ $$ = uniNode(tLOAD, $1); $$->info = $1->info;}						
 			| '(' expressao ')'			{ $$ = $2; $$->info = $2->info;}	
-			| ID '(' args ')'	{ $$ = binNode(tCALL, strNode(ID , $1), $3); /*TODO*/}	
+			| ID '(' args ')'	{ $$ = binNode(tCALL, strNode(ID , $1), $3); }	
 			| ID '(' ')'			{ $$ = binNode(tCALL, strNode(ID , $1), nilNode(tEND)); }	
       		| '-' expressao %prec UMINUS 	{ $$ = uniNode(UMINUS, $2); minusChecking($2->info); $$->info = ($2->info > vconst) ? $2->info - vconst + vptr : $2->info + vptr;}
 			| '&' lvalue %prec ENDE			{ $$ = uniNode(tPTR, $2); isIntRealStrVoid($2->info); $$->info = £2>info; /*TODO*/ }	
@@ -262,17 +262,23 @@ void verificacoesSTMT(int pubOrConst, int tipo, int ast, char* id, int init) {
 		}		
 }
 
-void verificacoesPonteiro(int lval, int exp) {
-	if (exp%10 != vint)
+int verificacoesPonteiro(int lval, int exp) {
+	if (exp%10 != vint) {
 		yyerror("Index must be integer");
-
-	// se e ptr
-	if (lval>=vptr && lval <= vconst)
-		if 
-	
-
+		return 0;
+	}
+	return verificacaoPonteiro(lval);
 }
 
-void verificacaoPonteiro(int lval) {
-	
+int verificacaoPonteiro(int lval) {
+	// se lval for ponteiro
+	if (lval>=vptr && lval <= vconst) {
+
+		// se for string retorn int
+		if (lval%10 == vstring)
+			return lval-vstring-vptr+vint;
+
+		else return lval-vptr;
+	}
+	return 0;
 }
