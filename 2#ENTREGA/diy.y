@@ -161,10 +161,10 @@ expressao	: INT 		{ $$ = intNode(INT, $1); $$->info = vint;}
 			| DECR lvalue			{ $$ = binNode(DECR, intNode(INT, 1),  $2 ); isInt($2->info, 0);}
 
      		| expressao '*' expressao	{ $$ = binNode(tMUL, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = ($1>$3) ? $1 : $3;}
-     		| expressao '/' expressao	{ $$ = binNode(tDIV, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = $1>$2 ? $1 : $2;}
-     		| expressao '%' expressao	{ $$ = binNode(tMOD, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = $1>$2 ? $1 : $2;}
-    		| expressao '+' expressao	{ $$ = binNode(tADD, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = $1>$2 ? $1 : $2;}
-    		| expressao '-' expressao	{ $$ = binNode(tSUB, $1, $3); areIntOrReal($1->info, $3->info); $$->info = $1>$2 ? $1 : $2;}
+     		| expressao '/' expressao	{ $$ = binNode(tDIV, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = $1>$3 ? $1 : $3;}
+     		| expressao '%' expressao	{ $$ = binNode(tMOD, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = $1>$3 ? $1 : $3;}
+    		| expressao '+' expressao	{ $$ = binNode(tADD, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = $1>$3 ? $1 : $3;}
+    		| expressao '-' expressao	{ $$ = binNode(tSUB, $1, $3); areIntOrReal($1->info, $3->info); $$->info = $1>$3 ? $1 : $3;}
 			| expressao '<' expressao	{ $$ = binNode(tLT, $1, $3); areIntRealOrStr($1->info, $3->info); $$->info = vint;}
 			| expressao '>' expressao	{ $$ = binNode(tGT, $1, $3); areIntRealOrStr($1->info, $3->info); $$->info = vint;}
 			| expressao GE expressao    { $$ = binNode(GE, $1, $3); areIntRealOrStr($1->info, $3->info); $$->info = vint;}
