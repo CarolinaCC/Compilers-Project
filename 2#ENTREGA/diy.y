@@ -89,8 +89,8 @@ crpOrNon: 			{ $$ = nilNode(tEND); }
 		| corpo		{ $$ = $1; }
 		;
 
-cnstOrNon : 		{ $$ = nilNode(tEND); $$->info = 0}
-		  | CONST   { $$ = nilNode(CONST); $$->info = 10000}
+cnstOrNon : 		{ $$ = nilNode(tEND); $$->info = 0;}
+		  | CONST   { $$ = nilNode(CONST); $$->info = vconst;}
 		  ;
 
 parametros 	: parametro 			   { $$ = binNode(tPARA, $1, nilNode(tEND)); }
@@ -143,34 +143,34 @@ lvalue		: ID				        { $$ = strNode(ID , $1); }
 			| '*' lvalue				{ $$ = uniNode(tLOAD, $2); $$->info = 0; }	
 			;
 
-expressao	: INT 		{ $$ = intNode(INT, $1); }	
-			| REAL 		{ $$ = realNode(REAL, $1); }	
-			| STR 		{ $$ = strNode(STR, $1); }	
-			| lvalue	{ $$ = uniNode(tLOAD, $1); }						
-			| '(' expressao ')'			{ $$ = $2; }	
-			| expressao '(' args ')'	{ $$ = binNode(tCALL, $1, $3); }	
-			| expressao '(' ')'			{ $$ = binNode(tCALL, $1, nilNode(tEND)); }	
-      		| '-' expressao %prec UMINUS 	{ $$ = uniNode(UMINUS, $2); }
-			| '&' lvalue %prec ENDE			{ $$ = uniNode(tPTR, $2); }	
-			| '~' expressao					{ $$ = uniNode(tNOT, $2); }	
-			| lvalue INCR			{ $$ = binNode(INCR, $1, intNode(INT, 1)); }
-			| lvalue DECR			{ $$ = binNode(DECR, $1, intNode(INT, 1)); }
-			| INCR lvalue			{ $$ = binNode(INCR, intNode(INT, 1),  $2 ); }
-			| DECR lvalue			{ $$ = binNode(DECR, intNode(INT, 1),  $2 ); }
+expressao	: INT 		{ $$ = intNode(INT, $1); $$->info = vint;}	
+			| REAL 		{ $$ = realNode(REAL, $1); $$->info = vreal;}	
+			| STR 		{ $$ = strNode(STR, $1); $$->info = vstr; }	
+			| lvalue	{ $$ = uniNode(tLOAD, $1); $$->info = $1->info}						
+			| '(' expressao ')'			{ $$ = $2; $$->info = $2->info}	
+			| ID '(' args ')'	{ $$ = binNode(tCALL, $1, $3); //TODO}	
+			| ID '(' ')'			{ $$ = binNode(tCALL, $1, nilNode(tEND)); }	
+      		| '-' expressao %prec UMINUS 	{ $$ = uniNode(UMINUS, $2); minusChecking($2->info); $$->info = $2->info;}
+			| '&' lvalue %prec ENDE			{ $$ = uniNode(tPTR, $2); //TODO }	
+			| '~' expressao					{ $$ = uniNode(tNOT, $2); isIntConst($2->info, 1);}	
+			| lvalue INCR			{ $$ = binNode(INCR, $1, intNode(INT, 1)); isInt($2->info, 0);}
+			| lvalue DECR			{ $$ = binNode(DECR, $1, intNode(INT, 1)); isInt($2->info, 0);}
+			| INCR lvalue			{ $$ = binNode(INCR, intNode(INT, 1),  $2 ); isInt($2->info, 0);}
+			| DECR lvalue			{ $$ = binNode(DECR, intNode(INT, 1),  $2 ); isInt($2->info, 0);}
 
-     		| expressao '*' expressao	{ $$ = binNode(tMUL, $1, $3); }
-     		| expressao '/' expressao	{ $$ = binNode(tDIV, $1, $3); }
-     		| expressao '%' expressao	{ $$ = binNode(tMOD, $1, $3); }
-    		| expressao '+' expressao	{ $$ = binNode(tADD, $1, $3); }
-    		| expressao '-' expressao	{ $$ = binNode(tSUB, $1, $3); }
-			| expressao '<' expressao	{ $$ = binNode(tLT, $1, $3); }
-			| expressao '>' expressao	{ $$ = binNode(tGT, $1, $3); }
-			| expressao GE expressao    { $$ = binNode(GE, $1, $3); }
-			| expressao LE expressao    { $$ = binNode(LE, $1, $3); }	
-			| expressao '=' expressao   { $$ = binNode(tEQ, $1, $3); }	
-			| expressao NE expressao	{ $$ = binNode(NE, $1, $3); }	
-    		| expressao '&' expressao	{ $$ = binNode(tAND, $1, $3); }	
-    		| expressao '|' expressao	{ $$ = binNode(tOR, $1, $3); }	
+     		| expressao '*' expressao	{ $$ = binNode(tMUL, $1, $3); areIntOrReal($1->info, $2->info, 0);}
+     		| expressao '/' expressao	{ $$ = binNode(tDIV, $1, $3); areIntOrReal($1->info, $2->info, 0);}
+     		| expressao '%' expressao	{ $$ = binNode(tMOD, $1, $3); areIntOrReal($1->info, $2->info, 0);}
+    		| expressao '+' expressao	{ $$ = binNode(tADD, $1, $3); areIntOrReal($1->info, $2->info, 0);}
+    		| expressao '-' expressao	{ $$ = binNode(tSUB, $1, $3); areIntOrReal($1->info, $2->info, 0);}
+			| expressao '<' expressao	{ $$ = binNode(tLT, $1, $3); isIntRealOrStr($1->info, $2->info);}
+			| expressao '>' expressao	{ $$ = binNode(tGT, $1, $3); isIntRealOrStr($1->info, $2->info);}
+			| expressao GE expressao    { $$ = binNode(GE, $1, $3); isIntRealOrStr($1->info, $2->info);}
+			| expressao LE expressao    { $$ = binNode(LE, $1, $3); isIntRealOrStr($1->info, $2->info);}	
+			| expressao '=' expressao   { $$ = binNode(tEQ, $1, $3); isIntRealOrStr($1->info, $2->info);}	
+			| expressao NE expressao	{ $$ = binNode(NE, $1, $3); isIntRealOrStr($1->info, $2->info);}	
+    		| expressao '&' expressao	{ $$ = binNode(tAND, $1, $3); areInt($1->info, $2->info);}	
+    		| expressao '|' expressao	{ $$ = binNode(tOR, $1, $3); areInt($1->info, $2->info);}	
 			| lvalue ATR expressao		{ $$ = binNode(ATR, $3, $1); }
        		;
 
@@ -187,3 +187,41 @@ char **yynames =
 #else
 		 0;
 #endif
+
+void minusChecking(int tipo) {
+	if (!(tipo == vint || tipo == vreal || tipo == vreal + vconst || tipo == vint + vconst))
+		yyerror("Invalid operation");
+}
+
+void isInt(int tipo, int const) {
+	if (const)
+		if (!(tipo == vint + vconst))
+			yyerror("Invalid operation");
+	if (tipo != vint)
+		yyerror("Invalid operation");
+}
+
+void areIntOrReal(int first, int second, int const) {
+	if (const)
+		if (!(first == vint + vconst || first == vreal + vconst || second == vint + vconst || second == vreal+ vconst))
+			yyerror("Invalid operation");
+	if (!(first == vint || first == vreal || second == vint || second == vreal))
+		yyerror("Invalid operation");
+}
+
+void isIntRealOrStr(int first, int second) {
+	if (first == vint || first == vreal || second == vint || second == vreal || first == vint + vconst || first == vreal + vconst || second == vint + vconst || second == vreal+ vconst )
+		return;
+	else if (first == vstr || second == vstr || first == vstr + vconst || second == vstr + vconst)
+		return;
+	yyerror("Invalid operation");
+
+		
+}
+
+void areInt(int first, int second) {
+	if (!(first == vint || first == vint + const || second == vint || second == vint + const))
+		yyerror("Invalid operation");
+
+}
+
