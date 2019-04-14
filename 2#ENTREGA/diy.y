@@ -44,7 +44,7 @@ file	:			 { $$ = nilNode(tEND); }
 		;
 
 stmt 	: pubOuConstOrNone tipo astOrNon ID initOrNon ';' { $$ = binNode(tSTMT, binNode(tPUBeTIPO, $1, $2), binNode(tSTARMORE, $3, binNode(tIDINIT, strNode(ID, $4), $5 ))); } 
-		| pubOuConstOrNone tipo astOrNon ID '(' prmtsOrNon ')' crpOrNon { $$ = binNode(tSTMT1, binNode(tPUBeTIPO, $1, $2), binNode(tSTMTN, binNode(tSTMTSTARTID, $3, strNode(ID, $4)), binNode(tSTMTPRMTCORP, $6, $8))); } 
+		| pubOuConstOrNone tipo astOrNon ID '(' prmtsOrNon ')' crpOrNon ';' { $$ = binNode(tSTMT1, binNode(tPUBeTIPO, $1, $2), binNode(tSTMTN, binNode(tSTMTSTARTID, $3, strNode(ID, $4)), binNode(tSTMTPRMTCORP, $6, $8))); } 
 		;
 
 
