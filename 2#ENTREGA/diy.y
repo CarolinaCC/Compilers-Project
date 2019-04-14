@@ -209,8 +209,8 @@ void areIntOrReal(int first, int second) {
 
 void areIntRealOrStr(int first, int second) {
 	if ((first == vint || first == vreal || first == vint + vconst || first == vreal + vconst ) && ( second == vint + vconst || second == vreal+ vconst || second == vint || second == vreal))
-		
-	else if ((first == vstr  || first == vstr + vconst) && (second == vstr || second == vstr + vconst))
+		return;
+	if ((first == vstr  || first == vstr + vconst) && (second == vstr || second == vstr + vconst))
 		return;
 	yyerror("Invalid operation");
 
@@ -218,7 +218,7 @@ void areIntRealOrStr(int first, int second) {
 }
 
 void areInt(int first, int second) {
-	if (!(first == vint || first == vint + const || second == vint || second == vint + const))
+	if (!(first == vint || first == vint + vconst || second == vint || second == vint + vconst))
 		yyerror("Invalid operation");
 
 }
