@@ -146,8 +146,8 @@ lvalue		: ID				        { $$ = strNode(ID , $1); }
 expressao	: INT 		{ $$ = intNode(INT, $1); $$->info = vint;}	
 			| REAL 		{ $$ = realNode(REAL, $1); $$->info = vreal;}	
 			| STR 		{ $$ = strNode(STR, $1); $$->info = vstr; }	
-			| lvalue	{ $$ = uniNode(tLOAD, $1); $$->info = $1->info}						
-			| '(' expressao ')'			{ $$ = $2; $$->info = $2->info}	
+			| lvalue	{ $$ = uniNode(tLOAD, $1); $$->info = $1->info;}						
+			| '(' expressao ')'			{ $$ = $2; $$->info = $2->info;}	
 			| ID '(' args ')'	{ $$ = binNode(tCALL, $1, $3); /*TODO*/}	
 			| ID '(' ')'			{ $$ = binNode(tCALL, $1, nilNode(tEND)); }	
       		| '-' expressao %prec UMINUS 	{ $$ = uniNode(UMINUS, $2); minusChecking($2->info); $$->info = $2->info;}
@@ -193,8 +193,8 @@ void minusChecking(int tipo) {
 		yyerror("Invalid operation");
 }
 
-void isInt(int tipo, int const) {
-	if (const)
+void isInt(int tipo, int canBeConst) {
+	if (canBeConst)
 		if (!(tipo == vint + vconst))
 			yyerror("Invalid operation");
 	if (tipo != vint)
