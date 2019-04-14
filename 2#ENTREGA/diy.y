@@ -10,6 +10,7 @@
 #define vvoid 4
 #define vptr 1000
 #define vconst 10000
+#define vpublic 100000
 extern int yylex();
 int yyerror(char *s);
 %}
@@ -49,7 +50,7 @@ file	:			 { $$ = nilNode(tEND); }
 		| file stmt	 { $$ = binNode(tFILE, $1, $2 ); printNode($$, 0, (char**)yyname); }
 		;
 
-stmt 	: pubOuConstOrNone tipo astOrNon ID initOrNon ';' { $$ = binNode(tSTMT, binNode(tPUBeTIPO, $1, $2), binNode(tSTARMORE, $3, binNode(tIDINIT, strNode(ID, $4), $5 ))); } 
+stmt 	: pubOuConstOrNone tipo astOrNon ID initOrNon ';' { $$ = binNode(tSTMT, binNode(tPUBeTIPO, $1, $2),binNode(tSTARMORE, $3, binNode(tIDINIT, strNode(ID, $4), $5 ))); verificacoesSTMT( $1->info, $2->info, $4->info, $5->info); } 
 		| pubOuConstOrNone tipo astOrNon ID '(' prmtsOrNon ')' crpOrNon ';' { $$ = binNode(tSTMT1, binNode(tPUBeTIPO, $1, $2), binNode(tSTMTN, binNode(tSTMTSTARTID, $3, strNode(ID, $4)), binNode(tSTMTPRMTCORP, $6, $8))); /*TODO*/} 
 		;
 
@@ -58,8 +59,8 @@ initOrNon : 				{ $$ = nilNode(tEND); $$->info = 0;}
 		  | ATR init		{ $$ = uniNode(ATR, $2); $$->info = $2->info;}
 		  ;
 
-pubOuConstOrNone : cnstOrNon 	  		{ $$ = binNode(tPUBoN, nilNode(tEND), $1 ); } 
-				 | PUBLIC cnstOrNon 	{ $$ = binNode(tPUBoN, nilNode(PUBLIC), $2 ); }
+pubOuConstOrNone : cnstOrNon 	  		{ $$ = binNode(tPUBoN, nilNode(tEND), $1 ); $$->info = $1->info;} 
+				 | PUBLIC cnstOrNon 	{ $$ = binNode(tPUBoN, nilNode(PUBLIC), $2 ); $$->info = $2->info + vpublic;}
 				 ;
 
 
@@ -97,7 +98,8 @@ parametros 	: parametro 			   { $$ = binNode(tPARA, $1, nilNode(tEND)); }
 			| parametro ',' parametros { $$ = binNode(tPARA, $1, $3); }
 			;
 
-parametro   : tipo astOrNon ID  	{ $$ = binNode(tTIPOSTAR, $1, binNode(tSTARID, $2, strNode(ID, $3))); $$->info = $1->info + $2->info;}
+parametro   : tipo astOrNon ID  	{ $$ = binNode(tTIPOSTAR, $1, binNode(tSTARID, $2, strNode(ID, $3))); 
+										$$->info = $1->info + $2->info;}
 			;
 
 corpo 		:'{' prmtNonOrMore instrNonOrMore '}' { $$ = binNode(tCORPO, $2, $3);}
@@ -150,25 +152,25 @@ expressao	: INT 		{ $$ = intNode(INT, $1); $$->info = vint;}
 			| '(' expressao ')'			{ $$ = $2; $$->info = $2->info;}	
 			| ID '(' args ')'	{ $$ = binNode(tCALL, strNode(ID , $1), $3); /*TODO*/}	
 			| ID '(' ')'			{ $$ = binNode(tCALL, strNode(ID , $1), nilNode(tEND)); }	
-      		| '-' expressao %prec UMINUS 	{ $$ = uniNode(UMINUS, $2); minusChecking($2->info); $$->info = $2->info;}
-			| '&' lvalue %prec ENDE			{ $$ = uniNode(tPTR, $2); /*TODO*/ }	
+      		| '-' expressao %prec UMINUS 	{ $$ = uniNode(UMINUS, $2); minusChecking($2->info); $$->info = ($2->info > vconst) ? $2->info - vconst + vptr : $2->info + vptr;}
+			| '&' lvalue %prec ENDE			{ $$ = uniNode(tPTR, $2); isIntRealStrVoid($2->info); $$->info = £2>info; /*TODO*/ }	
 			| '~' expressao					{ $$ = uniNode(tNOT, $2); isInt($2->info, 1);}	
 			| lvalue INCR			{ $$ = binNode(INCR, $1, intNode(INT, 1)); isInt($1->info, 0);}
 			| lvalue DECR			{ $$ = binNode(DECR, $1, intNode(INT, 1)); isInt($1->info, 0);}
 			| INCR lvalue			{ $$ = binNode(INCR, intNode(INT, 1),  $2 ); isInt($2->info, 0);}
 			| DECR lvalue			{ $$ = binNode(DECR, intNode(INT, 1),  $2 ); isInt($2->info, 0);}
 
-     		| expressao '*' expressao	{ $$ = binNode(tMUL, $1, $3); areIntOrReal($1->info, $3->info);}
-     		| expressao '/' expressao	{ $$ = binNode(tDIV, $1, $3); areIntOrReal($1->info, $3->info);}
-     		| expressao '%' expressao	{ $$ = binNode(tMOD, $1, $3); areIntOrReal($1->info, $3->info);}
-    		| expressao '+' expressao	{ $$ = binNode(tADD, $1, $3); areIntOrReal($1->info, $3->info);}
-    		| expressao '-' expressao	{ $$ = binNode(tSUB, $1, $3); areIntOrReal($1->info, $3->info);}
-			| expressao '<' expressao	{ $$ = binNode(tLT, $1, $3); areIntRealOrStr($1->info, $3->info);}
-			| expressao '>' expressao	{ $$ = binNode(tGT, $1, $3); areIntRealOrStr($1->info, $3->info);}
-			| expressao GE expressao    { $$ = binNode(GE, $1, $3); areIntRealOrStr($1->info, $3->info);}
-			| expressao LE expressao    { $$ = binNode(LE, $1, $3); areIntRealOrStr($1->info, $3->info);}	
-			| expressao '=' expressao   { $$ = binNode(tEQ, $1, $3); areIntRealOrStr($1->info, $3->info);}	
-			| expressao NE expressao	{ $$ = binNode(NE, $1, $3); areIntRealOrStr($1->info, $3->info);}	
+     		| expressao '*' expressao	{ $$ = binNode(tMUL, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = $1>$2 ? $1 : $2;}
+     		| expressao '/' expressao	{ $$ = binNode(tDIV, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = $1>$2 ? $1 : $2;}
+     		| expressao '%' expressao	{ $$ = binNode(tMOD, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = $1>$2 ? $1 : $2;}
+    		| expressao '+' expressao	{ $$ = binNode(tADD, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = $1>$2 ? $1 : $2;}
+    		| expressao '-' expressao	{ $$ = binNode(tSUB, $1, $3); areIntOrReal($1->info, $3->info); $$->info = $1>$2 ? $1 : $2;}
+			| expressao '<' expressao	{ $$ = binNode(tLT, $1, $3); areIntRealOrStr($1->info, $3->info); $$->info = vint;}
+			| expressao '>' expressao	{ $$ = binNode(tGT, $1, $3); areIntRealOrStr($1->info, $3->info); $$->info = vint;}
+			| expressao GE expressao    { $$ = binNode(GE, $1, $3); areIntRealOrStr($1->info, $3->info); $$->info = vint;}
+			| expressao LE expressao    { $$ = binNode(LE, $1, $3); areIntRealOrStr($1->info, $3->info); $$->info = vint;}	
+			| expressao '=' expressao   { $$ = binNode(tEQ, $1, $3); areIntRealOrStr($1->info, $3->info); $$->info = vint;}	
+			| expressao NE expressao	{ $$ = binNode(NE, $1, $3); areIntRealOrStr($1->info, $3->info); $$->info = vint;}	
     		| expressao '&' expressao	{ $$ = binNode(tAND, $1, $3); areInt($1->info, $3->info);}	
     		| expressao '|' expressao	{ $$ = binNode(tOR, $1, $3); areInt($1->info, $3->info);}	
 			| lvalue ATR expressao		{ $$ = binNode(ATR, $3, $1); }
@@ -191,6 +193,12 @@ char **yynames =
 void minusChecking(int tipo) {
 	if (!(tipo == vint || tipo == vreal || tipo == vreal + vconst || tipo == vint + vconst))
 		yyerror("Invalid operation");
+}
+
+void isIntRealStrVoid(int tipo) {
+	if (!(tipo == vint || tipo == vreal || tipo == vreal + vconst || tipo == vint + vconst || tipo == vstr || tipo == vstr + vconst || tipo == vvoid || tipo == vvoid + vconst))
+		yyerror("Invalid operation");
+
 }
 
 void isInt(int tipo, int canBeConst) {
@@ -221,5 +229,37 @@ void areInt(int first, int second) {
 	if (!(first == vint || first == vint + vconst || second == vint || second == vint + vconst))
 		yyerror("Invalid operation");
 
+}
+
+void verificacoesSTMT(int pubOrConst, int tipo, int ast, char* id, int init) {
+	
+	// se e so const sem public
+	if (pubOrConst == vconst && !init)
+		yyerror("Const variable must inicialized");
+
+	// se um e const e outro nao, da erro
+	if (!(tipo>vconst && tipo<vconst && init>vconst && init<vconst ))
+		yyerror("Const variable must inicialized with const value");	
+
+
+	// ver se tipos sao iguais
+	if (tipo%10 == init%10)
+		// se init for ponteiro
+		if (init>vptr && init<vconst) {
+			if (ast)
+				IDnew(tipo,id,0);
+			else 
+				yyerror("Non compatible types");
+		}
+		
+		// init nao tem ponteiro
+		else {
+			if (ast)
+				yyerror("Non compatible types");
+			else
+				IDnew(tipo,id,0);
+		}
+
+		
 }
 
