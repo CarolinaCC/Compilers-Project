@@ -148,8 +148,8 @@ expressao	: INT 		{ $$ = intNode(INT, $1); $$->info = vint;}
 			| STR 		{ $$ = strNode(STR, $1); $$->info = vstr; }	
 			| lvalue	{ $$ = uniNode(tLOAD, $1); $$->info = $1->info;}						
 			| '(' expressao ')'			{ $$ = $2; $$->info = $2->info;}	
-			| ID '(' args ')'	{ $$ = binNode(tCALL, $1, $3); /*TODO*/}	
-			| ID '(' ')'			{ $$ = binNode(tCALL, $1, nilNode(tEND)); }	
+			| ID '(' args ')'	{ $$ = binNode(tCALL, strNode(ID , $1), $3); /*TODO*/}	
+			| ID '(' ')'			{ $$ = binNode(tCALL, strNode(ID , $1), nilNode(tEND)); }	
       		| '-' expressao %prec UMINUS 	{ $$ = uniNode(UMINUS, $2); minusChecking($2->info); $$->info = $2->info;}
 			| '&' lvalue %prec ENDE			{ $$ = uniNode(tPTR, $2); /*TODO*/ }	
 			| '~' expressao					{ $$ = uniNode(tNOT, $2); isInt($2->info, 1);}	
