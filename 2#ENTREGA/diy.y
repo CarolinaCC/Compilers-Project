@@ -99,7 +99,7 @@ parametros 	: parametro 			   { $$ = binNode(tPARA, $1, nilNode(tEND)); }
 			;
 
 parametro   : tipo astOrNon ID  	{ $$ = binNode(tTIPOSTAR, $1, binNode(tSTARID, $2, strNode(ID, $3))); 
-										IDnew (tipo->info + astOrNon->info, $3, 0); 
+										IDnew ($1->info + $2->info, $3, 0); 
 										$$->info = $1->info + $2->info;}
 			;
 
@@ -154,7 +154,7 @@ expressao	: INT 		{ $$ = intNode(INT, $1); $$->info = vint;}
 			| ID '(' args ')'	{ $$ = binNode(tCALL, strNode(ID , $1), $3); }	
 			| ID '(' ')'			{ $$ = binNode(tCALL, strNode(ID , $1), nilNode(tEND)); }	
       		| '-' expressao %prec UMINUS 	{ $$ = uniNode(UMINUS, $2); minusChecking($2->info); $$->info = ($2->info > vconst) ? $2->info - vconst + vptr : $2->info + vptr;}
-			| '&' lvalue %prec ENDE			{ $$ = uniNode(tPTR, $2); isIntRealStrVoid($2->info); $$->info = £2>info; /*TODO*/ }	
+			| '&' lvalue %prec ENDE			{ $$ = uniNode(tPTR, $2); isIntRealStrVoid($2->info); $$->info = £2>info; }	
 			| '~' expressao					{ $$ = uniNode(tNOT, $2); isInt($2->info, 1);}	
 			| lvalue INCR			{ $$ = binNode(INCR, $1, intNode(INT, 1)); isInt($1->info, 0);}
 			| lvalue DECR			{ $$ = binNode(DECR, $1, intNode(INT, 1)); isInt($1->info, 0);}
