@@ -174,7 +174,7 @@ expressao	: INT 		{ $$ = intNode(INT, $1); $$->info = vint;}
 			| expressao NE expressao	{ $$ = binNode(NE, $1, $3); areIntRealOrStr($1->info, $3->info); $$->info = vint;}	
     		| expressao '&' expressao	{ $$ = binNode(tAND, $1, $3); areInt($1->info, $3->info);}	
     		| expressao '|' expressao	{ $$ = binNode(tOR, $1, $3); areInt($1->info, $3->info);}	
-			| lvalue ATR expressao		{ $$ = binNode(ATR, $3, $1); }
+			| lvalue ATR expressao		{ $$ = binNode(ATR, $3, $1); verificacaoAtribuicoes($1->info, $3->info);}
        		;
 
 args	: expressao		      { $$ = binNode(tARG, $1, nilNode(tEND)); }
@@ -281,4 +281,22 @@ int verificacaoPonteiro(int lval) {
 		else return lval-vptr;
 	}
 	return 0;
+}
+
+void verificacaoAtribuicoes(int lval, int exp) {
+	// se estamos a atribuir valor a um const
+	if (lval>=vconst && lval<=vpublic)
+		yyerror("Cannot attribute new value to a const");	
+
+	else if ((lval%10 == vint || lval%10 == vreal) && !(exp%10 == vint || exp%10 == vreal )) || ((exp%10 == vint || exp%10 == vreal ) && !(lval%10 == vint || lval%10 == vreal))
+		yyerror("Atribution should be with int or real");
+
+	// atribuicao de um *int a uma string e valida
+	else if (lval%10 == vstr && exp%10 == vint && exp>vptr && exp<vconst)
+		return;
+
+	else if (lval%10 != exp%10)
+		yyerror("Invalid atribution");
+
+			
 }
