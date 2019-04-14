@@ -50,7 +50,7 @@ file	:			 { $$ = nilNode(tEND); }
 		| file stmt	 { $$ = binNode(tFILE, $1, $2 ); printNode($$, 0, (char**)yyname); }
 		;
 
-stmt 	: pubOuConstOrNone tipo astOrNon ID initOrNon ';' { $$ = binNode(tSTMT, binNode(tPUBeTIPO, $1, $2),binNode(tSTARMORE, $3, binNode(tIDINIT, strNode(ID, $4), $5 ))); verificacoesSTMT( $1->info, $2->info, $4->info, $5->info); } 
+stmt 	: pubOuConstOrNone tipo astOrNon ID initOrNon ';' { $$ = binNode(tSTMT, binNode(tPUBeTIPO, $1, $2),binNode(tSTARMORE, $3, binNode(tIDINIT, strNode(ID, $4), $5 ))); verificacoesSTMT( $1->info, $2->info, $3->info, $4->info, $5->info); } 
 		| pubOuConstOrNone tipo astOrNon ID '(' prmtsOrNon ')' crpOrNon ';' { $$ = binNode(tSTMT1, binNode(tPUBeTIPO, $1, $2), binNode(tSTMTN, binNode(tSTMTSTARTID, $3, strNode(ID, $4)), binNode(tSTMTPRMTCORP, $6, $8))); /*TODO*/} 
 		;
 
@@ -78,7 +78,7 @@ init 	: 					{ $$ = nilNode(tEND); $$->info = 0;}
 		| INT 				{ $$ = intNode(INT, $1); $$->info = vint;}
 		| cnstOrNon STR 	{ $$ = binNode(tCONSTSTR, $1, strNode(STR, $2)); $$->info = $1->info + vstr;}
 		| REAL 				{ $$ = realNode(REAL, $1); $$->info=vreal;}
-		| ID 				{ $$ = strNode(ID, $1); }
+		| ID 				{ $$ = strNode(ID, $1); $$->info=IDfind($1, null);}
 		;
 
 prmtsOrNon:					{ $$ = nilNode(tEND); } 
@@ -99,6 +99,7 @@ parametros 	: parametro 			   { $$ = binNode(tPARA, $1, nilNode(tEND)); }
 			;
 
 parametro   : tipo astOrNon ID  	{ $$ = binNode(tTIPOSTAR, $1, binNode(tSTARID, $2, strNode(ID, $3))); 
+										IDnew (tipo->info + astOrNon->info, $3, 0); 
 										$$->info = $1->info + $2->info;}
 			;
 
@@ -136,13 +137,13 @@ els 		: %prec IFX		  { $$ = nilNode(tEND); }
 			| ELSE instrucao  { $$ = uniNode(ELSE, $2);  }	
 			;
 	
-inteirOrNon	: 				{ $$ = nilNode(tEND); }
+inteirOrNon	: 				{ $$ = nilNode(tEND); $$->info = 0;}
 			| INT 			{ $$ = intNode(INT, $1); $$->info = vint; }
 			;
 
-lvalue		: ID				        { $$ = strNode(ID , $1); }
-			| lvalue '[' expressao ']'  { $$ = binNode(tINDEX, $1, $3); $$->info = 0; }
-			| '*' lvalue				{ $$ = uniNode(tLOAD, $2); $$->info = 0; }	
+lvalue		: ID				        { $$ = strNode(ID , $1); $$->info = IDfind($1, null); }
+			| lvalue '[' expressao ']'  { $$ = binNode(tINDEX, $1, $3); verificacoesPonteiro($1->info, $3->info); $$->info = 0; }
+			| '*' lvalue				{ $$ = uniNode(tLOAD, $2); verificacaoPonteiro($1->info); $$->info = 0; }	
 			;
 
 expressao	: INT 		{ $$ = intNode(INT, $1); $$->info = vint;}	
@@ -258,8 +259,20 @@ void verificacoesSTMT(int pubOrConst, int tipo, int ast, char* id, int init) {
 				yyerror("Non compatible types");
 			else
 				IDnew(tipo,id,0);
-		}
-
-		
+		}		
 }
 
+void verificacoesPonteiro(int lval, int exp) {
+	if (exp%10 != vint)
+		yyerror("Index must be integer");
+
+	// se e ptr
+	if (lval>=vptr && lval <= vconst)
+		if 
+	
+
+}
+
+void verificacaoPonteiro(int lval) {
+	
+}
