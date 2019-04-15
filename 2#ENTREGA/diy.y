@@ -325,11 +325,8 @@ void verificacaoAtribuicoes(int lval, int exp) {
 }
 
 void verificacoesBreak(int i) {
-	if (i == -1)
-		ciclos --;
-	
-	else if (i >= ciclos) 
-		ciclos -= i;
+	if (i >= ciclos || i == -1)
+		return;
 
 	else
 		yyerror("Cannot break outside of cycle");
