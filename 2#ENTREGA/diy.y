@@ -122,12 +122,12 @@ instrNonOrMore	: 								{ $$ = nilNode(tEND); }
 				;
 
 instrucao 	: IF expressao THEN instrucao els  { $$ = binNode(IF, binNode(THEN, $2, $4), $5);}
-			| DO instrucao WHILE expressao ';' { $$ = binNode(WHILE, $2, $4);  ciclos++; }
-			| FOR lvalue IN expressao upOrDown expressao stp DO instrucao { $$ = binNode(tFINST, binNode(tFORX, binNode(tFLVEX, $2, $4), binNode(tUPDOWN, $5, binNode(tFEXPSTP, $6, $7))), $9);  ciclos++;}
+			| DO {ciclos++;} instrucao  WHILE {ciclos--;} expressao  ';' { $$ = binNode(WHILE, $3, $6);  ciclos++; }
+			| FOR lvalue IN expressao upOrDown expressao stp DO {ciclos++;} instrucao {ciclos--;} { $$ = binNode(tFINST, binNode(tFORX, binNode(tFLVEX, $2, $4), binNode(tUPDOWN, $5, binNode(tFEXPSTP, $6, $7))), $10);}
 			| expressao ';'    			{ $$ = $1; }
 			| corpo 					{ $$ = $1; }
-			| BREAK inteirOrNon ';'     { $$ = uniNode(BREAK, $2);  if(!ciclos) yyerror("Break must be inclosed in cycle"); else ciclos--;}		
-			| CONTINUE inteirOrNon ';'	{ $$ = uniNode(CONTINUE, $2);  if(!ciclos) yyerror("Break must be inclosed in cycle"); else ciclos--;}		
+			| BREAK inteirOrNon ';'     { $$ = uniNode(BREAK, $2); verificacoesBreak($2); }		
+			| CONTINUE inteirOrNon ';'	{ $$ = uniNode(CONTINUE, $2);  if(!ciclos) yyerror("Continue must be inclosed in cycle"); else ciclos--; }		
 			| lvalue '#' expressao ';'	{ $$ = binNode(tALLOC, $3, $1); }
 			;
 
@@ -311,4 +311,15 @@ void verificacaoAtribuicoes(int lval, int exp) {
 	else if (lval%10 != exp%10)
 		yyerror("Invalid atribution");
 			
+}
+
+void verificacoesContinue(int i) {
+	if (i == -1)
+		ciclos --;
+	
+	else if (i >= ciclos) 
+		ciclos -= i;
+
+	else
+		yyerror("Cannot break outside of cycle");
 }
