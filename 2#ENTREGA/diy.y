@@ -296,7 +296,7 @@ int verificacoesPonteiro(int lval, int exp) {
 
 void verificacaoAtribuicoes(int lval, int exp) {
 	// para o caso em que e retorno de funcao 
-	if (lval == -1) return;
+	//if (lval == -1) return;
 	
 	// se estamos a atribuir valor a um const
 	if (lval>=vconst && lval<=vpublic)
