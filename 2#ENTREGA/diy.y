@@ -302,9 +302,17 @@ void verificacaoAtribuicoes(int lval, int exp) {
 	if (lval>=vconst && lval<=vpublic)
 		yyerror("Cannot attribute new value to a const");	
 
+	else if (lval%10 == vint || lval%10 == vreal)
+		if (!(exp%10 == vint || exp%10 == vreal ))
+			yyerror("Atribution should be with int or real");
+
+	else if (exp%10 == vint || exp%10 == vreal )
+		if (!(lval%10 == vint || lval%10 == vreal))
+			yyerror("Atribution should be with int or real");
+			/*
 	else if (((lval%10 == vint || lval%10 == vreal) && !(exp%10 == vint || exp%10 == vreal )) || ((exp%10 == vint || exp%10 == vreal ) && !(lval%10 == vint || lval%10 == vreal)))
 		yyerror("Atribution should be with int or real");
-
+*/
 	// atribuicao de um *int a uma string e valida
 	else if (lval%10 == vstr && exp%10 == vint && exp>vptr && exp<vconst)
 		return;
