@@ -328,7 +328,7 @@ void verificacoesBreak(int i) {
 
 void functionHelper(Node* tipoRetorno, Node*ast, char* id) {
 	
-	IDnew(tipoRetorno->info+ ast->info + vfunct, id, 0);
+	IDnew(tipoRetorno->info+ ast->info + vfunc, id, 0);
 
 	IDpush();
 
