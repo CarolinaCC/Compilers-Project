@@ -234,10 +234,9 @@ void areIntRealOrStr(int first, int second) {
 		return;
 
 	//comparacoes entre string e int sao validas
-	if ((first == vstr  || first == vstr + vconst || first == vint || first == vint + vconst) && (second == vstr || second == vstr + vconst || first == vint || first == vint + vconst))
+	if ((first == vstr  || first == vstr + vconst || first == vint || first == vint + vconst) && (second == vstr || second == vstr + vconst || second == vint || second == vint + vconst))
 		return;
 	
-	printf("ERRO, first:%i, second:%i", first, second);	
 	yyerror("Invalid operation");
 
 		
