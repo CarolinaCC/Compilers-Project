@@ -78,7 +78,7 @@ init 	: 					{ $$ = nilNode(tEND); $$->info = 0;}
 		| INT 				{ $$ = intNode(INT, $1); $$->info = vint;}
 		| cnstOrNon STR 	{ $$ = binNode(tCONSTSTR, $1, strNode(STR, $2)); $$->info = $1->info + vstr;}
 		| REAL 				{ $$ = realNode(REAL, $1); $$->info=vreal;}
-		| ID 				{ $$ = strNode(ID, $1); $$->info=IDfind($1, null);}
+		| ID 				{ $$ = strNode(ID, $1); $$->info=IDfind($1, NULL);}
 		;
 
 prmtsOrNon:					{ $$ = nilNode(tEND); } 
@@ -141,7 +141,7 @@ inteirOrNon	: 				{ $$ = nilNode(tEND); $$->info = 0;}
 			| INT 			{ $$ = intNode(INT, $1); $$->info = vint; }
 			;
 
-lvalue		: ID				        { $$ = strNode(ID , $1); $$->info = IDfind($1, null); }
+lvalue		: ID				        { $$ = strNode(ID , $1); $$->info = IDfind($1, NULL); }
 			| lvalue '[' expressao ']'  { $$ = binNode(tINDEX, $1, $3); $$->info = verificacoesPonteiro($1->info, $3->info);  }
 			| '*' lvalue				{ $$ = uniNode(tLOAD, $2); $$->info = verificacaoPonteiro($2->info);  }	
 			;
@@ -154,18 +154,18 @@ expressao	: INT 		{ $$ = intNode(INT, $1); $$->info = vint;}
 			| ID '(' args ')'	{ $$ = binNode(tCALL, strNode(ID , $1), $3); }	
 			| ID '(' ')'			{ $$ = binNode(tCALL, strNode(ID , $1), nilNode(tEND)); }	
       		| '-' expressao %prec UMINUS 	{ $$ = uniNode(UMINUS, $2); minusChecking($2->info); $$->info = ($2->info > vconst) ? $2->info - vconst + vptr : $2->info + vptr;}
-			| '&' lvalue %prec ENDE			{ $$ = uniNode(tPTR, $2); isIntRealStrVoid($2->info); $$->info = $2>info; }	
+			| '&' lvalue %prec ENDE			{ $$ = uniNode(tPTR, $2); isIntRealStrVoid($2->info); $$->info = $2->info; }	
 			| '~' expressao					{ $$ = uniNode(tNOT, $2); isInt($2->info, 1);}	
 			| lvalue INCR			{ $$ = binNode(INCR, $1, intNode(INT, 1)); isInt($1->info, 0);}
 			| lvalue DECR			{ $$ = binNode(DECR, $1, intNode(INT, 1)); isInt($1->info, 0);}
 			| INCR lvalue			{ $$ = binNode(INCR, intNode(INT, 1),  $2 ); isInt($2->info, 0);}
 			| DECR lvalue			{ $$ = binNode(DECR, intNode(INT, 1),  $2 ); isInt($2->info, 0);}
 
-     		| expressao '*' expressao	{ $$ = binNode(tMUL, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = ($1>$3) ? $1 : $3;}
-     		| expressao '/' expressao	{ $$ = binNode(tDIV, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = $1>$3 ? $1 : $3;}
-     		| expressao '%' expressao	{ $$ = binNode(tMOD, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = $1>$3 ? $1 : $3;}
-    		| expressao '+' expressao	{ $$ = binNode(tADD, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = $1>$3 ? $1 : $3;}
-    		| expressao '-' expressao	{ $$ = binNode(tSUB, $1, $3); areIntOrReal($1->info, $3->info); $$->info = $1>$3 ? $1 : $3;}
+     		| expressao '*' expressao	{ $$ = binNode(tMUL, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = ($1->info%10>$3->info%10) ? $1->info : $3->info;}
+     		| expressao '/' expressao	{ $$ = binNode(tDIV, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = $1->info%10>$3->info%10 ? $1->info : $3->info;}
+     		| expressao '%' expressao	{ $$ = binNode(tMOD, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = $1->info%10>$3->info%10 ? $1->info : $3;}
+    		| expressao '+' expressao	{ $$ = binNode(tADD, $1, $3); areIntOrReal($1->info, $3->info);  $$->info = $1->info%10>$3->info%10 ? $1->info : $3->info;}
+    		| expressao '-' expressao	{ $$ = binNode(tSUB, $1, $3); areIntOrReal($1->info, $3->info); $$->info = $1->info%10>$3->info%10 ? $1->info : $3->info;}
 			| expressao '<' expressao	{ $$ = binNode(tLT, $1, $3); areIntRealOrStr($1->info, $3->info); $$->info = vint;}
 			| expressao '>' expressao	{ $$ = binNode(tGT, $1, $3); areIntRealOrStr($1->info, $3->info); $$->info = vint;}
 			| expressao GE expressao    { $$ = binNode(GE, $1, $3); areIntRealOrStr($1->info, $3->info); $$->info = vint;}
