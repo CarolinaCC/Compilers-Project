@@ -232,10 +232,11 @@ void areIntRealOrStr(int first, int second) {
 	if ((first == vint || first == vreal || first == vint + vconst || first == vreal + vconst ) && ( second == vint + vconst || second == vreal+ vconst || second == vint || second == vreal))
 		return;
 
-
-	if ((first == vstr  || first == vstr + vconst) && (second == vstr || second == vstr + vconst))
+	//comparacoes entre string e int sao validas
+	if ((first == vstr  || first == vstr + vconst || first == vint || first == vint + vconst) && (second == vstr || second == vstr + vconst || first == vint || first == vint + vconst))
 		return;
-		yyerror("Invalid operation");
+	
+	yyerror("Invalid operation");
 
 		
 }
