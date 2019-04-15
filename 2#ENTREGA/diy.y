@@ -272,7 +272,7 @@ int verificacaoPonteiro(int lval) {
 
 		// se for string retorna int
 		if (lval%10 == vstr)
-			return vint;
+			return lval-vstr-vptr+vint;
 
 		else return lval-vptr;
 	}
