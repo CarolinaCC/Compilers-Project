@@ -221,7 +221,7 @@ void isInt(int tipo, int canBeConst) {
 int areIntOrReal(int first, int second) {
 	if (!(first == vint + vconst || first == vreal + vconst || second == vint + vconst || second == vreal+ vconst || first == vint || first == vreal || second == vint || second == vreal)) {
 			yyerror("Invalid operation");
-			return -1;
+			return 0;
 	}
 
 	return first%10>second%10 ? first : second;
