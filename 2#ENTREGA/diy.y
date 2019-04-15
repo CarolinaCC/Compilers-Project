@@ -58,7 +58,7 @@ file	:			 { $$ = nilNode(tEND); }
 		;
 
 stmt 	: pubOuConstOrNone tipo astOrNon ID initOrNon ';' { $$ = binNode(tSTMT, binNode(tPUBeTIPO, $1, $2),binNode(tSTARMORE, $3, binNode(tIDINIT, strNode(ID, $4), $5 ))); verificacoesSTMT( $1->info, $2->info, $3->info, $4, $5->info); } 
-		| pubOuConstOrNone tipo astOrNon ID '(' {functionHelper($2, $3, $4->info);} prmtsOrNon ')' crpOrNon ';' { $$ = binNode(tSTMT1, binNode(tPUBeTIPO, $1, $2), binNode(tSTMTN, binNode(tSTMTSTARTID, $3, strNode(ID, $5)), binNode(tSTMTPRMTCORP, $7, $9))); /*TODO*/} 
+		| pubOuConstOrNone tipo astOrNon ID '(' {functionHelper($2, $3, $4->info);} prmtsOrNon ')' crpOrNon ';' { $$ = binNode(tSTMT1, binNode(tPUBeTIPO, $1, $2), binNode(tSTMTN, binNode(tSTMTSTARTID, $3, strNode(ID, $5)), binNode(tSTMTPRMTCORP, $7, $9))); } 
 		;
 
 
@@ -110,7 +110,7 @@ parametro   : tipo astOrNon ID  	{ $$ = binNode(tTIPOSTAR, $1, binNode(tSTARID, 
 										$$->info = $1->info + $2->info;}
 			;
 
-corpo 		:'{' {IDpush();} prmtNonOrMore instrNonOrMore'}' {  $$ = binNode(tCORPO, $2, $3); IDpop();}
+corpo 		:'{' {IDpush();} prmtNonOrMore instrNonOrMore'}' {  $$ = binNode(tCORPO, $3, $4); IDpop();}
 			;
 
 prmtNonOrMore : 								{ $$ = nilNode(tEND); }
