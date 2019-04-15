@@ -288,7 +288,8 @@ int verificacoesPonteiro(int lval, int exp) {
 }
 
 void verificacaoAtribuicoes(int lval, int exp) {
-	// se estamos a atribuir valor a um const
+	printf("lval %i \t exp %i", lval, exp);
+/*	// se estamos a atribuir valor a um const
 	if (lval>=vconst && lval<=vpublic)
 		yyerror("Cannot attribute new value to a const");	
 
@@ -302,5 +303,5 @@ void verificacaoAtribuicoes(int lval, int exp) {
 	else if (lval%10 != exp%10)
 		yyerror("Invalid atribution");
 
-			
+*/			
 }
