@@ -206,7 +206,7 @@ void minusChecking(int tipo) {
 void isIntRealStrVoid(int tipo) {
 
 	if (!(tipo == vint || tipo == vreal || tipo == vreal + vconst || tipo == vint + vconst || tipo == vstr || tipo == vstr + vconst || tipo == vvoid || tipo == vvoid + vconst))
-		yyerror("1Invalid operation");
+		yyerror("Invalid operation");
 
 }
 
@@ -215,12 +215,12 @@ void isInt(int tipo, int canBeConst) {
 		if (!(tipo == vint + vconst || tipo == vint))
 			yyerror("2Invalid operation");
 	if (tipo != vint)
-		yyerror("3Invalid operation");
+		yyerror("Invalid operation");
 }
 
 int areIntOrReal(int first, int second) {
 	if (!(first == vint + vconst || first == vreal + vconst || second == vint + vconst || second == vreal+ vconst || first == vint || first == vreal || second == vint || second == vreal)) {
-			yyerror("4Invalid operation");
+			yyerror("Invalid operation");
 			return 0;
 	}
 
@@ -237,14 +237,15 @@ void areIntRealOrStr(int first, int second) {
 	if ((first == vstr  || first == vstr + vconst || first == vint || first == vint + vconst) && (second == vstr || second == vstr + vconst || first == vint || first == vint + vconst))
 		return;
 	
-	yyerror("5Invalid operation");
+	printf("ERRO, first:%i, second:%i", first, second);	
+	yyerror("Invalid operation");
 
 		
 }
 
 void areInt(int first, int second) {
 	if (!(first == vint || first == vint + vconst || second == vint || second == vint + vconst))
-		yyerror("6Invalid operation");
+		yyerror("Invalid operation");
 
 }
 
