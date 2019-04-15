@@ -296,7 +296,7 @@ int verificacoesPonteiro(int lval, int exp) {
 
 void verificacaoAtribuicoes(int lval, int exp) {
 	// para o caso em que e retorno de funcao 
-	//if (lval == -1) return;
+	if (lval == -1) return;
 	
 	// se estamos a atribuir valor a um const
 	if (lval>=vconst && lval<=vpublic)
@@ -309,13 +309,12 @@ void verificacaoAtribuicoes(int lval, int exp) {
 	else if (exp%10 == vint || exp%10 == vreal )
 		if (!(lval%10 == vint || lval%10 == vreal))
 			yyerror("Atribution should be with int or real");
-			/*
-	else if (((lval%10 == vint || lval%10 == vreal) && !(exp%10 == vint || exp%10 == vreal )) || ((exp%10 == vint || exp%10 == vreal ) && !(lval%10 == vint || lval%10 == vreal)))
-		yyerror("Atribution should be with int or real");
-*/
+			
+
 	// atribuicao de um *int a uma string e valida
-	else if (lval%10 == vstr && exp%10 == vint && exp>vptr && exp<vconst)
+	else if (lval%10 == vstr && exp%10 == vint && exp>=vptr && exp<=vconst)
 		return;
+
 
 	else if (lval%10 != exp%10)
 		yyerror("Invalid atribution");
