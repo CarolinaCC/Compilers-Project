@@ -325,8 +325,7 @@ void verificacaoAtribuicoes(int lval, int exp) {
 }
 
 void verificacoesBreak(int i) {
-	printf("breakkkk %i", i);
-	if (i >= ciclos)
+	if (i <= ciclos)
 		return;
 
 	else
