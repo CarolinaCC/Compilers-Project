@@ -154,7 +154,7 @@ expressao	: INT 		{ $$ = intNode(INT, $1); $$->info = vint;}
 			| ID '(' args ')'	{ $$ = binNode(tCALL, strNode(ID , $1), $3); }	
 			| ID '(' ')'			{ $$ = binNode(tCALL, strNode(ID , $1), nilNode(tEND)); }	
       		| '-' expressao %prec UMINUS 	{ $$ = uniNode(UMINUS, $2); minusChecking($2->info); $$->info = ($2->info > vconst) ? $2->info - vconst + vptr : $2->info + vptr;}
-			| '&' lvalue %prec ENDE			{ $$ = uniNode(tPTR, $2); isIntRealStrVoid($2->info); $$->info = £2>info; }	
+			| '&' lvalue %prec ENDE			{ $$ = uniNode(tPTR, $2); isIntRealStrVoid($2->info); $$->info = $2>info; }	
 			| '~' expressao					{ $$ = uniNode(tNOT, $2); isInt($2->info, 1);}	
 			| lvalue INCR			{ $$ = binNode(INCR, $1, intNode(INT, 1)); isInt($1->info, 0);}
 			| lvalue DECR			{ $$ = binNode(DECR, $1, intNode(INT, 1)); isInt($1->info, 0);}
@@ -262,6 +262,19 @@ void verificacoesSTMT(int pubOrConst, int tipo, int ast, char* id, int init) {
 		}		
 }
 
+int verificacaoPonteiro(int lval) {
+	// se lval for ponteiro
+	if (lval>=vptr && lval <= vconst) {
+
+		// se for string retorn int
+		if (lval%10 == vstr)
+			return lval-vstr-vptr+vint;
+
+		else return lval-vptr;
+	}
+	return 0;
+}
+
 int verificacoesPonteiro(int lval, int exp) {
 	if (exp%10 != vint) {
 		yyerror("Index must be integer");
@@ -270,25 +283,12 @@ int verificacoesPonteiro(int lval, int exp) {
 	return verificacaoPonteiro(lval);
 }
 
-int verificacaoPonteiro(int lval) {
-	// se lval for ponteiro
-	if (lval>=vptr && lval <= vconst) {
-
-		// se for string retorn int
-		if (lval%10 == vstring)
-			return lval-vstring-vptr+vint;
-
-		else return lval-vptr;
-	}
-	return 0;
-}
-
 void verificacaoAtribuicoes(int lval, int exp) {
 	// se estamos a atribuir valor a um const
 	if (lval>=vconst && lval<=vpublic)
 		yyerror("Cannot attribute new value to a const");	
 
-	else if ((lval%10 == vint || lval%10 == vreal) && !(exp%10 == vint || exp%10 == vreal )) || ((exp%10 == vint || exp%10 == vreal ) && !(lval%10 == vint || lval%10 == vreal))
+	else if (((lval%10 == vint || lval%10 == vreal) && !(exp%10 == vint || exp%10 == vreal )) || ((exp%10 == vint || exp%10 == vreal ) && !(lval%10 == vint || lval%10 == vreal)))
 		yyerror("Atribution should be with int or real");
 
 	// atribuicao de um *int a uma string e valida
