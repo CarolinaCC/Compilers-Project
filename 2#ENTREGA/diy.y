@@ -313,7 +313,7 @@ void verificacaoAtribuicoes(int lval, int exp) {
 			
 }
 
-void verificacoesContinue(int i) {
+void verificacoesBreak(int i) {
 	if (i == -1)
 		ciclos --;
 	
