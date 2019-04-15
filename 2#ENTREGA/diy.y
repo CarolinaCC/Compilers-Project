@@ -276,14 +276,14 @@ void verificacoesSTMT(int pubOrConst, int tipo, int ast, char* id, int init) {
 }
 
 int verificacaoPonteiro(int lval) {
+	// se string retorna
+	if(lval%10 == vstr)
+		return vint;
+
 	// se lval for ponteiro
 	if (lval>=vptr && lval <= vconst) {
+		return lval-vptr;
 
-		// se for string retorna int
-		if (lval%10 == vstr)
-			return lval-vstr-vptr+vint;
-
-		else return lval-vptr;
 	}
 	return 0;
 }
