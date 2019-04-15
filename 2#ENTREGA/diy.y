@@ -163,7 +163,7 @@ expressao	: INT 		{ $$ = intNode(INT, $1); $$->info = vint;}
 
      		| expressao '*' expressao	{ $$ = binNode(tMUL, $1, $3); $$->info = areIntOrReal($1->info, $3->info); }
      		| expressao '/' expressao	{ $$ = binNode(tDIV, $1, $3); $$->info = areIntOrReal($1->info, $3->info); }
-     		| expressao '%' expressao	{ $$ = binNode(tMOD, $1, $3); $$->info = areIntOrReal($1->info, }
+     		| expressao '%' expressao	{ $$ = binNode(tMOD, $1, $3); $$->info = areIntOrReal($1->info, $3->info);}
     		| expressao '+' expressao	{ $$ = binNode(tADD, $1, $3); $$->info = areIntOrReal($1->info, $3->info); }
     		| expressao '-' expressao	{ $$ = binNode(tSUB, $1, $3); $$->info = areIntOrReal($1->info, $3->info); }
 			| expressao '<' expressao	{ $$ = binNode(tLT, $1, $3); areIntRealOrStr($1->info, $3->info); $$->info = vint;}
@@ -214,7 +214,7 @@ int areIntOrReal(int first, int second) {
 	if (!(first == vint + vconst || first == vreal + vconst || second == vint + vconst || second == vreal+ vconst || first == vint || first == vreal || second == vint || second == vreal))
 			yyerror("Invalid operation");
 
-	return $1->info%10>$3->info%10 ? $1->info : $3->info;
+	return first%10>second%10 ? first : second;
 
 }
 
