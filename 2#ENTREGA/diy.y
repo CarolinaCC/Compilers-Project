@@ -13,7 +13,6 @@
 #define vpublic 100000
 extern int yylex();
 int yyerror(char *s);
-int ciclos = 0;
 %}
 %union {
 	int i;			/* integer value */
@@ -117,12 +116,12 @@ instrNonOrMore	: 								{ $$ = nilNode(tEND); }
 				;
 
 instrucao 	: IF expressao THEN instrucao els  { $$ = binNode(IF, binNode(THEN, $2, $4), $5); }
-			| DO instrucao WHILE expressao ';' { $$ = binNode(WHILE, $2, $4); ciclos++; }
+			| DO instrucao WHILE expressao ';' { $$ = binNode(WHILE, $2, $4); }
 			| FOR lvalue IN expressao upOrDown expressao stp DO instrucao { $$ = binNode(tFINST, binNode(tFORX, binNode(tFLVEX, $2, $4), binNode(tUPDOWN, $5, binNode(tFEXPSTP, $6, $7))), $9); }
 			| expressao ';'    			{ $$ = $1; }
 			| corpo 					{ $$ = $1; }
-			| BREAK inteirOrNon ';'     { $$ = uniNode(BREAK, $2); if(!ciclos)yyerror("Break must be in a cycle"); 	else ciclos--; }		
-			| CONTINUE inteirOrNon ';'	{ $$ = uniNode(CONTINUE, $2); if(!ciclos)yyerror("Continue must be in a cycle"); else ciclos--; }		
+			| BREAK inteirOrNon ';'     { $$ = uniNode(BREAK, $2);  }		
+			| CONTINUE inteirOrNon ';'	{ $$ = uniNode(CONTINUE, $2);  }		
 			| lvalue '#' expressao ';'	{ $$ = binNode(tALLOC, $3, $1); }
 			;
 
@@ -289,7 +288,7 @@ int verificacoesPonteiro(int lval, int exp) {
 }
 
 void verificacaoAtribuicoes(int lval, int exp) {
-	// para o caso em que e retorno de funcao
+	// para o caso em que e retorno de funcao 
 	if (lval == -1) return;
 	
 	// se estamos a atribuir valor a um const
