@@ -300,18 +300,19 @@ void verificacaoAtribuicoes(int lval, int exp) {
 	// para o caso em que e retorno de funcao 
 	//if (lval == -1) return;
 	
+	printf("lval:%i, exp:%i", lval, exp);
 	// se estamos a atribuir valor a um const
 	if (lval>=vconst && lval<=vpublic)
 		yyerror("Cannot attribute new value to a const");	
 
 	// atribuicoes a um int que nao sejam real ou int sao invalidas
 	else if (lval%10 == vint || lval%10 == vreal)
-		if (!(exp%10 == vint || exp%10 == vreal ))
-			yyerror("Atribution should be with int or real");
+		if ((exp%10 == vint || exp%10 == vreal ))
+			return;
 
 	else if (exp%10 == vint || exp%10 == vreal )
-		if (!(lval%10 == vint || lval%10 == vreal))
-			yyerror("Atribution should be with int or real");
+		if ((lval%10 == vint || lval%10 == vreal))
+			return;
 			
 
 	// atribuicao de um *int a uma string e valida
