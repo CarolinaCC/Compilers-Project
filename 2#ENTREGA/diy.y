@@ -230,9 +230,11 @@ int areIntOrReal(int first, int second) {
 void areIntRealOrStr(int first, int second) {
 	if ((first == vint || first == vreal || first == vint + vconst || first == vreal + vconst ) && ( second == vint + vconst || second == vreal+ vconst || second == vint || second == vreal))
 		return;
+
+
 	if ((first == vstr  || first == vstr + vconst) && (second == vstr || second == vstr + vconst))
 		return;
-	yyerror("Invalid operation");
+		yyerror("Invalid operation");
 
 		
 }
@@ -296,12 +298,13 @@ int verificacoesPonteiro(int lval, int exp) {
 
 void verificacaoAtribuicoes(int lval, int exp) {
 	// para o caso em que e retorno de funcao 
-	if (lval == -1) return;
+	//if (lval == -1) return;
 	
 	// se estamos a atribuir valor a um const
 	if (lval>=vconst && lval<=vpublic)
 		yyerror("Cannot attribute new value to a const");	
 
+	// atribuicoes a um int que nao sejam real ou int sao invalidas
 	else if (lval%10 == vint || lval%10 == vreal)
 		if (!(exp%10 == vint || exp%10 == vreal ))
 			yyerror("Atribution should be with int or real");
