@@ -13,6 +13,7 @@
 #define vptr 1000
 #define vconst 10000
 #define vpublic 100000
+#define vfunc 1000000
 
 extern int yylex();
 int yyerror(char *s);
@@ -57,7 +58,7 @@ file	:			 { $$ = nilNode(tEND); }
 		;
 
 stmt 	: pubOuConstOrNone tipo astOrNon ID initOrNon ';' { $$ = binNode(tSTMT, binNode(tPUBeTIPO, $1, $2),binNode(tSTARMORE, $3, binNode(tIDINIT, strNode(ID, $4), $5 ))); verificacoesSTMT( $1->info, $2->info, $3->info, $4, $5->info); } 
-		| pubOuConstOrNone tipo astOrNon ID '(' prmtsOrNon ')' crpOrNon ';' { $$ = binNode(tSTMT1, binNode(tPUBeTIPO, $1, $2), binNode(tSTMTN, binNode(tSTMTSTARTID, $3, strNode(ID, $4)), binNode(tSTMTPRMTCORP, $6, $8))); /*TODO*/} 
+		| pubOuConstOrNone tipo astOrNon ID '(' {functionHelper($2, $3, $4->info);} prmtsOrNon ')' crpOrNon ';' { $$ = binNode(tSTMT1, binNode(tPUBeTIPO, $1, $2), binNode(tSTMTN, binNode(tSTMTSTARTID, $3, strNode(ID, $5)), binNode(tSTMTPRMTCORP, $7, $9))); /*TODO*/} 
 		;
 
 
@@ -109,7 +110,7 @@ parametro   : tipo astOrNon ID  	{ $$ = binNode(tTIPOSTAR, $1, binNode(tSTARID, 
 										$$->info = $1->info + $2->info;}
 			;
 
-corpo 		:'{' prmtNonOrMore instrNonOrMore '}' { $$ = binNode(tCORPO, $2, $3);}
+corpo 		:'{' {IDpush();} prmtNonOrMore instrNonOrMore'}' {  $$ = binNode(tCORPO, $2, $3); IDpop();}
 			;
 
 prmtNonOrMore : 								{ $$ = nilNode(tEND); }
@@ -126,7 +127,7 @@ instrucao 	: IF expressao THEN instrucao els  { $$ = binNode(IF, binNode(THEN, $
 			| FOR lvalue IN expressao upOrDown expressao stp DO {ciclos++;} instrucao {ciclos--;} { $$ = binNode(tFINST, binNode(tFORX, binNode(tFLVEX, $2, $4), binNode(tUPDOWN, $5, binNode(tFEXPSTP, $6, $7))), $10);}
 			| expressao ';'    			{ $$ = $1; }
 			| corpo 					{ $$ = $1; }
-			| BREAK inteirOrNon ';'     { $$ = uniNode(BREAK, $2); verificacoesBreak($2); }		
+			| BREAK inteirOrNon ';'     { $$ = uniNode(BREAK, $2); verificacoesBreak($2->info); }		
 			| CONTINUE inteirOrNon ';'	{ $$ = uniNode(CONTINUE, $2);  if(!ciclos) yyerror("Continue must be inclosed in cycle"); else ciclos--; }		
 			| lvalue '#' expressao ';'	{ $$ = binNode(tALLOC, $3, $1); }
 			;
@@ -323,3 +324,19 @@ void verificacoesBreak(int i) {
 	else
 		yyerror("Cannot break outside of cycle");
 }
+
+
+void functionHelper(Node* tipoRetorno, Node*ast, char* id) {
+	
+	IDnew(tipoRetorno->info+ ast->info + tipo->vfunct, id, 0);
+
+	IDpush();
+
+	// se funcao nao retorna void
+	if (tipoRetorno->info%10 != vvoid)
+		IDnew(tipoRetorno->info + ast->info, id, 0);
+
+	IDpop();
+} 
+
+
