@@ -211,7 +211,7 @@ void isIntRealStrVoid(int tipo) {
 
 void isInt(int tipo, int canBeConst) {
 	if (canBeConst)
-		if (!(tipo == vint + vconst))
+		if (!(tipo == vint + vconst || tipo == vint))
 			yyerror("Invalid operation");
 	if (tipo != vint)
 		yyerror("Invalid operation");
@@ -300,7 +300,6 @@ void verificacaoAtribuicoes(int lval, int exp) {
 	// para o caso em que e retorno de funcao 
 	//if (lval == -1) return;
 	
-	printf("lval:%i, exp:%i", lval, exp);
 	// se estamos a atribuir valor a um const
 	if (lval>=vconst && lval<=vpublic)
 		yyerror("Cannot attribute new value to a const");	
