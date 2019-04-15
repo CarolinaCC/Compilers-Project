@@ -270,9 +270,9 @@ int verificacaoPonteiro(int lval) {
 	// se lval for ponteiro
 	if (lval>=vptr && lval <= vconst) {
 
-		// se for string retorn int
+		// se for string retorna int
 		if (lval%10 == vstr)
-			return lval-vstr-vptr+vint;
+			return vint;
 
 		else return lval-vptr;
 	}
@@ -289,6 +289,7 @@ int verificacoesPonteiro(int lval, int exp) {
 
 void verificacaoAtribuicoes(int lval, int exp) {
 	printf("lval %i \t exp %i", lval, exp);
+	
 /*	// se estamos a atribuir valor a um const
 	if (lval>=vconst && lval<=vpublic)
 		yyerror("Cannot attribute new value to a const");	
