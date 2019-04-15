@@ -204,6 +204,7 @@ void minusChecking(int tipo) {
 }
 
 void isIntRealStrVoid(int tipo) {
+
 	if (!(tipo == vint || tipo == vreal || tipo == vreal + vconst || tipo == vint + vconst || tipo == vstr || tipo == vstr + vconst || tipo == vvoid || tipo == vvoid + vconst))
 		yyerror("Invalid operation");
 
@@ -220,7 +221,7 @@ void isInt(int tipo, int canBeConst) {
 int areIntOrReal(int first, int second) {
 	if (!(first == vint + vconst || first == vreal + vconst || second == vint + vconst || second == vreal+ vconst || first == vint || first == vreal || second == vint || second == vreal)) {
 			yyerror("Invalid operation");
-			return 0;
+			return -1;
 	}
 
 	return first%10>second%10 ? first : second;
@@ -297,8 +298,6 @@ int verificacoesPonteiro(int lval, int exp) {
 }
 
 void verificacaoAtribuicoes(int lval, int exp) {
-	// para o caso em que e retorno de funcao 
-	//if (lval == -1) return;
 	
 	// se estamos a atribuir valor a um const
 	if (lval>=vconst && lval<=vpublic)
@@ -315,7 +314,7 @@ void verificacaoAtribuicoes(int lval, int exp) {
 			
 
 	// atribuicao de um *int a uma string e valida
-	else if (lval%10 == vstr && exp%10 == vint && exp>=vptr && exp<=vconst)
+	else if (lval%10 == vstr && exp%10 == vint && exp>=vptr && exp<vconst)
 		return;
 
 
