@@ -250,7 +250,7 @@ void verificacoesSTMT(int pubOrConst, int tipo, int ast, char* id, int init) {
 		yyerror("Const variable must inicialized");
 
 	// se um e const e outro nao, da erro
-	if (!(tipo>vconst && tipo<vconst && !init%(vconst*10)))
+	if (tipo>=vconst && tipo<=public && init<const)
 		yyerror("Const variable must inicialized with const value");	
 
 
