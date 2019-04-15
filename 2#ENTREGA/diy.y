@@ -229,6 +229,7 @@ int areIntOrReal(int first, int second) {
 }
 
 void areIntRealOrStr(int first, int second) {
+	// comparacoes entre ints e reais sao validas
 	if ((first == vint || first == vreal || first == vint + vconst || first == vreal + vconst ) && ( second == vint + vconst || second == vreal+ vconst || second == vint || second == vreal))
 		return;
 
@@ -278,12 +279,12 @@ void verificacoesSTMT(int pubOrConst, int tipo, int ast, char* id, int init) {
 }
 
 int verificacaoPonteiro(int lval) {
-	// se string retorna
+	// se string retorna int
 	if(lval%10 == vstr)
 		return vint;
 
 	// se lval for ponteiro
-	if (lval>=vptr && lval <= vconst) {
+	else if (lval>=vptr) {
 		return lval-vptr;
 
 	}
