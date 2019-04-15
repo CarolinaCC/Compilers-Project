@@ -123,7 +123,7 @@ instrNonOrMore	: 								{ $$ = nilNode(tEND); }
 				;
 
 instrucao 	: IF expressao THEN instrucao els  { $$ = binNode(IF, binNode(THEN, $2, $4), $5);}
-			| DO {ciclos++;} instrucao  WHILE {ciclos--;} expressao  ';' { $$ = binNode(WHILE, $3, $6);  ciclos++; }
+			| DO {ciclos++;} instrucao  WHILE {ciclos--;} expressao  ';' { $$ = binNode(WHILE, $3, $6);}
 			| FOR lvalue IN expressao upOrDown expressao stp DO {ciclos++;} instrucao {ciclos--;} { $$ = binNode(tFINST, binNode(tFORX, binNode(tFLVEX, $2, $4), binNode(tUPDOWN, $5, binNode(tFEXPSTP, $6, $7))), $10);}
 			| expressao ';'    			{ $$ = $1; }
 			| corpo 					{ $$ = $1; }
