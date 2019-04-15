@@ -11,8 +11,12 @@
 #define vptr 1000
 #define vconst 10000
 #define vpublic 100000
+
 extern int yylex();
 int yyerror(char *s);
+
+int ciclos = 0;
+
 %}
 %union {
 	int i;			/* integer value */
