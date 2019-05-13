@@ -19,6 +19,7 @@ int noassign(Node *arg1, Node *arg2);
 static int ncicl;
 static char *fpar;
 int sizeOfLocalVariable = 0;
+int sizeOfArgs = 8;
 %}
 
 %union {
@@ -86,7 +87,7 @@ init	: ATR ID ';'		{ $$ = strNode(ID, $2); $$->info = IDfind($2, 0) + 10; }
         ;
 
 finit   : '(' params ')' blocop { $$ = binNode('(', $4, $2); }
-	| '(' ')' blocop        { $$ = binNode('(', $3, 0); }
+	| '(' ')' blocop        { $$ = binNode('(', $3, 0);  }
 	;
 
 blocop  : ';'   { $$ = nilNode(NIL); }
@@ -105,10 +106,15 @@ decls	:                       { $$ = nilNode(NIL); }
 	;
 
 param	: tipo ID               { $$ = binNode(PARAM, $1, strNode(ID, $2));
-                                  IDnew($1->value.i, $2, 0);
-                                  if (IDlevel() == 1) fpar[++fpar[0]] = $1->value.i;
+                                  
+                                  if (IDlevel() == 1)  {
+                                  	fpar[++fpar[0]] = $1->value.i;
+                                  	IDnew($1->value.i, $2, sizeOfArgs);
+                                  	sizeOfArgs += $1->value.i == 3 ? 8 : 4;
+                                  }
                                   else {
                                   	sizeOfLocalVariable += $1->value.i == 3 ? 8 : 4;
+                                  	IDnew($1->value.i, $2, -sizeOfLocalVariable);
                                   }
                                 }
 	;

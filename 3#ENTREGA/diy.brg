@@ -9,6 +9,8 @@
 
 extern FILE *outfp;
 extern int sizeOfLocalVariable;
+extern int sizeOfArgs;
+
 int lbl;
 
 char *dupstr(const char *s);
@@ -71,7 +73,7 @@ expr:   iexpr   1 {p->place = 4;}
 expr:   sexpr   1 {p->place = 4;}
 expr:   rexpr   1 {p->place = 8;}
 
-expr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfPUSH, mkfunc(LEFT_CHILD(p)->value.s), (int)(pfWORD*(RIGHT_CHILD(p)->place)));}
+expr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfPUSH, mkfunc(LEFT_CHILD(p)->value.s), (int)((RIGHT_CHILD(p)->place)));}
 expr:   CALL(ID, VOID) 	1 {}
 
 iexpr: INT 		 1 {fprintf(outfp, pfIMM, p->value.s);}
@@ -112,6 +114,7 @@ void function(int pub, Node *type, char *name, Node *body)
   			fprintf(outfp, pfLEAVE pfRET); /* just in case ... */
   			freeNode(body);
   			sizeOfLocalVariable = 0;
+  			sizeOfArgs = 8;
 			}
 	}
 }
