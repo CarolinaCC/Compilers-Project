@@ -18,7 +18,7 @@ int intonly(Node *arg, int);
 int noassign(Node *arg1, Node *arg2);
 static int ncicl;
 static char *fpar;
-int sizeOfLocalVariable = 0;
+int sizeOfLocalVariable = 
 %}
 
 %union {
@@ -93,14 +93,14 @@ blocop  : ';'   { $$ = 0; }
         | bloco ';'   { $$ = $1; }
         ;
 
-params	: param
+params	: param  			{ $$ = $1;}
 	| params ',' param      { $$ = binNode(',', $1, $3); }
 	;
 
 bloco	: '{' { IDpush(); } decls list end '}'    { $$ = binNode('{', $5 ? binNode(';', $4, $5) : $4, $3); IDpop(); }
 	;
 
-decls	:                       { $$ = 0; }
+decls	:                       { $$ = nilNode(NIL); }
 	| decls param ';'       { $$ = binNode(';', $1, $2); }
 	;
 
@@ -144,7 +144,7 @@ intp	:       { $$ = 1; }
 	| INT
 	;
 
-list	: base
+list	: base		{ $$ = $1;}
 	| list base     { $$ = binNode(';', $1, $2); }
 	;
 
