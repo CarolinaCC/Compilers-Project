@@ -66,15 +66,18 @@ tipo: INTEGER 	1 {}
 tipo: STRING 	1 {}
 tipo: NUMBER 	1 {}
 
-sexpr:  STR 	 1 {	outstr(p->value.s);}
-
 
 expr:   iexpr   1 {}
 expr:   sexpr   1 {}
-expr:   dexpr   1 {}
+expr:   rexpr   1 {}
 expr:   CALL(ID, args) 	1 {}
 expr:   CALL(ID, VOID) 	1 {}
 
+iexpr: INT 		 1 {outstr(p->value.s);}
+
+rexpr: REAL 	 1 {outstr(p->value.s);}
+
+sexpr:  STR 	 1 outstr(p->value.s);}
 
 
 %%
