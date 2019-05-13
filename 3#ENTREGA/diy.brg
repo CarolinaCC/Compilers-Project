@@ -86,7 +86,7 @@ sexpr:  STR 	 		1 {lbl++; fprintf(outfp, pfRODATA pfALIGN pfLABEL, mklbl(lbl)); 
 sexpr: ATR(sexpr, lv) 	1 {fprintf(outfp, pfSTORE);}
 
 
-lv:    LOCAL(ID)  1 {fprintf(outfp, pfLOCAL, p->value.i * (pfWORD/4));}
+lv:    LOCAL  1 {fprintf(outfp, pfLOCAL, p->value.i * (pfWORD/4));}
 
 
 
