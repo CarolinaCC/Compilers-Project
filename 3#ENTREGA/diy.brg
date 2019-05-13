@@ -57,11 +57,18 @@ params: t_COMA(params, param)  1 {}
 
 param: PARAM(tipo, ID) 		1 {} 
 
+args:  expr  			1 {}
+args:  COMA(args, expr) 1 {}
+
 tipo: INTEGER 	1 {}
 tipo: STRING 	1 {}
 tipo: NUMBER 	1 {}
 
 sexpr:  STR 	 1 {	outstr(p->value.s);}
+
+expr:   CALL(ID, args) 	1 {}
+expr:   CALL(ID, VOID) 	1 {}
+
 
 
 %%
