@@ -58,7 +58,7 @@ params: t_COMA(params, param)  1 {}
 param: PARAM(tipo, ID) 		1 {} 
 
 args:  expr  			1 {}
-args:  COMA(args, expr) 1 {}
+args:  t_COMA(args, expr) 1 {}
 
 tipo: INTEGER 	1 {}
 tipo: STRING 	1 {}
