@@ -59,18 +59,17 @@ params: t_COMA(params, param)  1 {}
 
 param: PARAM(tipo, ID) 		1 {} 
 
-args:  expr  			1 {}
-args:  t_COMA(args, expr) 1 {}
+args:  expr  			  1 {}
+args:  t_COMA(args, expr) 1 {p->place = LEFT_CHILD(p)->place + RIGHT_CHILD(p)->place;}
 
 tipo: INTEGER 	1 {}
 tipo: STRING 	1 {}
 tipo: NUMBER 	1 {}
 
-
 expr:   iexpr   1 {}
 expr:   sexpr   1 {}
 expr:   rexpr   1 {}
-expr:   CALL(ID, args) 	1 {}
+expr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfPUSH, mkfunc(LEFT_CHILD(p)->value.s), (int)(pfWORD*(RIGHT_CHILD(p)->place)));}
 expr:   CALL(ID, VOID) 	1 {}
 
 iexpr: INT 		 1 {outstr(p->value.s);}
