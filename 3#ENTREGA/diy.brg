@@ -6,13 +6,143 @@
 #include "node.h"
 #include "tabid.h"
 #include "postfix.h"
+
+extern FILE *outfp;
+char *dupstr(const char *s);
+
+static long brklbl[20], brkcnt; /* break labels */
+/* label _L0 is a break without a while/switch) */
+
+static char *extrns[100]; /* emit externs at the end only */
+static int extcnt;
+
+int lbl;
+char *mklbl(int n) {
+  static char buf[20];
+  sprintf(buf, "_i%d", n);
+  return strcpy(malloc(strlen(buf)+1),buf);
+}
+
+static void outstr(char *s) {
+  while (*s) fprintf(outfp, pfCHAR, (unsigned char)*s++);
+  fprintf(outfp, pfCHAR, 0);
+}
+static char *mkfunc(char *s) {
+  static char buf[80];
+  strcpy(buf, "_");
+  strcat(buf, s);
+  return buf;
+}
 %}
 %term END=';'
 %include "y.tab.h"
 %%
+
 stmt:	END	1	{	}
+
+
+sexpr:  ID 				isString { }
+sexpr:	ADD(sexpr,sexpr)	1 { fprintf(outfp, pfADD); }
+sexpr:	SUB(sexpr,sexpr)	1 { fprintf(outfp, pfSUB); }
+
+rexpr:  ID 				isReal { }
+rexpr:  iexpr			1 { //TODO fprintf(outfp, I2D);}
+rexpr:	ADD(rexpr,rexpr)	1 { fprintf(outfp, pfADD); }
+rexpr:	SUB(rexpr,rexpr)	1 { fprintf(outfp, pfSUB); }
+rexpr:	MUL(rexpr,rexpr)	1 { fprintf(outfp, pfMUL); }
+rexpr:	DIV(rexpr,rexpr)	1 { fprintf(outfp, pfDIV); }
+rexpr:	MOD(rexpr,rexpr)	1 { fprintf(outfp, pfMOD); }
+rexpr:	EQ(rexpr,rexpr)	1 { fprintf(outfp, pfEQ); }
+rexpr:	NE(rexpr,rexpr)	1 { fprintf(outfp, pfNE); }
+rexpr:	LT(rexpr,rexpr)	1 { fprintf(outfp, pfLT); }
+rexpr:	LE(rexpr,rexpr)	1 { fprintf(outfp, pfLE); }
+rexpr:	GT(rexpr,rexpr)	1 { fprintf(outfp, pfGT); }
+rexpr:	GE(rexpr,rexpr)	1 { fprintf(outfp, pfGE); }
+rexpr:	UMINUS(rexpr)	1 { fprintf(outfp, pfNEG); }
+rexpr:	NOT(rexpr)	1 { fprintf(outfp, pfIMM pfEQ, 0); }
+rexpr: 	INCR(rexpr) 		1 
+rexpr:   DECR(rexpr) 		1
+
+iexpr:  ID 				isInt { }
+iexpr:  INTEGER			1
+iexpr:	ADD(iexpr,iexpr)	1 { fprintf(outfp, pfADD); }
+iexpr:	SUB(iexpr,iexpr)	1 { fprintf(outfp, pfSUB); }
+iexpr:	MUL(iexpr,iexpr)	1 { fprintf(outfp, pfMUL); }
+iexpr:	DIV(iexpr,iexpr)	1 { fprintf(outfp, pfDIV); }
+iexpr:	MOD(expr,expr)	1 { fprintf(outfp, pfMOD); }
+iexpr:	EQ(iexpr,iexpr)	1 { fprintf(outfp, pfEQ); }
+iexpr:	NE(iexpr,iexpr)	1 { fprintf(outfp, pfNE); }
+iexpr:	LT(iexpr,iexpr)	1 { fprintf(outfp, pfLT); }
+iexpr:	LE(iexpr,iexpr)	1 { fprintf(outfp, pfLE); }
+iexpr:	GT(iexpr,iexpr)	1 { fprintf(outfp, pfGT); }
+iexpr:	GE(iexpr,iexpr)	1 { fprintf(outfp, pfGE); }
+iexpr:	UMINUS(iexpr)	1 { fprintf(outfp, pfNEG); }
+iexpr:	NOT(iexpr)		1 { fprintf(outfp, pfIMM pfEQ, 0); }
+
+iexpr:	INC(lval)	1 { fprintf(outfp, pfDUP pfINCR pfLOAD, LEFT_CHILD(p)->value.i); }
+iexpr:	DEC(lval)	1 { fprintf(outfp, pfDUP pfDECR pfLOAD, LEFT_CHILD(p)->value.i); }
+
+
+
+%! pre/post in/de-crement
+
+
+%! TODO
+expr:	AND(and,expr)	1 { //TODO}
+and:	expr		    1 {  }
+
+expr:	OR(or,expr)		1 { }
+or:	expr				1 { }
+
+%! if-else
+stmt:	ELSE(if,stmt)	1 { }
+if:	IF(cond,stmt)		1 { }
+
+%! simple if (no else): uses only one label
+stmt:	IF(cond,stmt)		1 { }
+cond:	expr				1 { }
+
+%! artimetic if ( ? : )
+expr:	ARELSE(arif,expr)	1 { }
+arif:	ARIF(cond,expr)		1 { }
+
+%! while
+stmt:	WHILE(do,stmt)	 	1 { }
+do:	DO(begin,expr) 			1 { }
+begin:	START		 		1 {  }
+
+
+
 %%
 #include "y.tab.h"
 extern void yyerror(const char*);
 extern char **yynames;
 extern int trace;
+
+void externs()
+{
+  int i;
+  
+  for (i = 0; i < extcnt; i++)
+    if (extrns[i])
+      fprintf(outfp, pfEXTRN, extrns[i]);
+}
+
+void function(int pub, Node *type, char *name, Node *body)
+{
+	Node *bloco = LEFT_CHILD(body);
+	IDpop();
+	if (bloco != 0) { /* not a forward declaration */
+		long par;
+		int fwd = IDfind(name, &par);
+		if (fwd > 40) yyerror("duplicate function");
+		else {
+			IDreplace(fwd+40, name, par);
+			fflush(stdout);
+  			fprintf(outfp, pfTEXT pfALIGN pfGLOBL pfLABEL pfENTER, mkfunc(name), pfFUNC, mkfunc(name), enter * (pfWORD/4));
+  			yyselect(stmt);
+  			fprintf(outfp, pfLEAVE pfRET); /* just in case ... */
+  			freeNode(stmt);
+			}
+	}
+}

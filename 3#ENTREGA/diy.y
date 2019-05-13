@@ -8,6 +8,7 @@
 #include "tabid.h"
 
 extern int yylex();
+extern void function(int pub, Node *type, char *name, Node *body);
 void yyerror(char *s);
 void declare(int pub, int cnst, Node *type, char *name, Node *value);
 void enter(int pub, int typ, char *name);
@@ -296,14 +297,4 @@ int noassign(Node *arg1, Node *arg2) {
 	return 1;
 }
 
-void function(int pub, Node *type, char *name, Node *body)
-{
-	Node *bloco = LEFT_CHILD(body);
-	IDpop();
-	if (bloco != 0) { /* not a forward declaration */
-		long par;
-		int fwd = IDfind(name, &par);
-		if (fwd > 40) yyerror("duplicate function");
-		else IDreplace(fwd+40, name, par);
-	}
-}
+
