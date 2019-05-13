@@ -79,8 +79,12 @@ expr:   CALL(ID, VOID) 	1 {}
 iexpr: INT 		 1 {fprintf(outfp, pfIMM, p->value.s);}
 
 rexpr: REAL 	 1 {outstr(p->value.s);}
+rexpr: ATR(rexpr, lval) 1 {fprintf(outfp, pfSTORE);
 
 sexpr:  STR 	 1 {lbl++; fprintf(outfp, pfRODATA pfALIGN pfLABEL, mklbl(lbl)); outstr(p->value.s); fprintf(outfp, pfTEXT pfADDR, mklbl(lbl));}
+
+lv:    LOCAL(ID)  1 {fprintf(outfp, pfLOCAL, p->value.i * (pfWORD/4));}
+
 
 
 %%
