@@ -50,7 +50,9 @@ decls: NIL 1 {}
 decls: t_END(decls, param) 1 {}
 
 list:   base 	 1 {}
-base:   sexpr 	 1 {}
+
+base:   expr 	 1 {}
+
 
 params: param 1 {}
 params: t_COMA(params, param)  1 {}
@@ -66,6 +68,10 @@ tipo: NUMBER 	1 {}
 
 sexpr:  STR 	 1 {	outstr(p->value.s);}
 
+
+expr:   iexpr   1 {}
+expr:   sexpr   1 {}
+expr:   dexpr   1 {}
 expr:   CALL(ID, args) 	1 {}
 expr:   CALL(ID, VOID) 	1 {}
 
