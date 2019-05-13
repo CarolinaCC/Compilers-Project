@@ -61,7 +61,7 @@ tipo: INTEGER 	1 {}
 tipo: STRING 	1 {}
 tipo: NUMBER 	1 {}
 
-sexpr:  STR 	 1 {	outstr($1->value.s);}
+sexpr:  STR 	 1 {	outstr(p->value.s);}
 
 
 %%
