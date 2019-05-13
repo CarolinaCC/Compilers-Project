@@ -77,7 +77,7 @@ iexpr: INT 		 1 {outstr(p->value.s);}
 
 rexpr: REAL 	 1 {outstr(p->value.s);}
 
-sexpr:  STR 	 1 outstr(p->value.s);}
+sexpr:  STR 	 1 {outstr(p->value.s);}
 
 
 %%
