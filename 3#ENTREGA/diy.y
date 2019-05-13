@@ -18,7 +18,7 @@ int intonly(Node *arg, int);
 int noassign(Node *arg1, Node *arg2);
 static int ncicl;
 static char *fpar;
-int sizeOfLocalVariable = 
+int sizeOfLocalVariable = 0;
 %}
 
 %union {
