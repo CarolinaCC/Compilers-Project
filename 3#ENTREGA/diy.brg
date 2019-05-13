@@ -77,10 +77,10 @@ expr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfPUSH, mkfunc(LEFT_CHI
 expr:   CALL(ID, VOID) 	1 {}
 
 iexpr: INT 			 	1 {fprintf(outfp, pfIMM, p->value.s);}
-iexpr: ATR(rexpr, lval) 1 {fprintf(outfp, pfSTORE);}
+iexpr: ATR(rexpr, lv) 1 {fprintf(outfp, pfSTORE);}
 
 rexpr: REAL 	 		1 {outstr(p->value.s);}
-rexpr: ATR(rexpr, lval) 1 {fprintf(outfp, pfSTORE);}
+rexpr: ATR(rexpr, lv) 1 {fprintf(outfp, pfSTORE);}
 
 sexpr:  STR 	 1 {lbl++; fprintf(outfp, pfRODATA pfALIGN pfLABEL, mklbl(lbl)); outstr(p->value.s); fprintf(outfp, pfTEXT pfADDR, mklbl(lbl));}
 
