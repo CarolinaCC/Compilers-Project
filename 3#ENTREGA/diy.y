@@ -89,7 +89,7 @@ finit   : '(' params ')' blocop { $$ = binNode('(', $4, $2); }
 	| '(' ')' blocop        { $$ = binNode('(', $3, 0); }
 	;
 
-blocop  : ';'   { $$ = 0; }
+blocop  : ';'   { $$ = nilNode(NIL); }
         | bloco ';'   { $$ = $1; }
         ;
 
