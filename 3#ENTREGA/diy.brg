@@ -8,6 +8,8 @@
 #include "postfix.h"
 
 extern FILE *outfp;
+extern int sizeOfLocalVariable;
+
 char *dupstr(const char *s);
 
 static long brklbl[20], brkcnt; /* break labels */
@@ -67,10 +69,11 @@ void function(int pub, Node *type, char *name, Node *body)
 		else {
 			IDreplace(fwd+40, name, par);
 			fflush(stdout);
-  			fprintf(outfp, pfTEXT pfALIGN pfGLOBL pfLABEL pfENTER, mkfunc(name), pfFUNC, mkfunc(name), enter * (pfWORD/4));
-  			yyselect(stmt);
+  			fprintf(outfp, pfTEXT pfALIGN pfGLOBL pfLABEL pfENTER, mkfunc(name), pfFUNC, mkfunc(name), sizeOfLocalVariable * (pfWORD/4));
+  			yyselect(body);
   			fprintf(outfp, pfLEAVE pfRET); /* just in case ... */
-  			freeNode(stmt);
+  			freeNode(body);
+  			sizeOfLocalVariable = 0;
 			}
 	}
 }

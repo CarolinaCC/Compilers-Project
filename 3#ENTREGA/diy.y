@@ -18,6 +18,7 @@ int intonly(Node *arg, int);
 int noassign(Node *arg1, Node *arg2);
 static int ncicl;
 static char *fpar;
+int sizeOfLocalVariable = 0;
 %}
 
 %union {
@@ -106,6 +107,9 @@ decls	:                       { $$ = 0; }
 param	: tipo ID               { $$ = binNode(PARAM, $1, strNode(ID, $2));
                                   IDnew($1->value.i, $2, 0);
                                   if (IDlevel() == 1) fpar[++fpar[0]] = $1->value.i;
+                                  else {
+                                  	sizeOfLocalVariable += $1->value.i == 3 ? 8 : 4;
+                                  }
                                 }
 	;
 
