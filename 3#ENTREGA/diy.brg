@@ -40,7 +40,6 @@ static char *mkfunc(char *s) {
 %include "y.tab.h"
 %%
 
-stmt:	END	1	{ 	}
 
 finit:  OPENP(blocop, params) 1 {}
 
