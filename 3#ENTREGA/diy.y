@@ -236,10 +236,13 @@ void enter(int pub, int typ, char *name) {
 	sizeOfArgs = 8;
 	fpar = malloc(32); /* 31 arguments, at most */
 	fpar[0] = 0; /* argument count */
-	if (IDfind(name, (long*)IDtest) < 20)
+	if (IDfind(name, (long*)IDtest) < 20) 
 		IDnew(typ+20, name, (long)fpar);
 	IDpush();
-	if (typ != 4) IDnew(typ, name, 0);
+	if (typ != 4) {
+	 	IDnew(typ, name, sizeOfArgs);
+	 	sizeOfArgs += typ == 3 ? 8 : 4;	 
+	 	}
 }
 
 int checkargs(char *name, Node *args) {
