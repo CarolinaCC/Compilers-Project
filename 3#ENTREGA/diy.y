@@ -9,6 +9,7 @@
 
 extern int yylex();
 extern void function(int pub, Node *type, char *name, Node *body);
+extern void externs();
 void yyerror(char *s);
 void declare(int pub, int cnst, Node *type, char *name, Node *value);
 void enter(int pub, int typ, char *name);
