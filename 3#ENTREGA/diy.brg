@@ -10,6 +10,7 @@
 extern FILE *outfp;
 extern int sizeOfLocalVariable;
 extern int sizeOfArgs;
+char array[80];
 
 int lbl;
 
@@ -128,15 +129,16 @@ void function(int pub, Node *type, char *name, Node *body) {
 			sizeOfArgs = 8;
 			int i;
 			for (i = 0; i < extcnt; i++)
-    		if (extrns[i] && strcmp(extrns[i], mkfunc(name)) == 0) extrns[i] = 0;
+    			if (extrns[i] && strcmp(extrns[i], mkfunc(name)) == 0) 
+    				extrns[i] = 0;
 			}
 	}
 	else {
-		char array[80];
+		
 		array[0] = '\0';
 		strcpy(array, "_");
 		strcat(array, name);
 		extrns[extcnt++] = array;
-		printf("%s\n",array);
+		
 	}
 }
