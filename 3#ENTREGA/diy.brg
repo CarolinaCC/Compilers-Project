@@ -85,6 +85,7 @@ expr:   CALL(ID, VOID) 	1 {}
 iexpr: INT 			 	1 {fprintf(outfp, pfIMM, p->value.i);}
 iexpr:	ADD(iexpr,iexpr)	1 { fprintf(outfp, pfADD); }
 
+iexpr: lv 			 	1 {fprintf(outfp, pfLOAD);}
 
 %!iexpr:	SUB(iexpr,iexpr)	1 { fprintf(outfp, pfSUB); }
 %!iexpr:	MUL(iexpr,iexpr)	1 { fprintf(outfp, pfMUL); }
