@@ -47,17 +47,18 @@ static char *mkfunc(char *s) {
 finit:  t_OPENP(blocop, params) 1 {}
 
 blocop: bloco    1 {}
+
 bloco:  t_BRACKET(list, decls) 	 1 {}
 
 decls: NIL 1 {}
 decls: t_END(decls, param) 1 {}
 
-list:   base 	 1 {}
+list:   base 	 		  1 {}
+list: 	t_END(list, base) 1 {}
 
 base:   expr 	 1 {}
 
-
-params: param 1 {}
+params: param 				   1 {}
 params: t_COMA(params, param)  1 {}
 
 param: PARAM(tipo, ID) 		1 {} 
