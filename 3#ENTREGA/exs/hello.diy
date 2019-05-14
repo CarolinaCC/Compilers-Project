@@ -5,7 +5,7 @@ public integer entry (integer argc, string *argv, string *envp) {
   a := 2;
   a := - 2;
   
-
+  a := a;
  == printi(a);
   prints("olá pessoal!\n")
   entry := 0
