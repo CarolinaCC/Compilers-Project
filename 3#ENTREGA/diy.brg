@@ -94,7 +94,7 @@ iexpr:	LT(iexpr,iexpr)		1 { fprintf(outfp, pfLT); }
 iexpr:	LE(iexpr,iexpr)		1 { fprintf(outfp, pfLE); }
 iexpr:	GT(iexpr,iexpr)		1 { fprintf(outfp, pfGT); }
 iexpr:	GE(iexpr,iexpr)		1 { fprintf(outfp, pfGE); }
-%!iexpr:	UMINUS(iexpr)	1 { fprintf(outfp, pfNEG); }
+iexpr:	UMINUS(iexpr)	1 { fprintf(outfp, pfNEG); }
 %!iexpr:  rexpr 			1 { fprintf(outfp, pfD2I);}
 
 iexpr: lv 			 		1 {fprintf(outfp, pfLOAD);}

@@ -3,7 +3,7 @@ public void printi(integer i)
 public integer entry (integer argc, string *argv, string *envp) {
   integer a;
   a := 2;
-  a := 2 % 2;
+  a := - 2;
   
 
  == printi(a);
