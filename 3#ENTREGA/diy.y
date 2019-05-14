@@ -55,7 +55,7 @@ int sizeOfArgs = 8;
 %token LOCAL POSINC POSDEC PTR CALL START PARAM NIL
 %%
 
-extern: file 	{externs();}
+extn: file 	{externs();}
 
 file	:
 	| file error ';'
