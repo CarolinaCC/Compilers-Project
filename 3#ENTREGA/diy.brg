@@ -87,6 +87,8 @@ iassign: iexpr 1 {fprintf(outfp, pfDUP);}
 rexpr: REAL 	 		1 {/*fprintf(outfp, p->value.d);*/}
 rexpr: ATR(rexpr, lv) 	1 {fprintf(outfp, pfSTORE);}
 
+rassign: rexpr 1 {fprintf(outfp, pfDUP);}
+
 sexpr:  STR 	 		1 {lbl++; fprintf(outfp, pfRODATA pfALIGN pfLABEL, mklbl(lbl)); outstr(p->value.s); fprintf(outfp, pfTEXT pfADDR, mklbl(lbl));}
 sexpr: ATR(sexpr, lv) 	1 {fprintf(outfp, pfSTORE);}
 
@@ -124,8 +126,7 @@ void function(int pub, Node *type, char *name, Node *body)
   			yyselect(body);
   			fprintf(outfp, pfLEAVE pfRET); /* just in case ... */
   			freeNode(body);
-  			sizeOfLocalVariable = 0;
-  			sizeOfArgs = 8;
+  			
 			}
 	}
 }
