@@ -85,7 +85,7 @@ iexpr: ATR(iassign, lv) 	1 {fprintf(outfp, pfSTORE);}
 iassign: iexpr 1 {fprintf(outfp, pfDUP);}
 
 rexpr: REAL 	 		1 {/*fprintf(outfp, p->value.d);*/}
-rexpr: ATR(rexpr, lv) 	1 {fprintf(outfp, pfSTORE);}
+rexpr: ATR(rassign, lv) 	1 {fprintf(outfp, pfSTORE);}
 
 rassign: rexpr 1 {fprintf(outfp, pfDUP);}
 
