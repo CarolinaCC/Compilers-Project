@@ -126,7 +126,8 @@ void function(int pub, Node *type, char *name, Node *body)
   			yyselect(body);
   			fprintf(outfp, pfLEAVE pfRET); /* just in case ... */
   			freeNode(body);
-  			
+  			sizeOfLocalVariable = 0;
+			sizeOfArgs = 8;
 			}
 	}
 }
