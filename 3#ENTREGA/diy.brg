@@ -100,7 +100,10 @@ iexpr:	GE(iexpr,iexpr)		1 { fprintf(outfp, pfGE); }
 iexpr: lv 			 		1 {fprintf(outfp, pfLOAD);}
 
 iexpr: ATR(iassign, lv) 	1 { fprintf(outfp, pfSTORE);}
-iexpr: ATR(iassign, LOCAL)	1 { fprintf(outfp, pfDUP pfLOCA, RIGHT_CHILD(p)->value.i * (pfWORD/4)); }
+iexpr: ATR(iexpr, LOCAL)	1 { fprintf(outfp, pfDUP pfLOCA, RIGHT_CHILD(p)->value.i * (pfWORD/4)); }
+
+iexpr:	ATR(iexpr,ADDR)		1 { fprintf(outfp, pfDUP pfADDRA, RIGHT_CHILD(p)->value.s); }
+
 
 iassign: iexpr 				1 {fprintf(outfp, pfDUP);}
 
