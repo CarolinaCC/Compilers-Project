@@ -10,7 +10,7 @@
 extern FILE *outfp;
 extern int sizeOfLocalVariable;
 extern int sizeOfArgs;
-char array[80];
+
 
 int lbl;
 
@@ -134,8 +134,8 @@ void function(int pub, Node *type, char *name, Node *body) {
 			}
 	}
 	else {
+		char array[80] = {'\0'};
 		
-		array[0] = '\0';
 		strcpy(array, "_");
 		strcat(array, name);
 		extrns[extcnt++] = array;
