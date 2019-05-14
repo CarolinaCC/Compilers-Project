@@ -87,23 +87,22 @@ iexpr:	ADD(iexpr,iexpr)	1 { fprintf(outfp, pfADD); }
 iexpr:	SUB(iexpr,iexpr)	1 { fprintf(outfp, pfSUB); }
 iexpr:	MUL(iexpr,iexpr)	1 { fprintf(outfp, pfMUL); }
 iexpr:	DIV(iexpr,iexpr)	1 { fprintf(outfp, pfDIV); }
-iexpr:	MOD(expr,expr)	1 { fprintf(outfp, pfMOD); }
-iexpr:	EQ(iexpr,iexpr)	1 { fprintf(outfp, pfEQ); }
-iexpr:	NE(iexpr,iexpr)	1 { fprintf(outfp, pfNE); }
-iexpr:	LT(iexpr,iexpr)	1 { fprintf(outfp, pfLT); }
-iexpr:	LE(iexpr,iexpr)	1 { fprintf(outfp, pfLE); }
-iexpr:	GT(iexpr,iexpr)	1 { fprintf(outfp, pfGT); }
-iexpr:	GE(iexpr,iexpr)	1 { fprintf(outfp, pfGE); }
+iexpr:	MOD(expr,expr)		1 { fprintf(outfp, pfMOD); }
+iexpr:	EQ(iexpr,iexpr)		1 { fprintf(outfp, pfEQ); }
+iexpr:	NE(iexpr,iexpr)		1 { fprintf(outfp, pfNE); }
+iexpr:	LT(iexpr,iexpr)		1 { fprintf(outfp, pfLT); }
+iexpr:	LE(iexpr,iexpr)		1 { fprintf(outfp, pfLE); }
+iexpr:	GT(iexpr,iexpr)		1 { fprintf(outfp, pfGT); }
+iexpr:	GE(iexpr,iexpr)		1 { fprintf(outfp, pfGE); }
 %!iexpr:	UMINUS(iexpr)	1 { fprintf(outfp, pfNEG); }
 %!iexpr:  rexpr 			1 { fprintf(outfp, pfD2I);}
 
-iexpr: lv 			 	1 {fprintf(outfp, pfLOAD);}
-
+iexpr: lv 			 		1 {fprintf(outfp, pfLOAD);}
 
 iexpr: ATR(iassign, lv) 	1 { fprintf(outfp, pfSTORE);}
-iexpr: ATR(iassign,LOCAL)		1 { fprintf(outfp, pfDUP pfLOCA, RIGHT_CHILD(p)->value.i * (pfWORD/4)); }
+iexpr: ATR(iassign, LOCAL)	1 { fprintf(outfp, pfDUP pfLOCA, RIGHT_CHILD(p)->value.i * (pfWORD/4)); }
 
-iassign: iexpr 1 			{fprintf(outfp, pfDUP);}
+iassign: iexpr 				1 {fprintf(outfp, pfDUP);}
 
 
 rexpr: REAL 	 		1 {/*fprintf(outfp, p->value.d);*/}
