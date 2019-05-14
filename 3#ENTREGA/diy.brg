@@ -134,11 +134,11 @@ void function(int pub, Node *type, char *name, Node *body) {
 			}
 	}
 	else {
-		char *array = malloc(sizeof(char)*80);
-		array[0] = '\0';
-		
-		/*char array[80] ;
+		/*char *array = malloc(sizeof(char)*80);
 		array[0] = '\0';*/
+
+		char array[80] ;
+		array[0] = '\0';
 		strcpy(array, "_");
 		strcat(array, name);
 		extrns[extcnt++] = array;
