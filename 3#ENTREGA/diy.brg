@@ -137,5 +137,6 @@ void function(int pub, Node *type, char *name, Node *body) {
 		strcpy(array, "_");
 		strcat(array, name);
 		extrns[extcnt++] = array;
+		printf("%s\n",array);
 	}
 }
