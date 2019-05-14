@@ -69,6 +69,7 @@ tipo: INTEGER 	1 {}
 tipo: STRING 	1 {}
 tipo: NUMBER 	1 {}
 
+
 expr:   iexpr   1 {p->place = 4;}
 expr:   sexpr   1 {p->place = 4;}
 expr:   rexpr   1 {p->place = 8;}

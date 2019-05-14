@@ -160,7 +160,7 @@ args	: expr		{ $$ = binNode(',', nilNode(NIL), $1); }
 
 lv	: ID		{ long pos; int typ = IDfind($1, &pos);
                           if (pos == 0) $$ = strNode(ID, $1);
-                          else $$ = intNode(LOCAL, pos);
+                          else {$$ = intNode(LOCAL, pos);}
 			  $$->info = typ;
 			}
 	| ID '[' expr ']' { Node *n;
