@@ -72,7 +72,7 @@ tipo: INTEGER 	1 {}
 tipo: STRING 	1 {}
 tipo: NUMBER 	1 {}
 
-lv:    LOCAL  1 {fprintf(outfp, pfLOCAL, p->value.i * (pfWORD/4));}
+lv:    LOCAL  	1 {fprintf(outfp, pfLOCAL, p->value.i * (pfWORD/4));}
 
 expr:   iexpr   1 {p->place = 4;}
 expr:   sexpr   1 {p->place = 4;}
@@ -82,7 +82,7 @@ expr:   CALL(ID, VOID) 	1 {}
 
 
 
-iexpr: INT 			 	1 {fprintf(outfp, pfIMM, p->value.i);}
+iexpr: INT 			 		1 {fprintf(outfp, pfIMM, p->value.i);}
 iexpr:	ADD(iexpr,iexpr)	1 { fprintf(outfp, pfADD); }
 iexpr:	SUB(iexpr,iexpr)	1 { fprintf(outfp, pfSUB); }
 iexpr:	MUL(iexpr,iexpr)	1 { fprintf(outfp, pfMUL); }
