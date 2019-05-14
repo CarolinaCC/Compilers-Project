@@ -84,15 +84,17 @@ expr:   CALL(ID, VOID) 	1 {}
 
 iexpr: INT 			 	1 {fprintf(outfp, pfIMM, p->value.i);}
 iexpr:	ADD(iexpr,iexpr)	1 { fprintf(outfp, pfADD); }
+iexpr:	SUB(iexpr,iexpr)	1 { fprintf(outfp, pfSUB); }
+iexpr:	MUL(iexpr,iexpr)	1 { fprintf(outfp, pfMUL); }
+iexpr:	DIV(iexpr,iexpr)	1 { fprintf(outfp, pfDIV); }
+iexpr:	MOD(expr,expr)	1 { fprintf(outfp, pfMOD); }
+iexpr:	EQ(iexpr,iexpr)	1 { fprintf(outfp, pfEQ); }
+iexpr:	NE(iexpr,iexpr)	1 { fprintf(outfp, pfNE); }
 
 iexpr: lv 			 	1 {fprintf(outfp, pfLOAD);}
 
-%!iexpr:	SUB(iexpr,iexpr)	1 { fprintf(outfp, pfSUB); }
-%!iexpr:	MUL(iexpr,iexpr)	1 { fprintf(outfp, pfMUL); }
-%!iexpr:	DIV(iexpr,iexpr)	1 { fprintf(outfp, pfDIV); }
-%!iexpr:	MOD(expr,expr)	1 { fprintf(outfp, pfMOD); }
-%!iexpr:	EQ(iexpr,iexpr)	1 { fprintf(outfp, pfEQ); }
-%!iexpr:	NE(iexpr,iexpr)	1 { fprintf(outfp, pfNE); }
+
+
 %!iexpr:	LT(iexpr,iexpr)	1 { fprintf(outfp, pfLT); }
 %!iexpr:	LE(iexpr,iexpr)	1 { fprintf(outfp, pfLE); }
 %!iexpr:	GT(iexpr,iexpr)	1 { fprintf(outfp, pfGT); }
