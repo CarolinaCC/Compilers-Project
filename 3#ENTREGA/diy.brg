@@ -40,7 +40,8 @@ static char *mkfunc(char *s) {
   return buf;
 }
 %}
-%term t_END=';' t_OPENP='(' t_COMA=',' t_BRACKET='{'
+%term t_END=';' t_OPENP='(' t_COMA=',' t_BRACKET='{' ADD='+' SUB='-' MUL='*' DIV='/'
+%term MOD='%' EQ='=' LT='<' GT='>'
 %include "y.tab.h"
 %%
 
