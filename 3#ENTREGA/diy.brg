@@ -78,22 +78,40 @@ expr:   rexpr   1 {p->place = 8;}
 expr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfPUSH, mkfunc(LEFT_CHILD(p)->value.s), (int)((RIGHT_CHILD(p)->place)));}
 expr:   CALL(ID, VOID) 	1 {}
 
-lv:    LOCAL  1 {fprintf(outfp, pfLOCAL, p->value.i * (pfWORD/4));}
+
 
 iexpr: INT 			 	1 {fprintf(outfp, pfIMM, p->value.i);}
+iexpr:	ADD(iexpr,iexpr)	1 { fprintf(outfp, pfADD); }
+iexpr:	SUB(iexpr,iexpr)	1 { fprintf(outfp, pfSUB); }
+iexpr:	MUL(iexpr,iexpr)	1 { fprintf(outfp, pfMUL); }
+iexpr:	DIV(iexpr,iexpr)	1 { fprintf(outfp, pfDIV); }
+iexpr:	MOD(expr,expr)	1 { fprintf(outfp, pfMOD); }
+iexpr:	EQ(iexpr,iexpr)	1 { fprintf(outfp, pfEQ); }
+iexpr:	NE(iexpr,iexpr)	1 { fprintf(outfp, pfNE); }
+iexpr:	LT(iexpr,iexpr)	1 { fprintf(outfp, pfLT); }
+iexpr:	LE(iexpr,iexpr)	1 { fprintf(outfp, pfLE); }
+iexpr:	GT(iexpr,iexpr)	1 { fprintf(outfp, pfGT); }
+iexpr:	GE(iexpr,iexpr)	1 { fprintf(outfp, pfGE); }
+iexpr:	UMINUS(iexpr)	1 { fprintf(outfp, pfNEG); }
+
 iexpr: ATR(iassign, lv) 	1 {fprintf(outfp, pfSTORE);}
 
 iassign: iexpr 1 {fprintf(outfp, pfDUP);}
+
 
 rexpr: REAL 	 		1 {/*fprintf(outfp, p->value.d);*/}
 rexpr: ATR(rassign, lv) 	1 {fprintf(outfp, pfSTORE);}
 
 rassign: rexpr 1 {fprintf(outfp, pfDUP);}
 
+
 sexpr:  STR 	 		1 {lbl++; fprintf(outfp, pfRODATA pfALIGN pfLABEL, mklbl(lbl)); outstr(p->value.s); fprintf(outfp, pfTEXT pfADDR, mklbl(lbl));}
-sexpr: ATR(sexpr, lv) 	1 {fprintf(outfp, pfSTORE);}
+sexpr: ATR(sassign, lv) 	1 {fprintf(outfp, pfSTORE);}
 
 
+sassign: sexpr 1 {fprintf(outfp, pfDUP);}
+
+lv:    LOCAL  1 {fprintf(outfp, pfLOCAL, p->value.i * (pfWORD/4));}
 
 
 

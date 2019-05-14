@@ -1,5 +1,10 @@
 public void prints(string s)
+public void printi(integer i)
 public integer entry (integer argc, string *argv, string *envp) {
+  integer a;
+  a := 2;
+  a := 2 + 2;
+  printi(a);
   prints("olá pessoal!\n")
   entry := 0
 };
