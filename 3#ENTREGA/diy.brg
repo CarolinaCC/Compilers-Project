@@ -73,12 +73,15 @@ tipo: NUMBER 	1 {}
 expr:   iexpr   1 {p->place = 4;}
 expr:   sexpr   1 {p->place = 4;}
 expr:   rexpr   1 {p->place = 8;}
-
 expr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfPUSH, mkfunc(LEFT_CHILD(p)->value.s), (int)((RIGHT_CHILD(p)->place)));}
 expr:   CALL(ID, VOID) 	1 {}
 
+lv:    LOCAL  1 {fprintf(outfp, pfLOCAL, p->value.i * (pfWORD/4));}
+
 iexpr: INT 			 	1 {fprintf(outfp, pfIMM, p->value.i);}
-iexpr: ATR(iexpr, lv) 	1 {fprintf(outfp, pfSTORE);}
+iexpr: ATR(iassign, lv) 	1 {fprintf(outfp, pfSTORE);}
+
+iassign: iexpr 1 {fprintf(outfp, pfDUP);}
 
 rexpr: REAL 	 		1 {/*fprintf(outfp, p->value.d);*/}
 rexpr: ATR(rexpr, lv) 	1 {fprintf(outfp, pfSTORE);}
@@ -87,7 +90,6 @@ sexpr:  STR 	 		1 {lbl++; fprintf(outfp, pfRODATA pfALIGN pfLABEL, mklbl(lbl)); 
 sexpr: ATR(sexpr, lv) 	1 {fprintf(outfp, pfSTORE);}
 
 
-lv:    LOCAL  1 {fprintf(outfp, pfLOCAL, p->value.i * (pfWORD/4));}
 
 
 
