@@ -94,7 +94,7 @@ finit   : '(' params ')' blocop { $$ = binNode('(', $4, $2); }
 	| '(' ')' blocop        { $$ = binNode('(', $3, 0);  }
 	;
 
-blocop  : ';'   { $$ = nilNode(NIL); }
+blocop  : ';'   { $$ = 0; }
         | bloco ';'   { $$ = $1; }
         ;
 
