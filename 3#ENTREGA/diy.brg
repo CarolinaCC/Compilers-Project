@@ -102,8 +102,7 @@ extern void yyerror(const char*);
 extern char **yynames;
 extern int trace;
 
-void externs()
-{
+void externs() {
   int i;
   
   for (i = 0; i < extcnt; i++)
@@ -111,8 +110,7 @@ void externs()
       fprintf(outfp, pfEXTRN, extrns[i]);
 }
 
-void function(int pub, Node *type, char *name, Node *body)
-{
+void function(int pub, Node *type, char *name, Node *body) {
 	Node *bloco = LEFT_CHILD(body);
 	IDpop();
 	if (bloco != 0) { /* not a forward declaration */
@@ -128,6 +126,15 @@ void function(int pub, Node *type, char *name, Node *body)
   			freeNode(body);
   			sizeOfLocalVariable = 0;
 			sizeOfArgs = 8;
+			for (i = 0; i < extcnt; i++)
+    		if (extrns[i] && strcmp(extrns[i], mkfunc(name)) == 0) extrns[i] = 0;
 			}
+	}
+	else {
+		char array[80];
+		array[0] = '\0';
+		strcpy(array, "_");
+		strcat(array, name);
+		extrns[extcnt++] = array;
 	}
 }

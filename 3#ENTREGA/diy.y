@@ -54,6 +54,9 @@ int sizeOfArgs = 8;
 
 %token LOCAL POSINC POSDEC PTR CALL START PARAM NIL
 %%
+
+extern: file 	{externs();}
+
 file	:
 	| file error ';'
 	| file public tipo ID ';'	{ IDnew($3->value.i, $4, 0); declare($2, 0, $3, $4, 0); }
@@ -232,8 +235,6 @@ void declare(int pub, int cnst, Node *type, char *name, Node *value)
     yyerror("wrong types in initialization");
 }
 void enter(int pub, int typ, char *name) {
-	sizeOfLocalVariable = 0;
-	sizeOfArgs = 8;
 	fpar = malloc(32); /* 31 arguments, at most */
 	fpar[0] = 0; /* argument count */
 	if (IDfind(name, (long*)IDtest) < 20) 
