@@ -119,7 +119,7 @@ iexpr:	OR(iexpr,iexpr)		1 { fprintf(outfp, pfOR); }
 iexpr:  rexpr 				1 { fprintf(outfp, pfD2I);}
 
 %! atribuicoes
-iexpr: lv 			 		1 {fprintf(outfp, pfLOAD);}
+
 iexpr: ATR(iassign, lv) 	1 { fprintf(outfp, pfSTORE);}
 iexpr: PTR(lv)				1 { fprintf(outfp, pfLOAD); }
 iassign: iexpr 				1 {fprintf(outfp, pfDUP);}
@@ -150,7 +150,6 @@ rexpr:  iexpr 				1 { fprintf(outfp, pfI2D);}
 
 
 %! atribuicoes
-rexpr: lv 			 		1 {fprintf(outfp, pfLOAD2);}
 rexpr: ATR(rassign, lv) 	1 {fprintf(outfp, pfSTORE2);}
 rexpr: PTR(lv)				1 {fprintf(outfp, pfLOAD2); }
 rassign: rexpr 				1 {fprintf(outfp, pfDUP2);}

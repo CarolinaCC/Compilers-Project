@@ -17,27 +17,6 @@ public integer entry (integer argc, string *argv, string *envp) {
 	b := 2.7;
 	c := a + b;
 	printd(c);
-	println();
-	a := b := c;
-	printd(b);
-	println();
-	printd(a);
-	println();
-	printd(c);
-	println();
-	printi(a = c);
-	println();
-	printi(a < c - 3.0);
-	c := a + b;
-	printd(c + 7);
-	println();
-	c := 2;
-	printd(c);
-	println();
-	printi(a > 3);
-	println();
-	c := hello();
-	printd(c);
-	println();
+
 	entry:= 0;
 };
