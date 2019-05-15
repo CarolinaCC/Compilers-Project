@@ -12,14 +12,9 @@ public integer entry (integer argc, string *argv, string *envp) {
 	number b;
 	number c;
 	a := 3.4;
-
-	
-
 	printd(a);
 	println();
 	b := 2.7;
-	printd(b);
-	println();
 	c := a + b;
 	printd(c);
 	println();
