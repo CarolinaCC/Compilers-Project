@@ -23,7 +23,7 @@ public integer entry (integer argc, string *argv, string *envp) {
 	k := i + j;
 	printi(k);
 	println();
-	printi(i := k);
+	==printi(i := k);
 	println();
 	printi(i + 4);
 	println();
