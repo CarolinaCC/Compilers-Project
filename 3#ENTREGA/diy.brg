@@ -88,7 +88,8 @@ iexpr:	ADD(iexpr,iexpr)	1 { fprintf(outfp, pfADD); }
 iexpr:	SUB(iexpr,iexpr)	1 { fprintf(outfp, pfSUB); }
 iexpr:	MUL(iexpr,iexpr)	1 { fprintf(outfp, pfMUL); }
 iexpr:	DIV(iexpr,iexpr)	1 { fprintf(outfp, pfDIV); }
-iexpr:	MOD(expr,expr)		1 { fprintf(outfp, pfMOD); }
+iexpr:	MOD(iexpr,iexpr)		1 { fprintf(outfp, pfMOD); }
+
 iexpr:	EQ(iexpr,iexpr)		1 { fprintf(outfp, pfEQ); }
 iexpr:	NE(iexpr,iexpr)		1 { fprintf(outfp, pfNE); }
 iexpr:	LT(iexpr,iexpr)		1 { fprintf(outfp, pfLT); }
@@ -96,31 +97,39 @@ iexpr:	LE(iexpr,iexpr)		1 { fprintf(outfp, pfLE); }
 iexpr:	GT(iexpr,iexpr)		1 { fprintf(outfp, pfGT); }
 iexpr:	GE(iexpr,iexpr)		1 { fprintf(outfp, pfGE); }
 iexpr:	UMINUS(iexpr)		1 { fprintf(outfp, pfNEG); }
-%!iexpr:  rexpr 			1 { fprintf(outfp, pfD2I);}
+iexpr:  rexpr 				1 { fprintf(outfp, pfD2I);}
 
+%! atribuicoes
 iexpr: lv 			 		1 {fprintf(outfp, pfLOAD);}
-
 iexpr: ATR(iassign, lv) 	1 { fprintf(outfp, pfSTORE);}
-
 iexpr: PTR(LOCAL)			1 { fprintf(outfp, pfLOCV, LEFT_CHILD(p)->value.i * (pfWORD/4)); }
-
 iassign: iexpr 				1 {fprintf(outfp, pfDUP);}
 
+%!REAIS
+rexpr: REAL 1 {lbl++; fprintf(outfp, pfRODATA pfALIGN pfLABEL pfDOUBLE, mklbl(lbl), p->value.r); fprintf(outfp, pfTEXT pfADDR pfLOAD2, mklbl(lbl));}
 
-rexpr: REAL 	 		1 {/*fprintf(outfp, p->value.d);*/}
+rexpr:	ADD(rexpr,rexpr)	1 { fprintf(outfp, pfADD); }
+rexpr:	SUB(rexpr,rexpr)	1 { fprintf(outfp, pfSUB); }
+rexpr:	MUL(rexpr,rexpr)	1 { fprintf(outfp, pfMUL); }
+rexpr:	DIV(rexpr,rexpr)	1 { fprintf(outfp, pfDIV); }
+rexpr:	MOD(rexpr,rexpr)		1 { fprintf(outfp, pfMOD); }
+rexpr:	UMINUS(rexpr)		1 { fprintf(outfp, pfNEG); }
+rexpr:  iexpr 				1 { fprint(outfp, pfI2D);}
+
+
+%! atribuicoes
 rexpr: ATR(rassign, lv) 	1 {fprintf(outfp, pfSTORE);}
-
 rassign: rexpr 1 {fprintf(outfp, pfDUP);}
+rexpr: lv 			 		1 {fprintf(outfp, pfLOAD);}
 
+rexpr: PTR(LOCAL)			1 { fprintf(outfp, pfLOCV, LEFT_CHILD(p)->value.i * (pfWORD/4)); }
+
+%!STRINGS
 
 sexpr:  STR 	 		1 {lbl++; fprintf(outfp, pfRODATA pfALIGN pfLABEL, mklbl(lbl)); outstr(p->value.s); fprintf(outfp, pfTEXT pfADDR, mklbl(lbl));}
 sexpr: ATR(sassign, lv) 	1 {fprintf(outfp, pfSTORE);}
 
-
 sassign: sexpr 1 {fprintf(outfp, pfDUP);}
-
-
-
 
 %%
 #include "y.tab.h"
