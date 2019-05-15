@@ -173,10 +173,10 @@ lv	: ID		{ long pos; int typ = IDfind($1, &pos);
                             if (pos == 0) n = strNode(ID, $1);
                             else n = intNode(LOCAL, pos);
                             $$ = binNode('[', n, $3);
-			    if (typ >= 10) typ -= 10;
-                            else if (typ % 5 == 2) typ = 1;
-			    if (typ >= 5) typ -= 5;
-			    $$->info = typ;
+			    			if (typ >= 10) typ -= 10;
+                            	else if (typ % 5 == 2) typ = 1;
+			    			if (typ >= 5) typ -= 5;
+			   				$$->info = typ;
 			  }
 	;
 
