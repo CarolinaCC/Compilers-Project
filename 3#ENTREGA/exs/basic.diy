@@ -35,6 +35,11 @@ public integer entry (integer argc, string *argv, string *envp) {
 	printi(j);
 	println();
 	k++;
+	printi(k);
+	println();
+	printi(k++);
+	println();
+	printi(++k);
 
 
 
