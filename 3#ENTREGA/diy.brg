@@ -161,6 +161,7 @@ void externs() {
       fprintf(outfp, pfEXTRN, extrns[i]);
 }
 
+
 void function(int pub, Node *type, char *name, Node *body) {
 	Node *bloco = LEFT_CHILD(body);
 	IDpop();
