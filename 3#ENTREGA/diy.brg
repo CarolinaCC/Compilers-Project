@@ -94,6 +94,7 @@ expr:   CALL(ID, VOID) 	1 {fprintf(outfp, pfCALL pfPUSH, mkfunc(LEFT_CHILD(p)->v
 
 %!INTEGERS
 
+%!arithmetic
 iexpr: INT 			 		1 {fprintf(outfp, pfIMM, p->value.i);}
 iexpr:  ADD(iexpr,iexpr)	1 { fprintf(outfp, pfADD); }
 iexpr:	SUB(iexpr,iexpr)	1 { fprintf(outfp, pfSUB); }
@@ -106,6 +107,7 @@ iexpr:	POSINC(lv)			1 { fprintf(outfp, pfDUP pfLOAD pfSWAP pfINCR, 1); }
 iexpr:	POSDEC(lv)			1 { fprintf(outfp, pfDUP pfLOAD pfSWAP pfDECR, 1); }
 iexpr:	UMINUS(iexpr)		1 { fprintf(outfp, pfNEG); }
 
+%!logic 
 iexpr:	EQ(iexpr,iexpr)		1 { fprintf(outfp, pfEQ); }
 iexpr:	NE(iexpr,iexpr)		1 { fprintf(outfp, pfNE); }
 iexpr:	LT(iexpr,iexpr)		1 { fprintf(outfp, pfLT); }
@@ -115,8 +117,6 @@ iexpr:	GE(iexpr,iexpr)		1 { fprintf(outfp, pfGE); }
 iexpr:	AND(iexpr,iexpr)	1 { fprintf(outfp, pfAND); }
 iexpr:	OR(iexpr,iexpr)		1 { fprintf(outfp, pfOR); }
 iexpr:  rexpr 				1 { fprintf(outfp, pfD2I);}
-
-
 
 %! atribuicoes
 iexpr: lv 			 		1 {fprintf(outfp, pfLOAD);}
@@ -137,14 +137,14 @@ rexpr:	MUL(rexpr,rexpr)	1 { fprintf(outfp, pfDMUL); }
 rexpr:	DIV(rexpr,rexpr)	1 { fprintf(outfp, pfDDIV); }
 rexpr:	UMINUS(rexpr)		1 { fprintf(outfp, pfDNEG); }
 
-rexpr:	EQ(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfEQ, 0); }
-rexpr:	NE(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfNE, 0); }
-rexpr:	LT(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfLT, 0); }
-rexpr:	LE(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfLE, 0); }
-rexpr:	GT(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfGT, 0); }
-rexpr:	GE(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfGE, 0); }
-rexpr:	AND(rexpr,rexpr)	1 { fprintf(outfp, pfAND); }
-rexpr:	OR(rexpr,rexpr)		1 { fprintf(outfp, pfOR); }
+%!logic 
+iexpr:	EQ(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfEQ, 0); }
+iexpr:	NE(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfNE, 0); }
+iexpr:	LT(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfLT, 0); }
+iexpr:	LE(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfLE, 0); }
+iexpr:	GT(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfGT, 0); }
+iexpr:	GE(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfGE, 0); }
+
 
 rexpr:  iexpr 				1 { fprintf(outfp, pfI2D);}
 
@@ -152,7 +152,7 @@ rexpr:  iexpr 				1 { fprintf(outfp, pfI2D);}
 %! atribuicoes
 rexpr: lv 			 		1 {fprintf(outfp, pfLOAD2);}
 rexpr: ATR(rassign, lv) 	1 {fprintf(outfp, pfSTORE2);}
-rexpr: PTR(lv)				1 { fprintf(outfp, pfLOAD2); }
+rexpr: PTR(lv)				1 {fprintf(outfp, pfLOAD2); }
 rassign: rexpr 				1 {fprintf(outfp, pfDUP2);}
 
 rexpr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfDPUSH, mkfunc(LEFT_CHILD(p)->value.s), (int)((RIGHT_CHILD(p)->place)));}
