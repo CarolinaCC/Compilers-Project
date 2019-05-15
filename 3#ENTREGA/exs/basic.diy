@@ -6,8 +6,6 @@ public integer f5(integer a, integer b, integer c, number d) {
 };
 
 public integer entry (integer argc, string *argv, string *envp) {
-	integer i;
-	integer j;
 	integer k;
 
 	k := f5(1, 2, 3, 4.0);
