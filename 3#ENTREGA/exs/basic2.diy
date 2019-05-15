@@ -18,6 +18,8 @@ public integer entry (integer argc, string *argv, string *envp) {
 	printd(a);
 	println();
 	b := 2.7;
+	printd(b);
+	println();
 	c := a + b;
 	printd(c);
 	println();
