@@ -26,7 +26,14 @@ public integer entry (integer argc, string *argv, string *envp) {
 	==printi(i := k);
 	println();
 	printi(i + 4);
-	
+	println();
+	printi(i * 2);
+	println();
+	==i := j := k;
+	printi(i);
+	println();
+	printi(j);
+	println();
 
 
 
