@@ -91,7 +91,7 @@ iexpr:	DIV(iexpr,iexpr)	1 { fprintf(outfp, pfDIV); }
 iexpr:	MOD(iexpr,iexpr)	1 { fprintf(outfp, pfMOD); }
 iexpr:	INCR(lv)			1 { fprintf(outfp, pfDUP pfINCR pfLOAD, 1); }
 iexpr:	DECR(lv)			1 { fprintf(outfp, pfDUP pfDECR pfLOAD, 1); }
-iexpr:	POSINC(lv)			1 { fprintf(outfp, pfDUP pfLOAD pfSWAP pfINCR, 1;) }
+iexpr:	POSINC(lv)			1 { fprintf(outfp, pfDUP pfLOAD pfSWAP pfINCR, 1); }
 iexpr:	POSDEC(lv)			1 { fprintf(outfp, pfDUP pfLOAD pfSWAP pfDECR, 1); }
 
 iexpr:	EQ(iexpr,iexpr)		1 { fprintf(outfp, pfEQ); }
