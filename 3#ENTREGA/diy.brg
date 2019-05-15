@@ -53,11 +53,11 @@ blocop: bloco    1 {}
 
 bloco:  t_BRACKET(list, decls) 	 1 {}
 
-decls: NIL 				   1 {}
-decls: t_END(decls, param) 1 {}
+decls: NIL 				   	1 {}
+decls: t_END(decls, param) 	1 {}
 
-list:   base 	 		  1 {}
-list: 	t_END(list, base) 1 {}
+list:   base 	 		  	1 {}
+list: 	t_END(list, base) 	1 {}
 
 base:   expr 	 1 { fprintf(outfp, pfTRASH, 4);}
 
