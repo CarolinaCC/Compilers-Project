@@ -46,7 +46,7 @@ static char *mkfunc(char *s) {
 %%
 
 
-finit:  t_OPENP(blocop, params) 1 {}
+finit:  t_OPENP(blocop, params) 1 {fprintf(outfp, pfLOCAL pfLOAD pfPOP, 8);}
 
 blocop: bloco    1 {}
 
@@ -78,9 +78,7 @@ expr:   iexpr   1 {p->place = 4;}
 expr:   sexpr   1 {p->place = 4;}
 expr:   rexpr   1 {p->place = 8;}
 expr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfPUSH, mkfunc(LEFT_CHILD(p)->value.s), (int)((RIGHT_CHILD(p)->place)));}
-
 expr:   CALL(ID, VOID) 	1 {fprintf(outfp, pfCALL pfPUSH, mkfunc(LEFT_CHILD(p)->value.s));}
-
 
 
 iexpr: INT 			 		1 {fprintf(outfp, pfIMM, p->value.i);}
