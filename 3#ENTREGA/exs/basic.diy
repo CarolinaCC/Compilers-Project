@@ -10,8 +10,6 @@ public integer entry (integer argc, string *argv, string *envp) {
 	integer j;
 	integer k;
 
-	number a;
-	number b;
 
 	i := 3;
 	printi(i);
@@ -40,7 +38,6 @@ public integer entry (integer argc, string *argv, string *envp) {
 	printi(k++);
 	println();
 	printi(++k);
-	k := 19.7 + 3.4;
 
 	println();
 	printi(k);
