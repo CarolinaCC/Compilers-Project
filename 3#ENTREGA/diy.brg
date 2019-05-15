@@ -74,12 +74,11 @@ tipo: NUMBER 	1 {}
 
 lv:    LOCAL  	1 {fprintf(outfp, pfLOCAL, p->value.i * (pfWORD/4));}
 
-expr:   iexpr   1 {p->place = 4;}
-expr:   sexpr   1 {p->place = 4;}
-expr:   rexpr   1 {p->place = 8;}
-expr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfPUSH, mkfunc(LEFT_CHILD(p)->value.s), (int)((RIGHT_CHILD(p)->place)));}
-expr:   CALL(ID, VOID) 	1 {fprintf(outfp, pfCALL pfPUSH, mkfunc(LEFT_CHILD(p)->value.s));}
+expr:   iexpr   	1 {p->place = 4;}
+expr:   sexpr   	1 {p->place = 4;}
+expr:   rexpr   	1 {p->place = 8;}
 
+%!INTEGERS
 
 iexpr: INT 			 		1 {fprintf(outfp, pfIMM, p->value.i);}
 iexpr:	ADD(iexpr,iexpr)	1 { fprintf(outfp, pfADD); }
@@ -106,6 +105,10 @@ iexpr: lv 			 		1 {fprintf(outfp, pfLOAD);}
 iexpr: ATR(iassign, lv) 	1 { fprintf(outfp, pfSTORE);}
 iexpr: PTR(LOCAL)			1 { fprintf(outfp, pfLOCV, LEFT_CHILD(p)->value.i * (pfWORD/4)); }
 iassign: iexpr 				1 {fprintf(outfp, pfDUP);}
+
+%! chamadas a funcoes
+iexpr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfPUSH, mkfunc(LEFT_CHILD(p)->value.s), (int)((RIGHT_CHILD(p)->place)));}
+iexpr:   CALL(ID, VOID) 	1 {fprintf(outfp, pfCALL pfPUSH, mkfunc(LEFT_CHILD(p)->value.s));}
 
 %!REAIS
 rexpr: REAL 				1 {lbl++; fprintf(outfp, pfRODATA pfALIGN pfLABEL pfDOUBLE, mklbl(lbl), p->value.r); fprintf(outfp, pfTEXT pfADDR pfLOAD2, mklbl(lbl));}
