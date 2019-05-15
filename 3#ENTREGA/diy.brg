@@ -175,8 +175,7 @@ void function(int pub, Node *type, char *name, Node *body) {
   			yyselect(body);
   			fprintf(outfp, pfLEAVE pfRET); /* just in case ... */
   			freeNode(body);
-  			sizeOfLocalVariable = 0;
-			sizeOfArgs = 8;
+  			
 			int i;
 			for (i = 0; i < extcnt; i++)
     			if (extrns[i] && strcmp(extrns[i], mkfunc(name)) == 0) 

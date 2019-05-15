@@ -64,8 +64,8 @@ file	:
 	| file public CONST tipo ID ';'	{ IDnew($4->value.i+5, $5, 0); declare($2, 1, $4, $5, 0); }
 	| file public tipo ID init	{ IDnew($3->value.i, $4, 0); declare($2, 0, $3, $4, $5); }
 	| file public CONST tipo ID init	{ IDnew($4->value.i+5, $5, 0); declare($2, 1, $4, $5, $6); }
-	| file public tipo ID { enter($2, $3->value.i, $4); } finit { function($2, $3, $4, $6); }
-	| file public VOID ID { enter($2, 4, $4); } finit { function($2, intNode(VOID, 4), $4, $6); }
+	| file public tipo ID { resetCounters(); enter($2, $3->value.i, $4); } finit { function($2, $3, $4, $6); }
+	| file public VOID ID { resetCounters(); enter($2, 4, $4); } finit { function($2, intNode(VOID, 4), $4, $6); }
 	;
 
 public	:               { $$ = 0; }
@@ -236,8 +236,6 @@ void declare(int pub, int cnst, Node *type, char *name, Node *value)
     yyerror("wrong types in initialization");
 }
 void enter(int pub, int typ, char *name) {
-	sizeOfLocalVariable = 0;
-	sizeOfArgs = 8;
 	fpar = malloc(32); /* 31 arguments, at most */
 	fpar[0] = 0; /* argument count */
 	if (IDfind(name, (long*)IDtest) < 20) 
@@ -247,6 +245,7 @@ void enter(int pub, int typ, char *name) {
 	 	IDnew(typ, name, sizeOfArgs);
 	 	sizeOfArgs += typ == 3 ? 8 : 4;	 
 	 	}
+
 }
 
 int checkargs(char *name, Node *args) {
@@ -288,7 +287,11 @@ int checkargs(char *name, Node *args) {
 	}
 	return typ % 20;
 }
-
+void resetCounters() {
+	sizeOfLocalVariable = 0;
+	sizeOfArgs = 8;	
+}
+ 
 int nostring(Node *arg1, Node *arg2) {
 	if (arg1->info % 5 == 2 || arg2->info % 5 == 2)
 		yyerror("can not use strings");
