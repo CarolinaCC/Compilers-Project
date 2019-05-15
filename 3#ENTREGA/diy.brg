@@ -89,8 +89,8 @@ iexpr:	SUB(iexpr,iexpr)	1 { fprintf(outfp, pfSUB); }
 iexpr:	MUL(iexpr,iexpr)	1 { fprintf(outfp, pfMUL); }
 iexpr:	DIV(iexpr,iexpr)	1 { fprintf(outfp, pfDIV); }
 iexpr:	MOD(iexpr,iexpr)	1 { fprintf(outfp, pfMOD); }
-iexpr:	INCR(lval)			1 { fprintf(outfp, pfDUP pfINCR pfLOAD, LEFT_CHILD(p)->value.i); }
-iexpr:	DECR(lval)			1 { fprintf(outfp, pfDUP pfDECR pfLOAD, LEFT_CHILD(p)->value.i); }
+iexpr:	INCR(lv)			1 { fprintf(outfp, pfDUP pfINCR pfLOAD, LEFT_CHILD(p)->value.i); }
+iexpr:	DECR(lv)			1 { fprintf(outfp, pfDUP pfDECR pfLOAD, LEFT_CHILD(p)->value.i); }
 
 iexpr:	EQ(iexpr,iexpr)		1 { fprintf(outfp, pfEQ); }
 iexpr:	NE(iexpr,iexpr)		1 { fprintf(outfp, pfNE); }
