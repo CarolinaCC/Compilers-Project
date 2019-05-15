@@ -114,7 +114,7 @@ rexpr:	MUL(rexpr,rexpr)	1 { fprintf(outfp, pfMUL); }
 rexpr:	DIV(rexpr,rexpr)	1 { fprintf(outfp, pfDIV); }
 rexpr:	MOD(rexpr,rexpr)		1 { fprintf(outfp, pfMOD); }
 rexpr:	UMINUS(rexpr)		1 { fprintf(outfp, pfNEG); }
-rexpr:  iexpr 				1 { fprint(outfp, pfI2D);}
+rexpr:  iexpr 				1 { fprintf(outfp, pfI2D);}
 
 
 %! atribuicoes
