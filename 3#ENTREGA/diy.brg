@@ -50,12 +50,12 @@ static char *mkfunc(char *s) {
 
 
 finit:  t_OPENP(blocop, params) 1 {if (returnType == DOUBLE) 
-									fprintf(outfp, pfLOCAL pfLOAD2 pfDPOP, 8)
+									fprintf(outfp, pfLOCAL pfLOAD2 pfDPOP, 8);
 								   else 
 									fprintf(outfp, pfLOCAL pfLOAD pfPOP, 8);
 								   }
 finit:  t_OPENP(blocop, NIL) 	1 {if (returnType == DOUBLE) 
-									fprintf(outfp, pfLOCAL pfLOAD2 pfDPOP, 8)
+									fprintf(outfp, pfLOCAL pfLOAD2 pfDPOP, 8);
 								   else 
 									fprintf(outfp, pfLOCAL pfLOAD pfPOP, 8);
 								   }
