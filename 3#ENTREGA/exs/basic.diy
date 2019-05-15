@@ -10,8 +10,8 @@ public integer entry (integer argc, string *argv, string *envp) {
 	integer j;
 	integer k;
 
-	==number a;
-	==number b;
+	number a;
+	number b;
 
 	i := 3;
 	printi(i);
@@ -48,10 +48,6 @@ public integer entry (integer argc, string *argv, string *envp) {
 	==k := f5(1, 2, 3, 4.0);
 	printi(k);
 	println();
-
-
-
-
 
 	entry := 0;
 };

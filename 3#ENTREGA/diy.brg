@@ -91,9 +91,8 @@ iexpr:	DIV(iexpr,iexpr)	1 { fprintf(outfp, pfDIV); }
 iexpr:	MOD(iexpr,iexpr)	1 { fprintf(outfp, pfMOD); }
 iexpr:	INCR(lv)			1 { fprintf(outfp, pfDUP pfINCR pfLOAD, 1); }
 iexpr:	DECR(lv)			1 { fprintf(outfp, pfDUP pfDECR pfLOAD, 1); }
-iexpr:	POSINC(lv)			1 { fprintf(outfp, pfDUP pfLOAD pfINCR, 1); }
-iexpr:	POSDEC(lv)			1 { fprintf(outfp, pfDUP pfLOAD pfDECR, 1); }
-
+iexpr:	POSINC(lv)			1 { fprintf(outfp, pfDUP pfLOAD pfSWAP pfINCR, 1;) }
+iexpr:	POSDEC(lv)			1 { fprintf(outfp, pfDUP pfLOAD pfSWAP pfDECR, 1); }
 
 iexpr:	EQ(iexpr,iexpr)		1 { fprintf(outfp, pfEQ); }
 iexpr:	NE(iexpr,iexpr)		1 { fprintf(outfp, pfNE); }
@@ -111,23 +110,29 @@ iexpr: PTR(LOCAL)			1 { fprintf(outfp, pfLOCV, LEFT_CHILD(p)->value.i * (pfWORD/
 iassign: iexpr 				1 {fprintf(outfp, pfDUP);}
 
 %!REAIS
-rexpr: REAL 1 {lbl++; fprintf(outfp, pfRODATA pfALIGN pfLABEL pfDOUBLE, mklbl(lbl), p->value.r); fprintf(outfp, pfTEXT pfADDR pfLOAD2, mklbl(lbl));}
-
+rexpr: REAL 				1 {lbl++; fprintf(outfp, pfRODATA pfALIGN pfLABEL pfDOUBLE, mklbl(lbl), p->value.r); fprintf(outfp, pfTEXT pfADDR pfLOAD2, mklbl(lbl));}
 rexpr:	ADD(rexpr,rexpr)	1 { fprintf(outfp, pfADD); }
 rexpr:	SUB(rexpr,rexpr)	1 { fprintf(outfp, pfSUB); }
 rexpr:	MUL(rexpr,rexpr)	1 { fprintf(outfp, pfMUL); }
 rexpr:	DIV(rexpr,rexpr)	1 { fprintf(outfp, pfDIV); }
 rexpr:	MOD(rexpr,rexpr)		1 { fprintf(outfp, pfMOD); }
+
+rexpr:	EQ(rexpr,rexpr)		1 { fprintf(outfp, pfEQ); }
+rexpr:	NE(rexpr,rexpr)		1 { fprintf(outfp, pfNE); }
+rexpr:	LT(rexpr,rexpr)		1 { fprintf(outfp, pfLT); }
+rexpr:	LE(rexpr,rexpr)		1 { fprintf(outfp, pfLE); }
+rexpr:	GT(rexpr,rexpr)		1 { fprintf(outfp, pfGT); }
+rexpr:	GE(rexpr,rexpr)		1 { fprintf(outfp, pfGE); }
 rexpr:	UMINUS(rexpr)		1 { fprintf(outfp, pfNEG); }
 rexpr:  iexpr 				1 { fprintf(outfp, pfI2D);}
 
 
 %! atribuicoes
-rexpr: ATR(rassign, lv) 	1 {fprintf(outfp, pfSTORE);}
-rassign: rexpr 1 {fprintf(outfp, pfDUP);}
 rexpr: lv 			 		1 {fprintf(outfp, pfLOAD);}
-
+rexpr: ATR(rassign, lv) 	1 {fprintf(outfp, pfSTORE);}
 rexpr: PTR(LOCAL)			1 { fprintf(outfp, pfLOCV, LEFT_CHILD(p)->value.i * (pfWORD/4)); }
+rassign: rexpr 				1 {fprintf(outfp, pfDUP);}
+
 
 %!STRINGS
 
