@@ -10,6 +10,8 @@ public integer entry (integer argc, string *argv, string *envp) {
 	integer j;
 	integer k;
 
+	==number a;
+	==number b;
 
 	i := 3;
 	printi(i);
@@ -27,7 +29,7 @@ public integer entry (integer argc, string *argv, string *envp) {
 	println();
 	printi(i * 2);
 	println();
-	i := j := k;
+	==i := j := k;
 	printi(i);
 	println();
 	printi(j);
@@ -38,6 +40,7 @@ public integer entry (integer argc, string *argv, string *envp) {
 	printi(k++);
 	println();
 	printi(++k);
+	==k := 19.7 + 3.4;
 
 	println();
 	printi(k);
