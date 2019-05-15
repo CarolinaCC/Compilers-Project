@@ -34,10 +34,11 @@ public integer entry (integer argc, string *argv, string *envp) {
 	println();
 	printi(j);
 	println();
+	k++;
 
 
 
 
-	
+
 	entry := 0;
 };
