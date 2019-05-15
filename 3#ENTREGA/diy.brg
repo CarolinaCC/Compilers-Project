@@ -106,7 +106,7 @@ iexpr:  rexpr 				1 { fprintf(outfp, pfD2I);}
 %! atribuicoes
 iexpr: lv 			 		1 {fprintf(outfp, pfLOAD);}
 iexpr: ATR(iassign, lv) 	1 { fprintf(outfp, pfSTORE);}
-iexpr: PTR(LOCAL)			1 { fprintf(outfp, pfLOCV, LEFT_CHILD(p)->value.i * (pfWORD/4)); }
+iexpr: PTR(lv)				1 { fprintf(outfp, pfLOAD); }
 iassign: iexpr 				1 {fprintf(outfp, pfDUP);}
 
 %! chamadas a funcoes
@@ -134,7 +134,7 @@ rexpr:  iexpr 				1 { fprintf(outfp, pfI2D);}
 %! atribuicoes
 rexpr: lv 			 		1 {fprintf(outfp, pfLOAD);}
 rexpr: ATR(rassign, lv) 	1 {fprintf(outfp, pfSTORE);}
-rexpr: PTR(LOCAL)			1 { fprintf(outfp, pfLOCV, LEFT_CHILD(p)->value.i * (pfWORD/4)); }
+rexpr: PTR(lv)				1 { fprintf(outfp, pfLOAD2); }
 rassign: rexpr 				1 {fprintf(outfp, pfDUP);}
 
 rexpr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfPUSH, mkfunc(LEFT_CHILD(p)->value.s), (int)((RIGHT_CHILD(p)->place)));}
