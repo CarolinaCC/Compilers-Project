@@ -12,6 +12,14 @@ public integer entry (integer argc, string *argv, string *envp) {
 	number b;
 	number c;
 	a := 3.4;
+
+	println();
+	println();
+	c := 3.4;
+	printi(a < c - 3.0);
+	println();
+	println();
+
 	printd(a);
 	println();
 	b := 2.7;
