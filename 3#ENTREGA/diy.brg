@@ -7,12 +7,15 @@
 #include "tabid.h"
 #include "postfix.h"
 
+#define DOUBLE 3
+
 extern FILE *outfp;
 extern int sizeOfLocalVariable;
 extern int sizeOfArgs;
 
 
 int lbl;
+int returnType;
 
 char *dupstr(const char *s);
 
@@ -46,8 +49,16 @@ static char *mkfunc(char *s) {
 %%
 
 
-finit:  t_OPENP(blocop, params) 1 {fprintf(outfp, pfLOCAL pfLOAD pfPOP, 8);}
-finit:  t_OPENP(blocop, NIL) 	1 {fprintf(outfp, pfLOCAL pfLOAD pfPOP, 8);}
+finit:  t_OPENP(blocop, params) 1 {if (returnType == DOUBLE) 
+									fprintf(outfp, pfLOCAL pfLOAD2 pfDPOP, 8)
+								   else 
+									fprintf(outfp, pfLOCAL pfLOAD pfPOP, 8);
+								   }
+finit:  t_OPENP(blocop, NIL) 	1 {if (returnType == DOUBLE) 
+									fprintf(outfp, pfLOCAL pfLOAD2 pfDPOP, 8)
+								   else 
+									fprintf(outfp, pfLOCAL pfLOAD pfPOP, 8);
+								   }
 
 blocop: bloco    1 {}
 
@@ -170,6 +181,7 @@ void externs() {
 
 
 void function(int pub, Node *type, char *name, Node *body) {
+	returnType = type->value.i;
 	Node *bloco = LEFT_CHILD(body);
 	IDpop();
 	if (bloco != 0) { /* not a forward declaration */
