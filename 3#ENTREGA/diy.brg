@@ -136,6 +136,8 @@ rexpr: ATR(rassign, lv) 	1 {fprintf(outfp, pfSTORE);}
 rexpr: PTR(LOCAL)			1 { fprintf(outfp, pfLOCV, LEFT_CHILD(p)->value.i * (pfWORD/4)); }
 rassign: rexpr 				1 {fprintf(outfp, pfDUP);}
 
+rexpr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfPUSH, mkfunc(LEFT_CHILD(p)->value.s), (int)((RIGHT_CHILD(p)->place)));}
+rexpr:   CALL(ID, VOID) 	1 {fprintf(outfp, pfCALL pfPUSH, mkfunc(LEFT_CHILD(p)->value.s));}
 
 %!STRINGS
 
