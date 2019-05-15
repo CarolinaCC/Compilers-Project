@@ -45,7 +45,7 @@ public integer entry (integer argc, string *argv, string *envp) {
 	println();
 	printi(k);
 	println();
-	k := f5(1, 2, 3, 4.0);
+	==k := f5(1, 2, 3, 4.0);
 	printi(k);
 	println();
 
