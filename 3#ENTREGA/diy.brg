@@ -150,13 +150,13 @@ rexpr:  iexpr 				1 { fprintf(outfp, pfI2D);}
 
 
 %! atribuicoes
-rexpr: lv 			 		1 {fprintf(outfp, pfLOAD);}
-rexpr: ATR(rassign, lv) 	1 {fprintf(outfp, pfSTORE);}
+rexpr: lv 			 		1 {fprintf(outfp, pfLOAD2);}
+rexpr: ATR(rassign, lv) 	1 {fprintf(outfp, pfSTORE2);}
 rexpr: PTR(lv)				1 { fprintf(outfp, pfLOAD2); }
-rassign: rexpr 				1 {fprintf(outfp, pfDUP);}
+rassign: rexpr 				1 {fprintf(outfp, pfDUP2);}
 
-rexpr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfPUSH, mkfunc(LEFT_CHILD(p)->value.s), (int)((RIGHT_CHILD(p)->place)));}
-rexpr:   CALL(ID, VOID) 	1 {fprintf(outfp, pfCALL pfPUSH, mkfunc(LEFT_CHILD(p)->value.s));}
+rexpr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfDPUSH, mkfunc(LEFT_CHILD(p)->value.s), (int)((RIGHT_CHILD(p)->place)));}
+rexpr:   CALL(ID, VOID) 	1 {fprintf(outfp, pfCALL pfDPUSH, mkfunc(LEFT_CHILD(p)->value.s));}
 
 %!STRINGS
 
