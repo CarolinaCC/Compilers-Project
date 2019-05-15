@@ -41,7 +41,7 @@ static char *mkfunc(char *s) {
 }
 %}
 %term t_END=';' t_OPENP='(' t_COMA=',' t_BRACKET='{' ADD='+' SUB='-' MUL='*' DIV='/'
-%term MOD='%' EQ='=' LT='<' GT='>'
+%term MOD='%' EQ='=' LT='<' GT='>' AND='&' OR='|'
 %include "y.tab.h"
 %%
 
@@ -84,7 +84,7 @@ expr:   CALL(ID, VOID) 	1 {fprintf(outfp, pfCALL pfPUSH, mkfunc(LEFT_CHILD(p)->v
 %!INTEGERS
 
 iexpr: INT 			 		1 {fprintf(outfp, pfIMM, p->value.i);}
-iexpr:	ADD(iexpr,iexpr)	1 { fprintf(outfp, pfADD); }
+iexpr:  ADD(iexpr,iexpr)	1 { fprintf(outfp, pfADD); }
 iexpr:	SUB(iexpr,iexpr)	1 { fprintf(outfp, pfSUB); }
 iexpr:	MUL(iexpr,iexpr)	1 { fprintf(outfp, pfMUL); }
 iexpr:	DIV(iexpr,iexpr)	1 { fprintf(outfp, pfDIV); }
@@ -93,6 +93,7 @@ iexpr:	INCR(lv)			1 { fprintf(outfp, pfDUP pfINCR pfLOAD, 1); }
 iexpr:	DECR(lv)			1 { fprintf(outfp, pfDUP pfDECR pfLOAD, 1); }
 iexpr:	POSINC(lv)			1 { fprintf(outfp, pfDUP pfLOAD pfSWAP pfINCR, 1); }
 iexpr:	POSDEC(lv)			1 { fprintf(outfp, pfDUP pfLOAD pfSWAP pfDECR, 1); }
+iexpr:	UMINUS(iexpr)		1 { fprintf(outfp, pfNEG); }
 
 iexpr:	EQ(iexpr,iexpr)		1 { fprintf(outfp, pfEQ); }
 iexpr:	NE(iexpr,iexpr)		1 { fprintf(outfp, pfNE); }
@@ -100,8 +101,11 @@ iexpr:	LT(iexpr,iexpr)		1 { fprintf(outfp, pfLT); }
 iexpr:	LE(iexpr,iexpr)		1 { fprintf(outfp, pfLE); }
 iexpr:	GT(iexpr,iexpr)		1 { fprintf(outfp, pfGT); }
 iexpr:	GE(iexpr,iexpr)		1 { fprintf(outfp, pfGE); }
-iexpr:	UMINUS(iexpr)		1 { fprintf(outfp, pfNEG); }
+iexpr:	AND(iexpr,iexpr)	1 { fprintf(outfp, pfAND); }
+iexpr:	OR(iexpr,iexpr)		1 { fprintf(outfp, pfOR); }
 iexpr:  rexpr 				1 { fprintf(outfp, pfD2I);}
+
+
 
 %! atribuicoes
 iexpr: lv 			 		1 {fprintf(outfp, pfLOAD);}
@@ -113,21 +117,24 @@ iassign: iexpr 				1 {fprintf(outfp, pfDUP);}
 iexpr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfPUSH, mkfunc(LEFT_CHILD(p)->value.s), (int)((RIGHT_CHILD(p)->place)));}
 iexpr:   CALL(ID, VOID) 	1 {fprintf(outfp, pfCALL pfPUSH, mkfunc(LEFT_CHILD(p)->value.s));}
 
+
 %!REAIS
 rexpr: REAL 				1 {lbl++; fprintf(outfp, pfRODATA pfALIGN pfLABEL pfDOUBLE, mklbl(lbl), p->value.r); fprintf(outfp, pfTEXT pfADDR pfLOAD2, mklbl(lbl));}
-rexpr:	ADD(rexpr,rexpr)	1 { fprintf(outfp, pfADD); }
-rexpr:	SUB(rexpr,rexpr)	1 { fprintf(outfp, pfSUB); }
-rexpr:	MUL(rexpr,rexpr)	1 { fprintf(outfp, pfMUL); }
-rexpr:	DIV(rexpr,rexpr)	1 { fprintf(outfp, pfDIV); }
-rexpr:	MOD(rexpr,rexpr)		1 { fprintf(outfp, pfMOD); }
+rexpr:	ADD(rexpr,rexpr)	1 { fprintf(outfp, pfDADD); }
+rexpr:	SUB(rexpr,rexpr)	1 { fprintf(outfp, pfDSUB); }
+rexpr:	MUL(rexpr,rexpr)	1 { fprintf(outfp, pfDMUL); }
+rexpr:	DIV(rexpr,rexpr)	1 { fprintf(outfp, pfDDIV); }
+rexpr:	UMINUS(rexpr)		1 { fprintf(outfp, pfDNEG); }
 
-rexpr:	EQ(rexpr,rexpr)		1 { fprintf(outfp, pfEQ); }
-rexpr:	NE(rexpr,rexpr)		1 { fprintf(outfp, pfNE); }
-rexpr:	LT(rexpr,rexpr)		1 { fprintf(outfp, pfLT); }
-rexpr:	LE(rexpr,rexpr)		1 { fprintf(outfp, pfLE); }
-rexpr:	GT(rexpr,rexpr)		1 { fprintf(outfp, pfGT); }
-rexpr:	GE(rexpr,rexpr)		1 { fprintf(outfp, pfGE); }
-rexpr:	UMINUS(rexpr)		1 { fprintf(outfp, pfNEG); }
+rexpr:	EQ(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfEQ, 0); }
+rexpr:	NE(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfNE, 0); }
+rexpr:	LT(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfLT, 0); }
+rexpr:	LE(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfLE, 0); }
+rexpr:	GT(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfGT, 0); }
+rexpr:	GE(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfGE, 0); }
+rexpr:	AND(rexpr,rexpr)	1 { fprintf(outfp, pfAND); }
+rexpr:	OR(rexpr,rexpr)		1 { fprintf(outfp, pfOR); }
+
 rexpr:  iexpr 				1 { fprintf(outfp, pfI2D);}
 
 
