@@ -42,6 +42,11 @@ static char *mkfunc(char *s) {
   strcat(buf, s);
   return buf;
 }
+
+int isInt(Node *p) { return p->info == 1 ? 1 : MAX_COST; }
+
+int isReal(Node *p) { return p->info == 3 ? 1 : MAX_COST; }
+
 %}
 %term t_END=';' t_OPENP='(' t_COMA=',' t_BRACKET='{' ADD='+' SUB='-' MUL='*' DIV='/'
 %term MOD='%' EQ='=' LT='<' GT='>' AND='&' OR='|'
@@ -178,13 +183,7 @@ void externs() {
       fprintf(outfp, pfEXTRN, extrns[i]);
 }
 
-int isInt(Node *p) {
-	return p->info == 1 ? 1 : MAX_COST;
-}
 
-int isReal(Node *p) {
-	return p->info == 3 ? 1 : MAX_COST;
-}
 
 void function(int pub, Node *type, char *name, Node *body) {
 	returnType = type->value.i;
