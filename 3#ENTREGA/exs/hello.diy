@@ -12,13 +12,7 @@ public integer entry (integer argc, string *argv, string *envp) {
   	prints("Good Work!\n");
   	printi(1);
   	println();
-
   	}
-
-
-  
-  
-
 
   entry := 0
 };

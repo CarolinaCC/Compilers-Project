@@ -85,6 +85,7 @@ list: 	t_END(list, base) 	1 {}
 stmt:	base				1 {}
 
 base:   expr 	 1 {fprintf(outfp, pfTRASH, (int)p->place); }
+base: 	bloco 	 1 {}
 
 params: param 				   1 {}
 params: t_COMA(params, param)  1 {}
