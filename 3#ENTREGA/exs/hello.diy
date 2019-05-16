@@ -7,7 +7,7 @@ public integer entry (integer argc, string *argv, string *envp) {
   do 
   	prints("Hello World\n"); 
   	
-  while --a <> 0;
+  while a-- <> 0;
     
 
 
