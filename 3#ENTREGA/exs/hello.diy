@@ -6,7 +6,7 @@ public integer entry (integer argc, string *argv, string *envp) {
   a := 2;
   do {
   	prints("Hello World\n"); 
-  	a := a - 1}
+  	a := a - 1;}
   while a <> 0;
     
 
