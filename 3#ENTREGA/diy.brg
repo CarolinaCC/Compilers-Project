@@ -128,7 +128,7 @@ iexpr:	GT(iexpr,iexpr)		1 { fprintf(outfp, pfGT); }
 iexpr:	GE(iexpr,iexpr)		1 { fprintf(outfp, pfGE); }
 iexpr:	AND(iexpr,iexpr)	1 { fprintf(outfp, pfAND); }
 iexpr:	OR(iexpr,iexpr)		1 { fprintf(outfp, pfOR); }
-iexpr:  rexpr 				30 { fprintf(outfp, pfD2I);}
+iexpr:  rexpr 				1 { fprintf(outfp, pfD2I);}
 
 %! atribuicoes
 
