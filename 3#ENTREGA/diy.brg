@@ -75,7 +75,7 @@ decls: t_END(decls, param) 	1 {}
 list:   base 	 		  	1 {}
 list: 	t_END(list, base) 	1 {}
 
-base:   expr 	 1 { fprintf(outfp, pfTRASH, p->place);}
+base:   expr 	 1 { fprintf(outfp, pfTRASH, (int)p->place);}
 
 params: param 				   1 {}
 params: t_COMA(params, param)  1 {}
