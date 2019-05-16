@@ -7,15 +7,19 @@ public integer entry (integer argc, string *argv, string *envp) {
   if a = 0 then {
   	prints("Oh! Ups\n");
   	printi(-1);
+  } else {
+  prints("O primeiro era falso e tambem es tu!\n");
+  a := 3;
   }
   if a = 2 then {
   	prints("Good Work!\n");
   	printi(1);
   	println();
-  	integer b;
-  	b := 3;
-  	printi(b);
-  	}
+
+  	} else printi(a); 
+
+
+
 
   entry := 0
 };

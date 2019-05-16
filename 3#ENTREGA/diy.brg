@@ -179,9 +179,17 @@ sexpr: ATR(sassign, lv) 	1 {fprintf(outfp, pfSTORE);}
 sassign: sexpr 1 {fprintf(outfp, pfDUP);}
 
 
-%! simple if (no else): uses only one label
+%! IF simple
 base: IF(cond, stmt) 	1 { fprintf(outfp, pfLABEL, mklbl(LEFT_CHILD(p)->place));}
 cond:	expr			1 { p->place = ++lbl; fprintf(outfp, pfJZ, mklbl(p->place)); }
+
+%! IF ELSE
+base: ELSE(IF, stmt)	1 { fprintf(outfp, pfLABEL, mklbl(LEFT_CHILD(p)->place)); }
+cond:	expr			1 { p->place = ++lbl; fprintf(outfp, pfJZ, mklbl(p->place)); }
+
+	
+
+
 
 
 
