@@ -184,7 +184,7 @@ base: IF(cond, stmt) 	1 { fprintf(outfp, pfLABEL, mklbl(LEFT_CHILD(p)->place));}
 cond:	expr			1 { p->place = ++lbl; fprintf(outfp, pfJZ, mklbl(p->place)); }
 
 %! IF ELSE
-base: ELSE(IF, stmt)	1 { fprintf(outfp, pfLABEL, mklbl(LEFT_CHILD(p)->place)); }
+base: ELSE(base, stmt)	1 { fprintf(outfp, pfLABEL, mklbl(LEFT_CHILD(p)->place)); }
 cond:	expr			1 { p->place = ++lbl; fprintf(outfp, pfJZ, mklbl(p->place)); }
 
 	
