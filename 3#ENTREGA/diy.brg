@@ -82,6 +82,9 @@ decls: t_END(decls, param) 	1 {}
 list:   base 	 		  	1 {}
 list: 	t_END(list, base) 	1 {}
 
+stmt:	base				1 {}
+stmt: 	brk 				1 {}
+
 base:   expr 	 1 {fprintf(outfp, pfTRASH, (int)p->place); }
 
 params: param 				   1 {}
@@ -128,7 +131,7 @@ iexpr:	GT(iexpr,iexpr)		1 { fprintf(outfp, pfGT); }
 iexpr:	GE(iexpr,iexpr)		1 { fprintf(outfp, pfGE); }
 iexpr:	AND(iexpr,iexpr)	1 { fprintf(outfp, pfAND); }
 iexpr:	OR(iexpr,iexpr)		1 { fprintf(outfp, pfOR); }
-iexpr:  rexpr 				1 { fprintf(outfp, pfD2I);}
+iexpr:  rexpr 				30 { fprintf(outfp, pfD2I);}
 
 %! atribuicoes
 
@@ -169,10 +172,18 @@ rexpr:   CALL(ID, VOID) 	1 {fprintf(outfp, pfCALL pfDPUSH, mkfunc(LEFT_CHILD(p)-
 
 %!STRINGS
 
-sexpr:  STR 	 		1 {lbl++; fprintf(outfp, pfRODATA pfALIGN pfLABEL, mklbl(lbl)); outstr(p->value.s); fprintf(outfp, pfTEXT pfADDR, mklbl(lbl));}
-sexpr: ATR(sassign, lv) 	1 {fprintf(outfp, pfSTORE);}
+sexpr:  STR 	 		1 {lbl++; fprintf(outfp, pfRODATA pfALIGN pfLABEL, mklbl(lbl)); 
+							outstr(p->value.s); fprintf(outfp, pfTEXT pfADDR, mklbl(lbl));}
 
+sexpr: ATR(sassign, lv) 	1 {fprintf(outfp, pfSTORE);}
 sassign: sexpr 1 {fprintf(outfp, pfDUP);}
+
+
+%! simple if (no else): uses only one label
+base: IF(cond, stmt) 	1 { fprintf(outfp, pfLABEL, mklbl(LEFT_CHILD(p)->place));}
+cond:	expr			1 { p->place = ++lbl; fprintf(outfp, pfJZ, mklbl(p->place)); }
+
+
 
 %%
 #include "y.tab.h"

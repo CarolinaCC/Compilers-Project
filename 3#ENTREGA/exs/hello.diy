@@ -4,14 +4,11 @@ public void printi(integer i)
 public integer entry (integer argc, string *argv, string *envp) {
   integer a;
   a := 2;
-  printi(a);
-  println();
-  a := - 2;
-  printi(a);
-  println();
-  a := a;
-  printi(a);
-  println();
-  prints("olá pessoal!\n")
+  if a = 0 then prints("Oh! Ups\n");
+  if a = 2 then prints("Good Work!\n");
+  
+  
+
+
   entry := 0
 };
