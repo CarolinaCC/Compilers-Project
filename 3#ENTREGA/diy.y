@@ -147,7 +147,7 @@ brk : BREAK intp ';'        { $$ = intNode(BREAK, $2); if ($2 <= 0 || $2 > ncicl
 	;
 
 step	:               { $$ = intNode(INT, 1); }
-	| STEP expr     { $$ = $2; }
+	| STEP expr     	{ $$ = $2; }
 	;
 
 intp	:       { $$ = 1; }
