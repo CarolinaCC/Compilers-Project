@@ -43,6 +43,13 @@ static char *mkfunc(char *s) {
   return buf;
 }
 
+void setPlace(Node *p) {
+	if (IDfind(LEFT_CHILD(p)->value.s, NULL) == 3)
+		p->place = 8;
+	else 
+		p->place = 4;
+}
+
 int isInt(Node *p) { return p->info == 1 ? 1 : MAX_COST; }
 
 int isReal(Node *p) { return p->info == 3 ? 1 : MAX_COST; }
@@ -75,7 +82,7 @@ decls: t_END(decls, param) 	1 {}
 list:   base 	 		  	1 {}
 list: 	t_END(list, base) 	1 {}
 
-base:   expr 	 1 { fprintf(outfp, pfTRASH, (int)p->place);}
+base:   expr 	 1 {fprintf(outfp, pfTRASH, (int)p->place); }
 
 params: param 				   1 {}
 params: t_COMA(params, param)  1 {}
@@ -94,8 +101,8 @@ lv:    LOCAL  	1 {fprintf(outfp, pfLOCAL, p->value.i * (pfWORD/4));}
 expr:   iexpr   		1 {p->place = 4;}
 expr:   sexpr   		1 {p->place = 4;}
 expr:   rexpr   		1 {p->place = 8;}
-expr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfPUSH, mkfunc(LEFT_CHILD(p)->value.s), (int)((RIGHT_CHILD(p)->place)));}
-expr:   CALL(ID, VOID) 	1 {fprintf(outfp, pfCALL pfPUSH, mkfunc(LEFT_CHILD(p)->value.s));}
+expr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfPUSH, mkfunc(LEFT_CHILD(p)->value.s), (int)((RIGHT_CHILD(p)->place))); setPlace(p);}
+expr:   CALL(ID, VOID) 	1 {fprintf(outfp, pfCALL pfPUSH, mkfunc(LEFT_CHILD(p)->value.s)); setPlace(p);}
 
 %!INTEGERS
 
