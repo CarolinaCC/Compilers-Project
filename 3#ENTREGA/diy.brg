@@ -83,7 +83,6 @@ list:   base 	 		  	1 {}
 list: 	t_END(list, base) 	1 {}
 
 stmt:	base				1 {}
-stmt: 	brk 				1 {}
 
 base:   expr 	 1 {fprintf(outfp, pfTRASH, (int)p->place); }
 
