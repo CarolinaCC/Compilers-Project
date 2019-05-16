@@ -199,9 +199,9 @@ base:		base_while		1 {}
 
 
 
-base_while:	WHILE(do,stmt)	1 { brkcnt--; fprintf(outfp, pfJZ pfJMP, mklbl(lbl), mklbl(LEFT_CHILD(p)->place));  fprintf(outfp, "1");}
+base_while:	WHILE(do,stmt)	1 { brkcnt--; fprintf(outfp, pfJZ pfLABEL , mklbl(LEFT_CHILD(p)->place), mklbl(LEFT_CHILD(p)->place));  fprintf(outfp, "1");}
 
-do:	DO(start,expr) 1 { p->place = (brklbl[++brkcnt] = ++lbl); fprintf(outfp, pfLABEL , mklbl(LEFT_CHILD(p)->place), mklbl(p->place));  fprintf(outfp, "2");}
+do:	DO(start,expr) 1 { p->place = (brklbl[++brkcnt] = ++lbl); fprintf(outfp, pfJMP  , mklbl(LEFT_CHILD(p)->place), mklbl(p->place));  fprintf(outfp, "2");}
 
 start:	START		 1 { p->place = ++lbl; fprintf(outfp, pfLABEL,  mklbl(lbl));  fprintf(outfp, "3");}
 
