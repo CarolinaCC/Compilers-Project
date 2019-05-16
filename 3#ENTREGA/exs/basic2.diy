@@ -56,8 +56,8 @@ public integer entry (integer argc, string *argv, string *envp) {
 	println();
 	printd(c + 7);
 	println();
+	
 	c := 2;
-
 	printi(9);
 	println();
 	printd(c);
