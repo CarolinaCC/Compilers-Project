@@ -131,7 +131,6 @@ iexpr:	GT(iexpr,iexpr)		1 { fprintf(outfp, pfGT); }
 iexpr:	GE(iexpr,iexpr)		1 { fprintf(outfp, pfGE); }
 iexpr:	AND(iexpr,iexpr)	1 { fprintf(outfp, pfAND); }
 iexpr:	OR(iexpr,iexpr)		1 { fprintf(outfp, pfOR); }
-iexpr:  rexpr 				30 { fprintf(outfp, pfD2I);}
 
 %! atribuicoes
 
@@ -160,7 +159,10 @@ iexpr:	LE(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfLE, 0); }
 iexpr:	GT(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfGT, 0); }
 iexpr:	GE(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfGE, 0); }
 
+%!conversoes
 rexpr:  iexpr 				1 { fprintf(outfp, pfI2D);}
+iassign: rexpr 				1     {fprintf(outfp, pfD2I pfDUP);}
+
 
 %! atribuicoes
 rexpr: ATR(rassign, lv) 	isReal {fprintf(outfp, pfSTORE2);}
@@ -176,7 +178,7 @@ sexpr:  STR 	 		1 {lbl++; fprintf(outfp, pfRODATA pfALIGN pfLABEL, mklbl(lbl));
 							outstr(p->value.s); fprintf(outfp, pfTEXT pfADDR, mklbl(lbl));}
 
 sexpr: ATR(sassign, lv) 	1 {fprintf(outfp, pfSTORE);}
-sassign: sexpr 1 {fprintf(outfp, pfDUP);}
+sassign: sexpr 				1 {fprintf(outfp, pfDUP);}
 
 
 %! IF simple
@@ -185,10 +187,13 @@ base_if: IF(cond, stmt) 1 { fprintf(outfp, pfLABEL, mklbl(LEFT_CHILD(p)->place))
 cond:	 expr			1 { p->place = ++lbl; fprintf(outfp, pfJZ, mklbl(p->place)); }
 
 %! IF ELSE
-base: 	   base_else	    	1 {}
-base_else: ELSE(base_if	, stmt)	1 { fprintf(outfp, pfLABEL, mklbl(LEFT_CHILD(LEFT_CHILD(p))->place)); }
+base: 		base_else		1 {}
+base_else:	ELSE(if,stmt)	1 { fprintf(outfp, pfLABEL, mklbl(LEFT_CHILD(
+								p)->place)); }
+if:			IF(cond,stmt)	1 { p->place = ++lbl; fprintf(outfp, pfJMP pfLABEL,
+								mklbl(p->place), mklbl(LEFT_CHILD(p)->place)); }
 
-%!cond:	   expr					1 { p->place = ++lbl; fprintf(outfp, pfJZ, mklbl(p->place)); }
+
 
 	
 
