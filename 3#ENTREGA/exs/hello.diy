@@ -12,6 +12,8 @@ public integer entry (integer argc, string *argv, string *envp) {
   	prints("Good Work!\n");
   	printi(1);
   	println();
+  	integer b := 3;
+  	printi(b);
   	}
 
   entry := 0
