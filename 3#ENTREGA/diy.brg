@@ -199,7 +199,7 @@ base:		base_while		1 {}
 
 
 
-base_while:	WHILE(do,stmt)	1 { brkcnt--; fprintf(outfp, pfJZ pfJMP, mklbl(lbl), mklbl(LEFT_CHILD(p)->place); }
+base_while:	WHILE(do,stmt)	1 { brkcnt--; fprintf(outfp, pfJZ pfJMP, mklbl(lbl), mklbl(LEFT_CHILD(p)->place)); }
 
 do:	DO(start,expr) 1 { p->place = (brklbl[++brkcnt] = ++lbl); fprintf(outfp, pfLABEL , mklbl(LEFT_CHILD(p)->place, mklbl(p->place)); }
 
