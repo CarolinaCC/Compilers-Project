@@ -56,7 +56,7 @@ int isReal(Node *p) { return p->info == 3 ? 1 : MAX_COST; }
 
 %}
 %term t_END=';' t_OPENP='(' t_COMA=',' t_BRACKET='{' ADD='+' SUB='-' MUL='*' DIV='/'
-%term MOD='%' EQ='=' LT='<' GT='>' AND='&' OR='|' HASH='#' NOT='!'
+%term MOD='%' EQ='=' LT='<' GT='>' AND='&' OR='|' HASH='#' t_NOT='!'
 %include "y.tab.h"
 %%
 
