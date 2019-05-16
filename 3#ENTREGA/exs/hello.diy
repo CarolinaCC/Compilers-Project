@@ -4,10 +4,9 @@ public void printi(integer i)
 public integer entry (integer argc, string *argv, string *envp) {
   integer a;
   a := 2;
-  if a = 0 then {
-  	printi(-1);
-  } else {
-  			prints("Sucess no elsss\n");}
+  do prints("Hello World\n"); 
+  while a-- <> 0;
+    
 
 
 
