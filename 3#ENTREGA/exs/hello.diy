@@ -5,18 +5,8 @@ public integer entry (integer argc, string *argv, string *envp) {
   integer a;
   a := 2;
   if a = 0 then {
-  	prints("Oh! Ups\n");
   	printi(-1);
-  } else {
-  prints("O primeiro era falso e tambem es tu!\n");
-  a := 3;
-  }
-  if a = 2 then {
-  	prints("Good Work!\n");
-  	printi(1);
-  	println();
-
-  	} else printi(a); 
+  } else prints("Sucess no elsss\n");
 
 
 
