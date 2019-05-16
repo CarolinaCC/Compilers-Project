@@ -128,7 +128,7 @@ iexpr:	GT(iexpr,iexpr)		1 { fprintf(outfp, pfGT); }
 iexpr:	GE(iexpr,iexpr)		1 { fprintf(outfp, pfGE); }
 iexpr:	AND(iexpr,iexpr)	1 { fprintf(outfp, pfAND); }
 iexpr:	OR(iexpr,iexpr)		1 { fprintf(outfp, pfOR); }
-iexpr:  rexpr 				30 { fprintf(outfp, pfD2I);}
+iexpr:  rexpr 				isReal { fprintf(outfp, pfD2I);}
 
 %! atribuicoes
 
@@ -157,7 +157,7 @@ iexpr:	LE(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfLE, 0); }
 iexpr:	GT(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfGT, 0); }
 iexpr:	GE(rexpr,rexpr)		1 { fprintf(outfp, pfDCMP pfIMM pfGE, 0); }
 
-rexpr:  iexpr 				1 { fprintf(outfp, pfI2D);}
+rexpr:  iexpr 				isInt { fprintf(outfp, pfI2D);}
 
 %! atribuicoes
 rexpr: ATR(rassign, lv) 	1 	   {fprintf(outfp, pfSTORE2);}
