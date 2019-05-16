@@ -181,12 +181,12 @@ sassign: sexpr 1 {fprintf(outfp, pfDUP);}
 
 %! IF simple
 base: 	 base_if 		1 {}
-base_if: IF(cond, stmt) 1 { fprintf(outfp, pfLABEL, mklbl(LEFT_CHILD(p)->place)); p->place = LEFT_CHILD(p)->place;}
+base_if: IF(cond, stmt) 1 { fprintf(outfp, pfLABEL, mklbl(LEFT_CHILD(p)->place));}
 cond:	 expr			1 { p->place = ++lbl; fprintf(outfp, pfJZ, mklbl(p->place)); }
 
 %! IF ELSE
 base: 	   base_else	    	1 {}
-base_else: ELSE(base_if	, stmt)	1 { fprintf(outfp, pfLABEL, mklbl(LEFT_CHILD(p)->place)); }
+base_else: ELSE(base_if	, stmt)	1 { fprintf(outfp, pfLABEL, mklbl(LEFT_CHILD(LEFT_CHILD(p))->place)); }
 
 %!cond:	   expr					1 { p->place = ++lbl; fprintf(outfp, pfJZ, mklbl(p->place)); }
 
