@@ -4,10 +4,11 @@ public void printi(integer i)
 public integer entry (integer argc, string *argv, string *envp) {
   integer a;
   a := 2;
-  do 
+  do {
   	prints("Hello World\n"); 
-  	
-  while 1;
+	a := a - 1;
+  	}
+  while a<>0;
     
 
 
