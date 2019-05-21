@@ -1,15 +1,27 @@
 public void prints(string s)
 public void println()
 public void printi(integer i)
+public void printd(number d)
+
+==public const number interiroo := 3.2
+
+==public const number a;
+
+==integer b := 3;
+
+==string ss;
+
+
 public integer entry (integer argc, string *argv, string *envp) {
- 	integer i;
-
- 	for i in 0 upto 4 step 1 do {
- 	  	==prints("\nHello World\n"); 
- 	  	printi(i);
-
-
- 	}
+	==a := 15.4;
+ 	==integer i;
+ 	==ss := "sou a carolina cccccc";
+ 	==for i in 0 upto 4 step 1 do {
+ 	==  	prints("\nHello World\n"); 
+ 	==  	prints(ss);
+ 	printd(a);
+ 	println();
+ 	==}
 
 
 

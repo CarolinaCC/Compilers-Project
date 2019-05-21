@@ -14,6 +14,7 @@ extern int sizeOfLocalVariable;
 extern int sizeOfArgs;
 
 
+
 int lbl;
 int returnType;
 
@@ -76,9 +77,9 @@ void setPlace(Node *p) {
 		p->place = 4;
 }
 
-int isInt(Node *p) { return (p->info == 1  || p->info == -1)? 1 : MAX_COST; }
+int isInt(Node *p) { return (p->info == 1  || p->info == -1 || p->info == 6) ? 1 : MAX_COST; }
 
-int isReal(Node *p) { return p->info == 3 ? 1 : MAX_COST; }
+int isReal(Node *p) { return (p->info == 3 || p->info == 8) ? 1 : MAX_COST; }
 
 %}
 %term t_END=';' t_OPENP='(' t_COMA=',' t_BRACKET='{' ADD='+' SUB='-' MUL='*' DIV='/'
@@ -128,6 +129,7 @@ tipo: STRING 	1 {}
 tipo: NUMBER 	1 {}
 
 lv:    LOCAL  	1 {fprintf(outfp, pfLOCAL, p->value.i * (pfWORD/4));}
+lv:    ID   	1 { fprintf(outfp, pfADDR, p->value.s);}
 
 expr:   iexpr   		1 {p->place = 4;}
 expr:   sexpr   		1 {p->place = 4;}
@@ -291,3 +293,58 @@ void function(int pub, Node *type, char *name, Node *body) {
 		
 	}
 }
+
+void globalVariable(int pub, int cnst, Node *type, char *name, Node *value) {
+	if(pub) {
+		if (!value) {
+		fprintf(outfp, pfEXTRN, name);
+		return;
+		}
+		else fprintf(outfp, pfGLOBL, name, pfOBJ);
+	}
+
+  	if (!value) {
+  		int typ = type->value.i;
+    	fprintf(outfp, pfBSS pfALIGN pfLABEL pfBYTE, name, typ == 3 ? 8 : 4);
+    	return;
+  	}
+
+  	if(cnst) fprintf(outfp, pfRODATA pfALIGN pfLABEL, name);
+  	
+  	else fprintf(outfp, pfDATA pfALIGN pfLABEL, name); 
+  	
+  	switch (value->info) { 
+  		// inteiro
+  		case 1:
+  			fprintf(outfp, pfINTEGER, value->value.i);
+  			break;
+
+  		// string
+  		case 2:
+  		case 7: { 
+  			char *l = mklbl(++lbl);
+			fprintf(outfp, pfRODATA pfALIGN pfLABEL, l);
+			outstr(value->value.s);
+			if (cnst)
+				fprintf(outfp, pfRODATA pfID, l); 
+			else fprintf(outfp, pfDATA pfID, l); 
+			break;
+			}
+
+		// real
+		case 3:
+			fprintf(outfp, pfDOUBLE, value->value.r);
+  			break;
+
+  		// ponteiro
+  		case 10 ... 999:
+  			fprintf(outfp, pfID , value->value.s);
+  			break;
+
+	}
+  	
+
+ 
+
+}
+
