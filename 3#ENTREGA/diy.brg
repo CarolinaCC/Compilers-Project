@@ -25,6 +25,16 @@ static long brklbl[20], brkcnt; /* break labels */
 static char *extrns[100]; /* emit externs at the end only */
 static int extcnt;
 
+typedef struct controlerOfCycles {
+	int start;
+	int end;
+	int cont;
+} cycleControler;
+
+cycleControler cycleControlers[70];
+int cycleIndex = 0;
+
+
 int lbl;
 char *mklbl(int n) {
   static char buf[20];
@@ -43,6 +53,22 @@ static char *mkfunc(char *s) {
   return buf;
 }
 
+int initCycleControler_while() {
+	 cycleControlers[cycleIndex].start = ++lbl;
+	 cycleControlers[cycleIndex].end = ++lbl;
+	 cycleControlers[cycleIndex].cont = cycleControlers[cycleIndex].end;
+	 cycleIndex++;
+	 return cycleIndex - 1;
+}
+
+int initCycleControler_for() {
+	 cycleControlers[cycleIndex].start = ++lbl;
+	 cycleControlers[cycleIndex].end = ++lbl;
+	 cycleControlers[cycleIndex].cont = ++lbl;
+	  cycleIndex++;
+	 return cycleIndex - 1;
+}
+
 void setPlace(Node *p) {
 	if (IDfind(LEFT_CHILD(p)->value.s, NULL) == 3)
 		p->place = 8;
@@ -50,7 +76,7 @@ void setPlace(Node *p) {
 		p->place = 4;
 }
 
-int isInt(Node *p) { return p->info == 1 ? 1 : MAX_COST; }
+int isInt(Node *p) { return (p->info == 1  || p->info == -1)? 1 : MAX_COST; }
 
 int isReal(Node *p) { return p->info == 3 ? 1 : MAX_COST; }
 
@@ -74,7 +100,9 @@ finit:  t_OPENP(blocop, NIL) 	1 {if (returnType == DOUBLE)
 
 blocop: bloco    1 {}
 
-bloco:  t_BRACKET(list, decls) 	 1 {}
+bloco:  t_BRACKET(list, decls) 	 			1 {}
+bloco: 	t_BRACKET(t_END(list, stmt), decls) 1 {}
+
 
 decls: NIL 				   	1 {}
 decls: t_END(decls, param) 	1 {}
@@ -195,27 +223,22 @@ if:			IF(cond,stmt)	1 { p->place = ++lbl; fprintf(outfp, pfJMP pfLABEL,
 
 %! WHILE
 base:		base_while		1 {}
+base_while:	WHILE(do,expr)	1 { cycleIndex--;  fprintf(outfp,  pfJNZ pfLABEL , mklbl(cycleControlers[cycleIndex].start), mklbl(cycleControlers[cycleIndex].end)); }
+do:	DO(start,stmt) 		1 {}
+start:	START			1 {  fprintf(outfp, pfLABEL,  mklbl(cycleControlers[initCycleControler_while()].start));  }
 
+%! FOR
+base:		base_for				1 {}
+base_for:   t_END(expr, for)		1 {cycleIndex--; fprintf(outfp, pfLABEL, mklbl(cycleControlers[cycleIndex].end));}
 
-base_while:	WHILE(do,stmt)	1 { brkcnt--; fprintf(outfp,  pfLABEL , mklbl(LEFT_CHILD(p)->place)); }
+for:        FOR(in_for, end_for)    1 { fprintf(outfp, pfJMP, mklbl(cycleControlers[cycleIndex-1].start) );}
+end_for:    t_END(corpo_for, expr)  1 {}
 
-do:	DO(start,expr) 1 { p->place = (brklbl[++brkcnt] = ++lbl); fprintf(outfp, pfJNZ  , mklbl(LEFT_CHILD(p)->place));  }
+corpo_for:   stmt       			1 { fprintf(outfp, pfLABEL, mklbl(cycleControlers[cycleIndex-1].cont) ); }
 
-start:	START		 1 {  p->place = ++lbl; fprintf(outfp, pfLABEL,  mklbl(lbl));  }
+in_for:      IN(start_for, expr)   	1 {fprintf(outfp, pfJZ,  mklbl(cycleControlers[cycleIndex-1].end)); }
+start_for:   START 					1 { fprintf(outfp, pfLABEL,  mklbl(cycleControlers[initCycleControler_for()].start)); }
 
-
-
-
-%!base_while:	WHILE(do,stmt)	1 { brkcnt--; fprintf(outfp, pfLABEL, mklbl(LEFT_CHILD(									LEFT_CHILD(p))->place)); }
-
-%!do:	DO(start,expr) 1 { p->place = (brklbl[++brkcnt] = ++lbl); fprintf(outfp, pfJZ pfJMP, mklbl(lbl), mklbl(p->place)); }
-
-%!start:	START		 1 { p->place = ++lbl; fprintf(outfp, pfLABEL,  mklbl(lbl)); }
-
-
-%!base_while:	WHILE(do,stmt)	1 { brkcnt--; fprintf(outfp, pfJMP pfLABEL, mklbl(LEFT_CHILD(									LEFT_CHILD(p))->place), mklbl(LEFT_CHILD(p)->place)); }
-%!do:	DO(start,expr) 1 { p->place = (brklbl[++brkcnt] = ++lbl); fprintf(outfp, pfJZ, mklbl(lbl)); }
-%!start:	START		 1 { p->place = ++lbl; fprintf(outfp, pfLABEL, mklbl(lbl)); }
 
 
 %%

@@ -129,8 +129,8 @@ stmt	: base
 
 base	: ';'                   { $$ = nilNode(VOID); }
 	| DO { ncicl++; } stmt WHILE expr ';' { $$ = binNode(WHILE, binNode(DO, nilNode(START), $3), $5); ncicl--; }
-	| FOR lv IN expr UPTO expr step DO { ncicl++; } stmt       { $$ = binNode(';', binNode(ATR, $4, $2), binNode(FOR, binNode(IN, nilNode(START), binNode(LE, uniNode(PTR, $2), $6)), binNode(';', $10, binNode(ATR, binNode('+', uniNode(PTR, $2), $7), $2)))); ncicl--; }
-	| FOR lv IN expr DOWNTO expr step DO { ncicl++; } stmt       { $$ = binNode(';', binNode(ATR, $4, $2), binNode(FOR, binNode(IN, nilNode(START), binNode(GE, uniNode(PTR, $2), $6)), binNode(';', $10, binNode(ATR, binNode('-', uniNode(PTR, $2), $7), $2)))); ncicl--; }
+	| FOR lv IN expr UPTO expr step DO { ncicl++; } stmt       { Node* pt = uniNode(PTR, $2); pt->info = $2->info; $$ = binNode(';', binNode(ATR, $4, $2), binNode(FOR, binNode(IN, nilNode(START), binNode(LE,pt, $6)), binNode(';', $10, binNode(ATR, binNode('+', pt, $7), $2)))); ncicl--; }
+	| FOR lv IN expr DOWNTO expr step DO { ncicl++; } stmt       { Node* pointer = uniNode(PTR, $2); pointer->info = $2->info; $$ = binNode(';', binNode(ATR, $4, $2), binNode(FOR, binNode(IN, nilNode(START), binNode(GE, pointer, $6)), binNode(';', $10, binNode(ATR, binNode('-', pointer, $7), $2)))); ncicl--; }
 	| IF expr THEN stmt %prec IFX    { $$ = binNode(IF, $2, $4); }
 	| IF expr THEN stmt ELSE stmt    { $$ = binNode(ELSE, binNode(IF, $2, $4), $6); }
 	| expr ';'              { $$ = $1; }
