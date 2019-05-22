@@ -243,8 +243,8 @@ void enter(int pub, int typ, char *name) {
 		IDnew(typ+20, name, (long)fpar);
 	IDpush();
 	if (typ != 4) {
-	 	IDnew(typ, name, sizeOfArgs);
-	 	sizeOfArgs += typ == 3 ? 8 : 4;	 
+	 	sizeOfLocalVariable += typ == 3 ? 8 : 4;	 
+	 	IDnew(typ, name, -sizeOfLocalVariable);
 	 	}
 
 }

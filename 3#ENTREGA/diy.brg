@@ -89,14 +89,14 @@ int isReal(Node *p) { return (p->info == 3 || p->info == 8) ? 1 : MAX_COST; }
 
 
 finit:  t_OPENP(blocop, params) 1 {if (returnType == DOUBLE) 
-									fprintf(outfp, pfLOCAL pfLOAD2 pfDPOP, 8);
+									fprintf(outfp, pfLOCAL pfLOAD2 pfDPOP, -8);
 								   else 
-									fprintf(outfp, pfLOCAL pfLOAD pfPOP, 8);
+									fprintf(outfp, pfLOCAL pfLOAD pfPOP, -4);
 								   }
 finit:  t_OPENP(blocop, NIL) 	1 {if (returnType == DOUBLE) 
-									fprintf(outfp, pfLOCAL pfLOAD2 pfDPOP, 8);
+									fprintf(outfp, pfLOCAL pfLOAD2 pfDPOP, -8);
 								   else 
-									fprintf(outfp, pfLOCAL pfLOAD pfPOP, 8);
+									fprintf(outfp, pfLOCAL pfLOAD pfPOP, -4);
 								   }
 
 blocop: bloco    1 {}
