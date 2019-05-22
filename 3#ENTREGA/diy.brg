@@ -57,7 +57,7 @@ static char *mkfunc(char *s) {
 int initCycleControler_while() {
 	 cycleControlers[cycleIndex].start = ++lbl;
 	 cycleControlers[cycleIndex].end = ++lbl;
-	 cycleControlers[cycleIndex].cont = cycleControlers[cycleIndex].end;
+	 cycleControlers[cycleIndex].cont = cycleControlers[cycleIndex].start;
 	 cycleIndex++;
 	 return cycleIndex - 1;
 }
@@ -77,13 +77,15 @@ void setPlace(Node *p) {
 		p->place = 4;
 }
 
-int isInt(Node *p) { return (p->info == 1  || p->info == -1 || p->info == 6) ? 1 : MAX_COST; }
+int isInt(Node *p) { return (p->info == 1  || p->info == -1 || p->info == 6 || p->info >= 10) ? 1 : MAX_COST; }
 
 int isReal(Node *p) { return (p->info == 3 || p->info == 8) ? 1 : MAX_COST; }
 
+int isString(Node *p) { return (p->info == 2 || p->info == 7) ? 1 : MAX_COST; }
+
 %}
 %term t_END=';' t_OPENP='(' t_COMA=',' t_BRACKET='{' ADD='+' SUB='-' MUL='*' DIV='/'
-%term MOD='%' EQ='=' LT='<' GT='>' AND='&' OR='|' HASH='#' t_NOT='!'
+%term MOD='%' EQ='=' LT='<' GT='>' AND='&' OR='|' HASH='#' t_NOT='!' t_STR='['
 %include "y.tab.h"
 %%
 
@@ -128,8 +130,13 @@ tipo: INTEGER 	1 {}
 tipo: STRING 	1 {}
 tipo: NUMBER 	1 {}
 
-lv:    LOCAL  	1 {fprintf(outfp, pfLOCAL, p->value.i * (pfWORD/4));}
-lv:    ID   	1 { fprintf(outfp, pfADDR, p->value.s);}
+lv:    LOCAL  			 1 {fprintf(outfp, pfLOCAL, p->value.i * (pfWORD/4));}
+lv:    ID   			 1 { fprintf(outfp, pfADDR, p->value.s);}
+
+lv:	   lvi               1	
+lvi:   t_STR(lvec, expr) 1 { int size = (p->info == 3) ? 8 : ((LEFT_CHILD(p)->info) == 2 ? 1 : 4); fprintf(outfp, pfIMM pfMUL pfADD, size);}
+
+lvec:    lv     		 1 {fprintf(outfp, pfLOAD);}       
 
 expr:   iexpr   		1 {p->place = 4;}
 expr:   sexpr   		1 {p->place = 4;}
@@ -163,10 +170,15 @@ iexpr:	AND(iexpr,iexpr)	1 { fprintf(outfp, pfAND); }
 iexpr:	OR(iexpr,iexpr)		1 { fprintf(outfp, pfOR); }
 
 %! atribuicoes
-
 iexpr: ATR(iassign, lv) 	isInt { fprintf(outfp, pfSTORE);}
 iexpr: PTR(lv)				isInt { fprintf(outfp, pfLOAD); }
+iexpr: PTR(lvi)				isInt { fprintf(outfp, LEFT_CHILD(LEFT_CHILD(p))->info == 2 ? pfLDCHR : pfLOAD); }
+
+iexpr: PTR(iexpr)			isInt { fprintf(outfp, pfLOAD); }
+
 iassign: iexpr 				1 	  {fprintf(outfp, pfDUP);}
+
+iexpr: REF(lv)           	1 {}
 
 %! chamadas a funcoes
 iexpr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfPUSH, mkfunc(LEFT_CHILD(p)->value.s), (int)((RIGHT_CHILD(p)->place)));}
@@ -198,17 +210,23 @@ iassign: rexpr 				1     {fprintf(outfp, pfD2I pfDUP);}
 rexpr: ATR(rassign, lv) 	isReal {fprintf(outfp, pfSTORE2);}
 rexpr: PTR(lv)				isReal {fprintf(outfp, pfLOAD2); }
 rassign: rexpr 				1 	   {fprintf(outfp, pfDUP2);}
+rexpr: PTR(iexpr)			isReal { fprintf(outfp, pfLOAD2); }
+
 
 rexpr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfDPUSH, mkfunc(LEFT_CHILD(p)->value.s), (int)((RIGHT_CHILD(p)->place)));}
 rexpr:   CALL(ID, VOID) 	1 {fprintf(outfp, pfCALL pfDPUSH, mkfunc(LEFT_CHILD(p)->value.s));}
 
-%!STRINGS
 
+%!STRINGS
 sexpr:  STR 	 		1 {lbl++; fprintf(outfp, pfRODATA pfALIGN pfLABEL, mklbl(lbl)); 
 							outstr(p->value.s); fprintf(outfp, pfTEXT pfADDR, mklbl(lbl));}
 
+%! atribuicoes
 sexpr: ATR(sassign, lv) 	1 {fprintf(outfp, pfSTORE);}
+sexpr: PTR(lv)				isString {fprintf(outfp, pfLOAD); }
+sexpr: PTR(iexpr)			isString {fprintf(outfp, pfLOAD); }
 sassign: sexpr 				1 {fprintf(outfp, pfDUP);}
+sassign: iexpr 				1 {fprintf(outfp, pfDUP);}
 
 
 %! IF simple
@@ -222,6 +240,7 @@ base_else:	ELSE(if,stmt)	1 { fprintf(outfp, pfLABEL, mklbl(LEFT_CHILD(
 								p)->place)); }
 if:			IF(cond,stmt)	1 { p->place = ++lbl; fprintf(outfp, pfJMP pfLABEL,
 								mklbl(p->place), mklbl(LEFT_CHILD(p)->place)); }
+
 
 %! WHILE
 base:		base_while		1 {}
@@ -240,6 +259,11 @@ corpo_for:   stmt       			1 { fprintf(outfp, pfLABEL, mklbl(cycleControlers[cyc
 
 in_for:      IN(start_for, expr)   	1 {fprintf(outfp, pfJZ,  mklbl(cycleControlers[cycleIndex-1].end)); }
 start_for:   START 					1 { fprintf(outfp, pfLABEL,  mklbl(cycleControlers[initCycleControler_for()].start)); }
+
+%! BREAK
+stmt: BREAK 	1 { fprintf(outfp, pfJMP, mklbl(cycleControlers[cycleIndex-p->value.i].end) ); }
+
+stmt: CONTINUE 	1 { fprintf(outfp, pfJMP, mklbl(cycleControlers[cycleIndex-p->value.i].cont) ); }
 
 
 

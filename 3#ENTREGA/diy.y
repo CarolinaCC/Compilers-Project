@@ -173,6 +173,7 @@ lv	: ID		{ long pos; int typ = IDfind($1, &pos);
                             if (typ / 10 != 1 && typ % 5 != 2) yyerror("not a pointer");
                             if (pos == 0) n = strNode(ID, $1);
                             else n = intNode(LOCAL, pos);
+                            n->info = typ;
                             $$ = binNode('[', n, $3);
 			    			if (typ >= 10) typ -= 10;
                             	else if (typ % 5 == 2) typ = 1;

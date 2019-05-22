@@ -3,28 +3,28 @@ public void println()
 public void printi(integer i)
 public void printd(number d)
 
-==public const number interiroo := 3.2
+string s := "olaola"
 
-==public const number a;
-
-==integer b := 3;
-
-==string ss;
-
+string* ptr := s;
 
 public integer entry (integer argc, string *argv, string *envp) {
-	==a := 15.4;
- 	==integer i;
- 	==ss := "sou a carolina cccccc";
- 	==for i in 0 upto 4 step 1 do {
- 	==  	prints("\nHello World\n"); 
- 	==  	prints(ss);
- 	printd(a);
- 	println();
- 	==}
 
+	integer i;
+	i := 3;
 
+	do {
 
+		printi(i);
+		i--;
+		if (i = 2 ) then {
+			prints("continue\n");
+			continue 1;
+		} 
+			
+		
+	} while (i <> 0);
 
-  entry := 0
-};
+	println();
+
+	  entry := 0
+		};
