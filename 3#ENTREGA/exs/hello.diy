@@ -3,27 +3,13 @@ public void println()
 public void printi(integer i)
 public void printd(number d)
 
-string s := "olaola"
 
-string* ptr := s;
 
 public integer entry (integer argc, string *argv, string *envp) {
 
-	integer i;
-	i := 3;
+	prints("Hello Word\n");
 
 
-	do {
-
-		printi("ola"<"ola");
-		println()
-		i := 0;
-		
-			
-		
-	} while (i <> 0);
-
-	println();
 
 	  entry := 0
-		};
+};

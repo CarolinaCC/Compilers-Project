@@ -279,7 +279,13 @@ stmt: BREAK 	1 { fprintf(outfp, pfJMP, mklbl(cycleControlers[cycleIndex-p->value
 
 stmt: CONTINUE 	1 { fprintf(outfp, pfJMP, mklbl(cycleControlers[cycleIndex-p->value.i].cont) ); }
 
-
+%! OPTIMIZACOES
+cond: LT(iexpr,iexpr) 1 {  p->place = ++lbl; fprintf(outfp, pfJGE, mklbl(lbl)); }
+cond: GT(iexpr,iexpr) 1 {  p->place = ++lbl; fprintf(outfp, pfJLE, mklbl(lbl)); }
+cond: LE(iexpr,iexpr) 1 {  p->place = ++lbl; fprintf(outfp, pfJGT, mklbl(lbl)); }
+cond: GE(iexpr,iexpr) 1 {  p->place = ++lbl; fprintf(outfp, pfJLT, mklbl(lbl)); }
+cond: EQ(iexpr,iexpr) 1 {  p->place = ++lbl; fprintf(outfp, pfJNE, mklbl(lbl)); }
+cond: NE(iexpr,iexpr) 1 {  p->place = ++lbl; fprintf(outfp, pfJEQ, mklbl(lbl)); }
 
 %%
 #include "y.tab.h"
