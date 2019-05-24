@@ -12,14 +12,13 @@ public integer entry (integer argc, string *argv, string *envp) {
 	integer i;
 	i := 3;
 
+
 	do {
 
-		printi(i);
-		i--;
-		if (i = 2 ) then {
-			prints("continue\n");
-			continue 1;
-		} 
+		printi("ola"<"ola");
+		println()
+		i := 0;
+		
 			
 		
 	} while (i <> 0);

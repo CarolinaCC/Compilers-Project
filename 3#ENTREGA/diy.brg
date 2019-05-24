@@ -85,7 +85,7 @@ int isString(Node *p) { return (p->info == 2 || p->info == 7) ? 1 : MAX_COST; }
 
 %}
 %term t_END=';' t_OPENP='(' t_COMA=',' t_BRACKET='{' ADD='+' SUB='-' MUL='*' DIV='/'
-%term MOD='%' EQ='=' LT='<' GT='>' AND='&' OR='|' HASH='#' t_NOT='!' t_STR='['
+%term MOD='%' EQ='=' LT='<' GT='>' AND='&' OR='|' HASH='#' t_NOT='~' t_STR='[' t_FACT = '!'
 %include "y.tab.h"
 %%
 
@@ -141,6 +141,9 @@ lvec:    lv     		 1 {fprintf(outfp, pfLOAD);}
 expr:   iexpr   		1 {p->place = 4;}
 expr:   sexpr   		1 {p->place = 4;}
 expr:   rexpr   		1 {p->place = 8;}
+
+
+%! CALL
 expr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfPUSH, mkfunc(LEFT_CHILD(p)->value.s), (int)((RIGHT_CHILD(p)->place))); setPlace(p);}
 expr:   CALL(ID, VOID) 	1 {fprintf(outfp, pfCALL pfPUSH, mkfunc(LEFT_CHILD(p)->value.s)); setPlace(p);}
 
@@ -216,13 +219,24 @@ rexpr: PTR(iexpr)			isReal { fprintf(outfp, pfLOAD2); }
 rexpr:   CALL(ID, args) 	1 {fprintf(outfp, pfCALL pfTRASH pfDPUSH, mkfunc(LEFT_CHILD(p)->value.s), (int)((RIGHT_CHILD(p)->place)));}
 rexpr:   CALL(ID, VOID) 	1 {fprintf(outfp, pfCALL pfDPUSH, mkfunc(LEFT_CHILD(p)->value.s));}
 
+%! FACTORIAL
+rexpr: t_FACT(iexpr) 		1 {fprintf(outfp, pfCALL pfTRASH pfDPUSH, "_factorial", 4);}
+
 
 %!STRINGS
 sexpr:  STR 	 		1 {lbl++; fprintf(outfp, pfRODATA pfALIGN pfLABEL, mklbl(lbl)); 
 							outstr(p->value.s); fprintf(outfp, pfTEXT pfADDR, mklbl(lbl));}
 
+%!logic 
+iexpr:	EQ(sexpr,sexpr)		1 { fprintf(outfp, pfCALL pfTRASH pfPUSH pfIMM pfEQ, "_strcmp", 8, 0); }
+iexpr:	NE(sexpr,sexpr)		1 { fprintf(outfp, pfCALL pfTRASH pfPUSH pfIMM pfNE, "_strcmp", 8, 0);}
+iexpr:	LT(sexpr,sexpr)		1 { fprintf(outfp, pfCALL pfTRASH pfPUSH pfIMM pfLT, "_strcmp", 8, 0); }
+iexpr:	LE(sexpr,sexpr)		1 { fprintf(outfp, pfCALL pfTRASH pfPUSH pfIMM pfLE, "_strcmp", 8, 0); }
+iexpr:	GT(sexpr,sexpr)		1 { fprintf(outfp, pfCALL pfTRASH pfPUSH pfIMM pfGT, "_strcmp", 8, 0); }
+iexpr:	GE(sexpr,sexpr)		1 { fprintf(outfp, pfCALL pfTRASH pfPUSH pfIMM pfGE, "_strcmp", 8, 0); }
+
 %! atribuicoes
-sexpr: ATR(sassign, lv) 	1 {fprintf(outfp, pfSTORE);}
+sexpr: ATR(sassign, lv) 	isString {fprintf(outfp, pfSTORE);}
 sexpr: PTR(lv)				isString {fprintf(outfp, pfLOAD); }
 sexpr: PTR(iexpr)			isString {fprintf(outfp, pfLOAD); }
 sassign: sexpr 				1 {fprintf(outfp, pfDUP);}
@@ -279,6 +293,10 @@ void externs() {
   for (i = 0; i < extcnt; i++)
     if (extrns[i])
       fprintf(outfp, pfEXTRN, extrns[i]);
+
+  fprintf(outfp, pfEXTRN, "_factorial");
+  fprintf(outfp, pfEXTRN, "_strcmp");
+
 }
 
 
@@ -294,7 +312,7 @@ void function(int pub, Node *type, char *name, Node *body) {
 		else {
 			IDreplace(fwd+40, name, par);
 			fflush(stdout);
-  			fprintf(outfp, pfTEXT pfALIGN pfGLOBL pfLABEL pfENTER, mkfunc(name), pfFUNC, mkfunc(name), sizeOfLocalVariable * (pfWORD/4));
+  			fprintf(outfp, pfTEXT pfALIGN pfGLOBL pfLABEL pfENTER, mkfunc(name), pfFUNC, mkfunc(name), sizeOfLocalVariable);
   			yyselect(body);
   			fprintf(outfp, pfLEAVE pfRET); /* just in case ... */
   			freeNode(body);

@@ -1,9 +1,0 @@
-public void printd(number d)
-
-
-public integer entry (integer argc, string *argv, string *envp) {
-	number c;
-	c := 2;
-	printd(c);
-	entry:= 0;
-};
