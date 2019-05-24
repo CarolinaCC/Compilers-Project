@@ -1,5 +1,5 @@
 /*
-generated at Wed May 22 16:27:11 2019
+generated at Fri May 24 14:40:09 2019
 by $Id: pburg.c,v 2.5 2017/11/16 09:41:42 prs Exp $
 */
 #include <stdio.h>
@@ -315,7 +315,7 @@ static short yynts_9[] = { yyexpr_NT, 0 };
 static short yynts_10[] = { yyparam_NT, 0 };
 static short yynts_11[] = { yyparams_NT, yyparam_NT, 0 };
 static short yynts_12[] = { yytipo_NT, 0 };
-static short yynts_13[] = { yyargs_NT, yyexpr_NT, 0 };
+static short yynts_13[] = { yyexpr_NT, yyargs_NT, 0 };
 static short yynts_14[] = { yylvi_NT, 0 };
 static short yynts_15[] = { yylvec_NT, yyexpr_NT, 0 };
 static short yynts_16[] = { yylv_NT, 0 };
@@ -466,8 +466,8 @@ static YYCONST char *yystring[] = {
 /* 13 */	"params: param",
 /* 14 */	"params: t_COMA(params,param)",
 /* 15 */	"param: PARAM(tipo,ID)",
-/* 16 */	"args: t_COMA(NIL,expr)",
-/* 17 */	"args: t_COMA(args,expr)",
+/* 16 */	"args: t_COMA(expr,NIL)",
+/* 17 */	"args: t_COMA(expr,args)",
 /* 18 */	"tipo: INTEGER",
 /* 19 */	"tipo: STRING",
 /* 20 */	"tipo: NUMBER",
@@ -1189,18 +1189,18 @@ static void yylabel(NODEPTR_TYPE a, NODEPTR_TYPE u) {
 			p->cost[yyparams_NT] = c + 0;
 			p->rule.yyparams = 2;
 		}
-		if (	/* args: t_COMA(NIL,expr) */
-			OP_LABEL(LEFT_CHILD(a)) == 296 /* NIL */
+		if (	/* args: t_COMA(expr,NIL) */
+			OP_LABEL(RIGHT_CHILD(a)) == 296 /* NIL */
 		) {
-			c = ((struct yystate *)STATE_LABEL(RIGHT_CHILD(a)))->cost[yyexpr_NT] + 1;
+			c = ((struct yystate *)STATE_LABEL(LEFT_CHILD(a)))->cost[yyexpr_NT] + 1;
 			yytrace(a, 16, c + 0, p->cost[yyargs_NT]);
 			if (c + 0 < p->cost[yyargs_NT]) {
 				p->cost[yyargs_NT] = c + 0;
 				p->rule.yyargs = 1;
 			}
 		}
-		/* args: t_COMA(args,expr) */
-		c = ((struct yystate *)STATE_LABEL(LEFT_CHILD(a)))->cost[yyargs_NT] + ((struct yystate *)STATE_LABEL(RIGHT_CHILD(a)))->cost[yyexpr_NT] + 1;
+		/* args: t_COMA(expr,args) */
+		c = ((struct yystate *)STATE_LABEL(LEFT_CHILD(a)))->cost[yyexpr_NT] + ((struct yystate *)STATE_LABEL(RIGHT_CHILD(a)))->cost[yyargs_NT] + 1;
 		yytrace(a, 17, c + 0, p->cost[yyargs_NT]);
 		if (c + 0 < p->cost[yyargs_NT]) {
 			p->cost[yyargs_NT] = c + 0;
@@ -1946,7 +1946,7 @@ static void yykids(NODEPTR_TYPE p, int eruleno, NODEPTR_TYPE kids[]) {
 	case 33: /* iexpr: SUB(iexpr,iexpr) */
 	case 32: /* iexpr: ADD(iexpr,iexpr) */
 	case 24: /* lvi: t_STR(lvec,expr) */
-	case 17: /* args: t_COMA(args,expr) */
+	case 17: /* args: t_COMA(expr,args) */
 	case 14: /* params: t_COMA(params,param) */
 	case 9: /* list: t_END(list,base) */
 	case 7: /* decls: t_END(decls,param) */
@@ -1969,6 +1969,7 @@ static void yykids(NODEPTR_TYPE p, int eruleno, NODEPTR_TYPE kids[]) {
 	case 39: /* iexpr: POSINC(lv) */
 	case 38: /* iexpr: DECR(lv) */
 	case 37: /* iexpr: INCR(lv) */
+	case 16: /* args: t_COMA(expr,NIL) */
 	case 15: /* param: PARAM(tipo,ID) */
 	case 2: /* finit: t_OPENP(blocop,NIL) */
 		kids[0] = LEFT_CHILD(p);
@@ -2023,7 +2024,6 @@ static void yykids(NODEPTR_TYPE p, int eruleno, NODEPTR_TYPE kids[]) {
 	case 76: /* rexpr: CALL(ID,args) */
 	case 56: /* iexpr: CALL(ID,args) */
 	case 29: /* expr: CALL(ID,args) */
-	case 16: /* args: t_COMA(NIL,expr) */
 		kids[0] = RIGHT_CHILD(p);
 		break;
 	default:
@@ -2110,11 +2110,11 @@ static void yyreduce(NODEPTR_TYPE p, int goalnt)
 #line 124 "diy.brg"
 {}
 		break;
-	case 16: /* args: t_COMA(NIL,expr) */
+	case 16: /* args: t_COMA(expr,NIL) */
 #line 126 "diy.brg"
-{ p->place = RIGHT_CHILD(p)->place;}
+{ p->place = LEFT_CHILD(p)->place;}
 		break;
-	case 17: /* args: t_COMA(args,expr) */
+	case 17: /* args: t_COMA(expr,args) */
 #line 127 "diy.brg"
 { p->place = LEFT_CHILD(p)->place + RIGHT_CHILD(p)->place;}
 		break;
