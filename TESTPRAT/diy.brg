@@ -305,6 +305,7 @@ void externs() {
 
   fprintf(outfp, pfEXTRN, "_factorial");
   fprintf(outfp, pfEXTRN, "_strcmp");
+  fprintf(outfp, pfEXTRN, "_potencia");
 
 }
 
