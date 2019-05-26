@@ -86,7 +86,7 @@ int isString(Node *p) { return (p->info == 2 || p->info == 7) ? 1 : MAX_COST; }
 %}
 %term t_END=';' t_OPENP='(' t_COMA=',' t_BRACKET='{' ADD='+' SUB='-' MUL='*' DIV='/'
 %term MOD='%' EQ='=' LT='<' GT='>' AND='&' OR='|' HASH='#' t_NOT='~' t_STR='[' t_FACT = '!'
-%term t_EXP='^'
+%term t_POT='^'
 %include "y.tab.h"
 %%
 
@@ -224,7 +224,7 @@ rexpr:   CALL(ID, VOID) 	1 {fprintf(outfp, pfCALL pfDPUSH, mkfunc(LEFT_CHILD(p)-
 rexpr: t_FACT(iexpr) 		1 {fprintf(outfp, pfCALL pfTRASH pfDPUSH, "_factorial", 4);}
 
 %! POTENCIA
-iexpr: t_EXP(iexpr, iexpr) 1 {fprintf(outfp, pfCALL pfTRASH pfDPUSH, "_potencia", 8);}
+iexpr: t_POT(iexpr, iexpr) 1 {fprintf(outfp, pfCALL pfTRASH pfDPUSH, "_potencia", 8);}
 
 %!STRINGS
 sexpr:  STR 	 		1 {lbl++; fprintf(outfp, pfRODATA pfALIGN pfLABEL, mklbl(lbl)); 
