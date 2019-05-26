@@ -192,7 +192,7 @@ expr	: lv		{ $$ = uniNode(PTR, $1); $$->info = $1->info; }
 	| '~' expr %prec UMINUS { $$ = uniNode(NOT, $2); $$->info = intonly($2, 0); }
 	| '&' lv %prec UMINUS   { $$ = uniNode(REF, $2); $$->info = $2->info + 10; }
 	| expr '!'             { $$ = uniNode('!', $1); $$->info = 3; intonly($1, 0); }
-	| expr '^' expr        { $$ = binNode('^', $1, $2); $$->info = 1; intonly($1, 0); intonly($3, 0);}
+	| expr '^' expr        { $$ = binNode('^', $1, $3); $$->info = 1; intonly($1, 0); intonly($3, 0);}
 	| INCR lv       { $$ = uniNode(INCR, $2); $$->info = intonly($2, 1); }
 	| DECR lv       { $$ = uniNode(DECR, $2); $$->info = intonly($2, 1); }
 	| lv INCR       { $$ = uniNode(POSINC, $1); $$->info = intonly($1, 1); }
