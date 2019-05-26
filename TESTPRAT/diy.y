@@ -138,7 +138,7 @@ base	: ';'                   { $$ = nilNode(VOID); }
 	| bloco                 { $$ = $1; }
 	| lv '#' expr ';'       { $$ = binNode('#', $3, $1); }
 	| error ';'       { $$ = nilNode(NIL); }
-	| WRITE expr ';'  { $$ = uniNode(WRITE, expr); intonly($2, 0);  }
+	| WRITE expr ';'  { $$ = uniNode(WRITE, $2); intonly($2, 0);  }
 	;
 
 end	:		{ $$ = 0; }
