@@ -258,6 +258,9 @@ base_else:	ELSE(if,stmt)	1 { fprintf(outfp, pfLABEL, mklbl(LEFT_CHILD(
 if:			IF(cond,stmt)	1 { p->place = ++lbl; fprintf(outfp, pfJMP pfLABEL,
 								mklbl(p->place), mklbl(LEFT_CHILD(p)->place)); }
 
+%! ahaah 
+base:       base_write 		1 {}
+base_write: WRITE(iexpr) 	1 {fprintf(outfp, pfCALL pfTRASH pfDPUSH, "_printi", 8);}
 
 %! WHILE
 base:		base_while		1 {}

@@ -27,6 +27,7 @@ FLT	[0-9]+\.[0-9]+([Ee][+-]?[0-9]+)?
 ":="			eoi = 0; return ATR;
 "++"			eoi = 0; return INCR;
 "--"			eoi = 0; return DECR;
+"WRITE"    eoi = 0; return WRITE;
 "if"			eoi = 0; return IF;
 "then"			eoi = 0; return THEN;
 "else"			eoi = 0; return ELSE;

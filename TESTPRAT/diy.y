@@ -31,11 +31,11 @@ int sizeOfArgs = 8;
 	Node *n;		/* node pointer */
 };
 
-%token <i> INT
+%token <i> INT 
 %token <r> REAL
 %token <s> ID STR
 %token DO WHILE IF THEN FOR IN UPTO DOWNTO STEP BREAK CONTINUE
-%token VOID INTEGER STRING NUMBER CONST PUBLIC INCR DECR
+%token VOID INTEGER STRING NUMBER CONST PUBLIC INCR DECR WRITE
 %nonassoc IFX
 %nonassoc ELSE
 
@@ -138,6 +138,7 @@ base	: ';'                   { $$ = nilNode(VOID); }
 	| bloco                 { $$ = $1; }
 	| lv '#' expr ';'       { $$ = binNode('#', $3, $1); }
 	| error ';'       { $$ = nilNode(NIL); }
+	| WRITE expr ';'  { $$ = uniNode(WRITE, expr); intonly($2, 0);  }
 	;
 
 end	:		{ $$ = 0; }
