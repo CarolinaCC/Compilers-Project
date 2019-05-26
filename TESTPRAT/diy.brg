@@ -224,7 +224,7 @@ rexpr:   CALL(ID, VOID) 	1 {fprintf(outfp, pfCALL pfDPUSH, mkfunc(LEFT_CHILD(p)-
 rexpr: t_FACT(iexpr) 		1 {fprintf(outfp, pfCALL pfTRASH pfDPUSH, "_factorial", 4);}
 
 %! POTENCIA
-iexpr: t_EXP(iexpr, iexpr) 1 {fprintf(outfp, pfCALL pfTRASH pfDPUSH, "_potencia", 4*2);}
+iexpr: t_EXP(iexpr, iexpr) 1 {fprintf(outfp, pfCALL pfTRASH pfDPUSH, "_potencia", 8);}
 
 %!STRINGS
 sexpr:  STR 	 		1 {lbl++; fprintf(outfp, pfRODATA pfALIGN pfLABEL, mklbl(lbl)); 
