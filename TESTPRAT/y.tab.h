@@ -27,17 +27,17 @@
 #define NE 283
 #define GE 284
 #define LE 285
-#define UMINUS 286
-#define NOT 287
-#define REF 288
-#define LOCAL 289
-#define POSINC 290
-#define POSDEC 291
-#define PTR 292
-#define CALL 293
-#define START 294
-#define PARAM 295
-#define NIL 296
+#define UMINUS 287
+#define NOT 288
+#define REF 289
+#define LOCAL 290
+#define POSINC 291
+#define POSDEC 292
+#define PTR 293
+#define CALL 294
+#define START 295
+#define PARAM 296
+#define NIL 297
 #ifdef YYSTYPE
 #undef  YYSTYPE_IS_DECLARED
 #define YYSTYPE_IS_DECLARED 1

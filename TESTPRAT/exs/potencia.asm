@@ -55,6 +55,23 @@ $_potencia:
 	add	esp, 4
 ; LABEL
 $_i1:
+; LOCAL
+	lea	eax, [ebp+8]
+	push	eax
+; LOAD
+	pop	eax
+	push	dword [eax]
+; COPY
+	push	dword [esp]
+; LOCAL
+	lea	eax, [ebp+-12]
+	push	eax
+; STORE
+	pop	ecx
+	pop	eax
+	mov	[ecx], eax
+; TRASH
+	add	esp, 4
 ; LABEL
 $_i2:
 ; LOCAL
