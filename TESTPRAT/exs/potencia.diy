@@ -1,0 +1,11 @@
+public integer potencia(integer base, integer exp) {
+	integer i;
+	integer res;
+	i := exp;
+	if (exp = 0) potencia := 1;
+	do {
+		res := res * base;
+		i--;
+	} while (i <> 0)
+	potencia := res;
+}
