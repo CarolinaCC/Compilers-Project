@@ -46,7 +46,7 @@ int sizeOfArgs = 8;
 %left '=' NE
 %left GE LE '>' '<'
 %left '+' '-'
-%left '*' '/' '%'
+%left '*' '/' '%' '^'
 %nonassoc UMINUS '!' NOT REF
 %nonassoc '[' '('
 
