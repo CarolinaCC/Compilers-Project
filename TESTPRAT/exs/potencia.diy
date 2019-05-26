@@ -8,4 +8,4 @@ public integer potencia(integer base, integer exp) {
 		i--;
 	} while (i <> 0)
 	potencia := res;
-}
+};
