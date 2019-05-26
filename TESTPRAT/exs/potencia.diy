@@ -3,10 +3,11 @@ public integer potencia(integer base, integer exp) {
 	integer res;
 	i := exp;
 	if (exp = 0) then potencia := 1;
+	if (exp = 1) then potencia := base;
 	res := base;
 	do {
 		res := res * base;
 		i--;
-	} while (i <> 0)
+	} while (i <> 1)
 	potencia := res;
 };
